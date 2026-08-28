@@ -1,0 +1,291 @@
+:host {
+    display: block;
+
+    width: 100%;
+    height: 100%;
+}
+
+.sidebar-container {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+
+    background-color: #090f1b;
+}
+
+.btn-cerrar-menu {
+    display: none;
+}
+
+.logo {
+    height: 70px;
+    position: fixed;
+    top: 0;
+    width: 260px;
+    padding: 10px;
+    text-align: center;
+    border: 1px solid #1F2E4D;
+    justify-content: center;
+    align-items: center;
+    vertical-align: middle;
+}
+
+.menu {
+    position: fixed;
+    top: 70px;
+    bottom: 70px;
+    width: 260px;
+    overflow-y: auto;
+}
+
+.cerrarSession {
+    position: fixed;
+    height: 70px;
+    bottom: 0;
+    width: 260px;
+    padding: 10px;
+    text-align: center;
+    border-top: 1px solid #1F2E4D;
+}
+
+.contenedor_cerrar {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: 1fr;
+    grid-column-gap: 6px;
+    grid-row-gap: 0px;
+    justify-content: center;
+    align-items: center;
+}
+
+.avatar {
+    grid-area: 1 / 1 / 2 / 2;
+}
+
+.avatar_img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-left: 10px;
+}
+
+.nombres {
+    grid-area: 1 / 2 / 1 / 2;
+    width: 150px;
+    padding-left: 10px;
+}
+
+.nombres> :first-child {
+    font-size: 1rem;
+    font-weight: bold;
+    color: #fff;
+    margin: 0px;
+    padding: 0px;
+    text-align: left;
+}
+
+.nombres> :last-child {
+    padding: 0px;
+    padding-top: 2px;
+    margin: 0px;
+    font-size: 0.7rem;
+    color: #64748b;
+    text-align: left;
+    font-weight: bold;
+}
+
+.icono {
+    grid-area: 1 / 3 / 1 / 3;
+    color: #64748b;
+}
+
+.parent {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: 1fr;
+    grid-column-gap: 0px;
+    grid-row-gap: 0px;
+    justify-content: center;
+    align-items: center;
+}
+
+.div1 {
+    grid-area: 1 / 1 / 2 / 2;
+    width: 80%;
+    border: 1px solid #fff;
+    border-radius: 5px;
+    background-color: #fff;
+    padding: 0px;
+    margin-left: 10px;
+}
+
+.div2 {
+    grid-area: 1 / 2 / 2 / 3;
+    color: #fff;
+}
+
+.div2> :first-child {
+    font-size: 12px;
+    font-weight: bold;
+    color: #fff;
+    margin: 0px;
+    text-align: left;
+}
+
+.div2> :last-child {
+    padding-top: 1px;
+    margin: 0px;
+    font-size: 10px;
+    color: #00A3E0;
+    text-align: left;
+    font-weight: bold;
+}
+
+/* MENU */
+.menu {
+    margin-top: 10px;
+    width: 260px;
+}
+
+/* Quitar estilos predeterminados del UL */
+.menu ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+/* Cada elemento */
+.menu li {
+    margin: 5px 10px;
+    cursor: pointer;
+}
+
+/* Enlaces */
+.menu li a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 20px;
+    border-radius: 10px;
+    color: #79879a;
+    text-decoration: none;
+    font-size: 15px;
+    transition: 1s;
+}
+
+/* Iconos */
+.menu li a i {
+    width: 20px;
+    font-size: 18px;
+    text-align: center;
+}
+
+/* Al pasar el mouse */
+.menu li:hover a {
+    background: #131F35;
+    border: 1px solid #1F2E4D;
+    border-radius: 10px;
+    color: #F1F5F9;
+}
+
+.menu li:hover a i {
+    color: #00A3E0;
+    border-radius: 10px;
+}
+
+/* Página seleccionada */
+.menu li a.active {
+    background: #2563eb;
+    color: f1f5f9;
+    font-weight: 600;
+    border-radius: 10px;
+}
+
+.link_cerrar_session {
+    text-decoration: none;
+}
+.cerrarSession{
+    transition: .2s ease-in-out;
+    
+}
+.cerrarSession:hover {
+    box-shadow: 1px -3px 3px rgba(0,0,0,.1);
+    border: 1px solid #1f2e4d;
+    background-color: #131f35;
+    border-radius: 15px 15px 0 0;
+    cursor: pointer;
+}
+
+@media (max-width: 992px) {
+
+    /* MENU */
+    .menu {
+        margin-top: 10px;
+        width: 200px;
+    }
+
+    .logo,
+    .cerrarSession {
+        width: 200px;
+
+        overflow-x: hidden;
+    }
+
+    .logo>.parent>.div1>img {
+        width: 60%;
+    }
+
+    .cerrarSession>.contenedor_cerrar>.nombres {
+        width: 115px;
+    }
+
+    .cerrarSession>.contenedor_cerrar>.avatar>img {
+        width: 40px;
+        height: 40px;
+    }
+}
+
+@media (max-width: 768px) {
+
+    .btn-cerrar-menu {
+        display: flex;
+        position: absolute;
+        top: 0px;
+        right: 0px;
+        width: 20px;
+        height: 20px;
+        align-items: center;
+        justify-content: center;
+        border: none;
+        border-radius: 50%;
+        background: transparent;
+        color: white;
+        font-size: 20px;
+        cursor: pointer;
+        z-index: 2000;
+        border-radius: 50%;
+        padding: 0;
+        transition: 1s ease-in-out;
+    }
+
+    .btn-cerrar-menu:hover {
+        background-color: rgba(165, 42, 42, .5);
+    }
+
+    .danger {
+        background-color: brown;
+        color: #fff;
+    }
+
+    .btn-cerrar-menu:hover {
+        background: rgba(255, 255, 255, 0.1);
+    }
+
+    .logo,
+    .menu,
+    .cerrarSession {
+        width: 245px;
+    }
+
+}

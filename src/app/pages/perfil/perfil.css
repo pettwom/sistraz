@@ -1,0 +1,1304 @@
+/* =========================================================
+   PERFIL
+   ========================================================= */
+
+:host {
+    display: block;
+    width: 100%;
+    min-height: 100%;
+    box-sizing: border-box;
+
+    overflow: visible;
+}
+
+
+
+
+
+/* =========================================================
+   CONTENEDOR PRINCIPAL
+   ========================================================= */
+
+.contenedor_perfil {
+    width: 100%;
+
+    /* IMPORTANTE:
+       No usamos height fijo porque impediría crecer en móvil */
+    min-height: 400px;
+    height: auto;
+
+    border-radius: 10px;
+    border: 1px solid #1f2e4d;
+
+    background-color: #0f1625;
+
+    box-sizing: border-box;
+
+    overflow: visible;
+}
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.header {
+    width: 100%;
+    height: 200px;
+
+    overflow: hidden;
+
+    border-radius: 10px 10px 0 0;
+
+    background-color: #3F5EFB;
+    background-image: url('/images/Header_perfil.png');
+    background-size: cover;
+    background-position: center;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    color: #1f2e4d;
+
+    font-family:
+        'Inter',
+        'Segoe UI',
+        Roboto,
+        Arial,
+        sans-serif;
+
+    box-sizing: border-box;
+}
+
+
+/* =========================================================
+   ICONO HEADER
+   ========================================================= */
+
+.icono_perfil {
+    width: 50px;
+    height: 50px;
+
+    border: 1px solid rgba(73, 59, 209, 0.3);
+    border-radius: 50%;
+
+    background: linear-gradient(
+        97deg,
+        rgba(73, 64, 211, 1) 0%,
+        rgba(41, 91, 217, 1) 56%,
+        rgba(46, 115, 242, 1) 100%
+    );
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    color: #fff;
+
+    flex-shrink: 0;
+}
+
+
+.icono_perfil i {
+    font-size: 29px !important;
+}
+
+
+/* TÍTULO PERFIL */
+
+.header > :nth-child(2) {
+    font-size: 21px;
+    font-weight: bold;
+
+    color: #fff;
+
+    padding: 0;
+    margin: 10px 0 0;
+}
+
+
+/* SUBTÍTULO PERFIL */
+
+.header > :nth-child(3) {
+    font-size: 12px;
+
+    color: rgba(255, 255, 255, 0.47);
+
+    padding: 0;
+    margin: 5px 0 0;
+
+    text-align: center;
+}
+
+
+/* =========================================================
+   DATOS SUPERIORES
+   FOTO + NOMBRE + CARGO + CONTACTO
+   ========================================================= */
+
+.datos {
+    margin-block-start: -3rem;
+
+    display: grid;
+
+    grid-template-columns:
+        260px
+        minmax(0, 1fr);
+
+    gap: 6px;
+
+    width: 100%;
+
+    padding-bottom: 25px;
+
+    box-sizing: border-box;
+
+    overflow: visible;
+}
+
+
+/* =========================================================
+   FOTO
+   ========================================================= */
+
+.foto {
+    grid-column: 1;
+    grid-row: 1;
+
+    width: 220px;
+    height: 220px;
+
+    margin-left: 40px;
+
+    padding: 4px;
+
+    border-radius: 15px;
+
+    background: linear-gradient(
+        90deg,
+        #22d3ee 0%,
+        #a855f7 100%
+    );
+
+    box-sizing: border-box;
+
+    flex-shrink: 0;
+}
+
+
+.foto > img {
+    display: block;
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+
+    border-radius: 11px;
+}
+
+
+/* =========================================================
+   INFORMACIÓN SUPERIOR
+   ========================================================= */
+
+.info_persona {
+    grid-column: 2;
+    grid-row: 1;
+
+    margin-top: 60px;
+
+    min-width: 0;
+}
+
+
+/* NOMBRE */
+
+.info_persona > .panel1 > :first-child {
+    font-size: clamp(
+        0.9rem,
+        0.8rem + 1vw,
+        1.5rem
+    );
+
+    font-weight: bold;
+
+    color: #fff;
+
+    margin-left: 23px;
+}
+
+
+/* CONTENEDOR CARGO */
+
+.info_persona > .panel1 > :last-child {
+    display: inline-block;
+
+    margin-left: 23px !important;
+
+    padding: 0;
+
+    border: 2px solid transparent;
+    border-radius: 14px;
+
+    background:
+        linear-gradient(
+            transparent,
+            transparent
+        ) padding-box,
+        linear-gradient(
+            90deg,
+            #422f7a 0%,
+            #1e549d 100%
+        ) border-box;
+
+    color: #fff;
+
+    font-size: clamp(
+        0.6rem,
+        0.5rem + 0.5vw,
+        0.8rem
+    );
+}
+
+
+/* CARGO */
+
+.fondo_cargo {
+    display: flex;
+
+    align-items: center;
+
+    width: 100%;
+    height: 100%;
+
+    padding: 5px 20px;
+
+    margin: 0;
+
+    border-radius: 10px;
+
+    background: linear-gradient(
+        97deg,
+        rgba(21, 31, 53, 1) 0%,
+        rgba(32, 74, 141, 1) 76%,
+        rgba(22, 38, 64, 1) 99%
+    );
+
+    box-sizing: border-box;
+}
+
+
+.fondo_cargo > :first-child {
+    color: #4863c5;
+}
+
+
+/* =========================================================
+   PANELES
+   ========================================================= */
+
+.panel1,
+.panel2 {
+    display: block;
+    position: relative;
+}
+
+
+/* =========================================================
+   TABLA DATOS SUPERIORES
+   ========================================================= */
+
+.panel2 > table {
+    margin: 10px;
+
+    border-spacing: 0.1rem;
+
+    max-width: 100%;
+}
+
+
+/*
+ Angular/navegador agrega tbody automáticamente,
+ por eso usamos selectores que funcionen con tbody.
+*/
+
+.panel2 table tr {
+    display: flex;
+}
+
+
+.panel2 table td {
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+
+    border-left: 1px solid #222c3f;
+
+    padding: 0 10px;
+
+    box-sizing: border-box;
+}
+
+
+.panel2 table tr > td:first-child {
+    border-left: none;
+}
+
+
+/* ICONO */
+
+.icono {
+    flex-shrink: 0;
+}
+
+
+.icono_datos {
+    width: 40px;
+    height: 40px;
+
+    border: 1px solid #1c2b4f;
+    border-radius: 50%;
+
+    background: #19263e;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    color: #fff;
+
+    flex-shrink: 0;
+}
+
+
+/* TEXTO DATOS */
+
+.texto_d {
+    display: block;
+
+    text-align: left;
+
+    padding: 0 15px;
+
+    min-width: 0;
+}
+
+
+.texto_d p {
+    margin: 3px 0;
+
+    overflow-wrap: anywhere;
+}
+
+
+.texto_d > :nth-child(1) {
+    color: #6d7c95;
+
+    font-size: 12px;
+}
+
+
+.texto_d > :nth-child(2) {
+    color: #3e6bb5;
+
+    font-size: 12px;
+}
+
+
+/* =========================================================
+   SEGUNDO BLOQUE
+   INFORMACIÓN PERSONAL + SEGURIDAD
+   ========================================================= */
+
+.contenedor_datos_perfil {
+    display: grid;
+
+    grid-template-columns:
+        minmax(0, 65fr)
+        minmax(320px, 35fr);
+
+    gap: 10px;
+
+    width: 100%;
+
+    margin-top: 10px;
+
+    box-sizing: border-box;
+
+    align-items: stretch;
+
+    overflow: visible;
+}
+
+
+/* =========================================================
+   INFORMACIÓN PERSONAL
+   ========================================================= */
+
+.informacion_persona {
+    width: 100%;
+
+    min-height: 350px;
+    height: auto;
+
+    border-radius: 10px;
+    border: 1px solid #1f2e4d;
+
+    background-color: #0f1625;
+
+    padding: 20px;
+
+    box-sizing: border-box;
+
+    overflow: visible;
+}
+
+
+/* =========================================================
+   SEGURIDAD
+   ========================================================= */
+
+.seguridad {
+    width: 100%;
+
+    min-height: 350px;
+    height: auto;
+
+    border-radius: 10px;
+    border: 1px solid #1f2e4d;
+
+    background-color: #0f1625;
+
+    display: flex;
+
+    justify-content: center;
+
+    box-sizing: border-box;
+
+    overflow: visible;
+}
+
+
+.contenedor_seguridad {
+    display: flex;
+
+    flex-direction: column;
+
+    width: 100%;
+
+    padding: 30px;
+
+    box-sizing: border-box;
+}
+
+
+/* =========================================================
+   TITULOS
+   ========================================================= */
+
+.titulo_seguridad {
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    color: #fff;
+
+    font-size: 13px;
+
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   LÍNEA
+   ========================================================= */
+
+.lineaSeparacion {
+    width: 100%;
+
+    height: 1px;
+
+    border: 0;
+
+    background: linear-gradient(
+        90deg,
+        #422f7a 0%,
+        #1e549d 100%
+    );
+
+    margin: 15px 0;
+
+    box-sizing: border-box;
+}
+
+
+/* =========================================================
+   GRID INFORMACIÓN PERSONAL
+   ========================================================= */
+
+.datos-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap: 12px;
+
+    width: 100%;
+}
+
+
+/* =========================================================
+   TARJETAS
+   ========================================================= */
+
+.dato-card {
+    display: grid;
+
+    grid-template-columns:
+        40px
+        130px
+        minmax(0, 1fr);
+
+    align-items: center;
+
+    min-height: 52px;
+
+    padding: 8px 12px;
+
+    background: #101827;
+
+    border: 1px solid #222c3f;
+
+    border-radius: 9px;
+
+    box-sizing: border-box;
+
+    transition:
+        border-color 0.2s ease,
+        background-color 0.2s ease;
+}
+
+
+.dato-card:hover {
+    border-color: #33466a;
+
+    background: #121d30;
+}
+
+
+/* =========================================================
+   ICONO TARJETAS
+   ========================================================= */
+
+.dato-icon {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    width: 32px;
+    height: 32px;
+
+    border-radius: 7px;
+
+    background: rgba(79, 70, 229, 0.16);
+
+    color: #6366f1;
+
+    flex-shrink: 0;
+}
+
+
+.dato-icon i {
+    font-size: 15px;
+}
+
+
+/* =========================================================
+   LABEL TARJETAS
+   ========================================================= */
+
+.dato-label {
+    padding-left: 5px;
+
+    color: #f1f5f9;
+
+    font-size: 12px;
+    font-weight: 600;
+
+    min-width: 0;
+}
+
+
+/* =========================================================
+   VALOR TARJETAS
+   ========================================================= */
+
+.dato-valor {
+    min-width: 0;
+
+    color: #94a3b8;
+
+    font-size: 12px;
+
+    overflow-wrap: anywhere;
+
+    word-break: break-word;
+}
+
+
+.dato-valor.destacado {
+    color: #3b82f6;
+
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   LOGO SEGURIDAD
+   ========================================================= */
+
+.logo_seguridad {
+    display: flex;
+
+    align-items: center;
+
+    padding: 0 20px;
+
+    width: 100%;
+
+    box-sizing: border-box;
+}
+
+
+.logo_seguridad .panel1 {
+    flex-shrink: 0;
+}
+
+
+.logo_seguridad .panel2 {
+    flex: 1;
+
+    min-width: 0;
+}
+
+
+.logo_seguridad .panel2 > :nth-child(1),
+.logo_seguridad .panel2 > :nth-child(2) {
+    padding: 0 20px;
+
+    margin: 0;
+}
+
+
+.logo_seguridad .panel2 > :nth-child(1) {
+    margin-top: 10px;
+    margin-bottom: 10px;
+
+    color: #fff;
+}
+
+
+.logo_seguridad .panel2 > :nth-child(2) {
+    color: #6a738a;
+
+    font-size: 12px;
+}
+
+
+/* =========================================================
+   FORMULARIO SEGURIDAD
+   ========================================================= */
+
+.input_seguridad {
+    width: 100%;
+}
+
+
+.input_seguridad form {
+    width: 100%;
+}
+
+
+.form-group {
+    width: 100%;
+}
+
+
+/*
+ PrimeNG
+*/
+
+.input_seguridad p-inputgroup,
+.input_seguridad p-floatlabel,
+.input_seguridad p-iconfield,
+.input_seguridad p-password {
+    display: block;
+
+    width: 100%;
+}
+
+
+/*
+ p-password genera elementos internos.
+ ::ng-deep se usa aquí para asegurar que
+ el input generado ocupe todo el ancho.
+*/
+
+:host ::ng-deep .input_seguridad .p-password {
+    width: 100%;
+}
+
+
+:host ::ng-deep .input_seguridad .p-password input {
+    width: 100%;
+
+    box-sizing: border-box;
+}
+
+
+/* =========================================================
+   TABLET / PANTALLAS MEDIANAS
+   ========================================================= */
+
+@media (max-width: 1100px) {
+
+    .datos {
+        grid-template-columns:
+            210px
+            minmax(0, 1fr);
+
+        padding-left: 20px;
+        padding-right: 20px;
+        margin-block-start: 1.1rem;
+    }
+
+
+    .foto {
+        width: 180px;
+        height: 180px;
+
+        margin-left: 0;
+    }
+
+
+    .info_persona {
+        margin-top: 45px;
+    }
+
+
+    .contenedor_datos_perfil {
+        grid-template-columns:
+            minmax(0, 1.3fr)
+            minmax(300px, 0.7fr);
+    }
+
+
+    .dato-card {
+        grid-template-columns:
+            36px
+            110px
+            minmax(0, 1fr);
+    }
+
+
+    .logo_seguridad {
+        padding: 0 10px;
+    }
+
+
+    .contenedor_seguridad {
+        padding: 20px;
+    }
+}
+
+
+/* =========================================================
+   TABLET VERTICAL / CELULAR GRANDE
+   ========================================================= */
+
+@media (max-width: 768px) {
+
+    /*
+     MUY IMPORTANTE:
+     Permitimos que todo el contenido crezca verticalmente.
+    */
+
+    :host {
+        display: block;
+
+        width: 100%;
+
+        min-height: 100vh;
+
+        height: auto;
+
+        overflow: visible;
+    }
+
+
+    .contenedor_perfil {
+        width: 100%;
+
+        min-height: 0;
+
+        height: auto !important;
+
+        overflow: visible !important;
+    }
+
+
+    /* =====================================================
+       HEADER
+       ===================================================== */
+
+    .header {
+        height: 150px;
+
+        padding: 15px;
+
+        text-align: center;
+    }
+
+
+    .header > :nth-child(2) {
+        font-size: 18px;
+    }
+
+
+    .header > :nth-child(3) {
+        font-size: 11px;
+    }
+
+
+    /* =====================================================
+       FOTO + INFORMACIÓN
+       ===================================================== */
+
+    .datos {
+        display: flex;
+
+        flex-direction: column;
+
+        align-items: center;
+
+        width: 100%;
+
+        height: auto;
+
+        margin-block-start: -2.5rem;
+
+        padding:
+            0
+            15px
+            25px;
+
+        overflow: visible;
+
+        margin-block-start: -0.92rem;
+    }
+
+
+    .foto {
+        width: 145px;
+        height: 145px;
+
+        margin-left: 0;
+    }
+
+
+    .info_persona {
+        width: 100%;
+
+        min-width: 0;
+
+        height: auto;
+
+        margin-top: 15px;
+
+        text-align: center;
+
+        overflow: visible;
+    }
+
+
+    /* NOMBRE */
+
+    .info_persona > .panel1 > :first-child {
+        margin-left: 0;
+
+        font-size: 18px;
+
+        text-align: center;
+    }
+
+
+    /* CARGO */
+
+    .info_persona > .panel1 > :last-child {
+        margin-left: 0 !important;
+
+        max-width: 100%;
+    }
+
+
+    .fondo_cargo {
+        width: fit-content;
+
+        max-width: 100%;
+
+        margin: 0 auto;
+
+        justify-content: center;
+
+        text-align: center;
+
+        padding: 6px 15px;
+    }
+
+
+    /* =====================================================
+       DATOS CONTACTO
+       ===================================================== */
+
+    .panel2 > table {
+        display: block;
+
+        width: 100%;
+
+        margin: 15px 0 0;
+
+        border-spacing: 0;
+    }
+
+
+    .panel2 > table > tbody {
+        display: block;
+
+        width: 100%;
+    }
+
+
+    .panel2 table tr {
+        display: flex;
+
+        flex-direction: column;
+
+        width: 100%;
+    }
+
+
+    .panel2 table td {
+        display: flex;
+
+        width: 100%;
+
+        justify-content: flex-start;
+        align-items: center;
+
+        padding: 10px 5px;
+
+        border-left: none;
+
+        border-bottom: 1px solid #222c3f;
+
+        box-sizing: border-box;
+    }
+
+
+    .panel2 table td:last-child {
+        border-bottom: none;
+    }
+
+
+    .texto_d {
+        text-align: left;
+
+        padding: 0 10px;
+    }
+
+
+    /* =====================================================
+       INFORMACIÓN + SEGURIDAD
+       ===================================================== */
+
+    .contenedor_datos_perfil {
+        display: flex;
+
+        flex-direction: column;
+
+        width: 100%;
+
+        height: auto;
+
+        gap: 12px;
+
+        overflow: visible;
+    }
+
+
+    .informacion_persona {
+        width: 100%;
+
+        min-height: 0;
+
+        height: auto !important;
+
+        padding: 15px;
+
+        box-sizing: border-box;
+
+        overflow: visible;
+    }
+
+
+    .seguridad {
+        width: 100%;
+
+        min-height: 0;
+
+        height: auto !important;
+
+        margin-left: 0;
+
+        box-sizing: border-box;
+
+        overflow: visible;
+    }
+
+
+    .contenedor_seguridad {
+        width: 100%;
+
+        height: auto !important;
+
+        padding: 20px 15px;
+
+        box-sizing: border-box;
+
+        overflow: visible;
+    }
+
+
+    /* =====================================================
+       TARJETAS INFORMACIÓN PERSONAL
+       ===================================================== */
+
+    .datos-grid {
+        grid-template-columns: 1fr;
+
+        width: 100%;
+    }
+
+
+    .dato-card {
+        grid-template-columns:
+            40px
+            125px
+            minmax(0, 1fr);
+
+        width: 100%;
+    }
+
+
+    /* =====================================================
+       LOGO SEGURIDAD
+       ===================================================== */
+
+    .logo_seguridad {
+        display: flex;
+
+        flex-direction: column;
+
+        justify-content: center;
+        align-items: center;
+
+        width: 100%;
+
+        padding: 0;
+
+        text-align: center;
+    }
+
+
+    .logo_seguridad .panel2 {
+        width: 100%;
+    }
+
+
+    .logo_seguridad .panel2 > :nth-child(1),
+    .logo_seguridad .panel2 > :nth-child(2) {
+        padding: 0;
+    }
+
+
+    /* =====================================================
+       FORMULARIO
+       ===================================================== */
+
+    .input_seguridad {
+        width: 100%;
+    }
+
+
+    .form-group {
+        width: 100%;
+    }
+
+
+    :host ::ng-deep .input_seguridad .p-password {
+        width: 100%;
+    }
+
+
+    :host ::ng-deep .input_seguridad .p-password input {
+        width: 100%;
+    }
+
+
+    :host ::ng-deep .input_seguridad .p-button {
+        width: 100%;
+    }
+}
+
+
+/* =========================================================
+   CELULARES PEQUEÑOS
+   ========================================================= */
+
+@media (max-width: 480px) {
+
+    .header {
+        height: 135px;
+
+        padding: 10px;
+    }
+
+
+    .icono_perfil {
+        width: 42px;
+        height: 42px;
+    }
+
+
+    .icono_perfil i {
+        font-size: 23px !important;
+    }
+
+
+    .header > :nth-child(2) {
+        font-size: 17px;
+    }
+
+
+    .header > :nth-child(3) {
+        font-size: 10px;
+    }
+
+
+    /* =====================================================
+       FOTO
+       ===================================================== */
+
+    .foto {
+        width: 120px;
+        height: 120px;
+
+        padding: 3px;
+    }
+
+
+    /* =====================================================
+       NOMBRE
+       ===================================================== */
+
+    .info_persona > .panel1 > :first-child {
+        font-size: 15px;
+    }
+
+
+    /* =====================================================
+       CARGO
+       ===================================================== */
+
+    .fondo_cargo {
+        padding: 5px 10px;
+
+        font-size: 10px;
+    }
+
+
+    /* =====================================================
+       TARJETAS
+       ICONO | LABEL
+              | VALOR
+       ===================================================== */
+
+    .dato-card {
+        grid-template-columns:
+            40px
+            minmax(0, 1fr);
+
+        grid-template-rows:
+            auto
+            auto;
+
+        row-gap: 3px;
+
+        padding: 10px;
+    }
+
+
+    .dato-icon {
+        grid-column: 1;
+
+        grid-row: 1 / 3;
+
+        align-self: center;
+    }
+
+
+    .dato-label {
+        grid-column: 2;
+
+        grid-row: 1;
+
+        padding-left: 5px;
+    }
+
+
+    .dato-valor {
+        grid-column: 2;
+
+        grid-row: 2;
+
+        padding-left: 5px;
+    }
+
+
+    /* =====================================================
+       SEGURIDAD
+       ===================================================== */
+
+    .titulo_seguridad {
+        font-size: 11px;
+    }
+
+
+    .logo_seguridad img {
+        width: 70px;
+        height: auto;
+    }
+
+
+    .contenedor_seguridad {
+        padding: 15px 12px;
+    }
+}

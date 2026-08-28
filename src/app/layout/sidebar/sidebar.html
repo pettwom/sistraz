@@ -1,0 +1,67 @@
+<aside class="sidebar-container">
+    <button class="btn-cerrar-menu danger" (click)="cerrarMenu()">
+        <i class="pi pi-times"></i>
+    </button>
+    <div class="logo">
+        <div class="parent">
+            <div class="div1">
+                <img src="../../../../images/logo-anh.png" alt="ANH" width="70">
+            </div>
+            <div class="div2">
+                <p>TRAZABILIDAD</p>
+                <p>SISTEMA GLP</p>
+            </div>
+        </div>
+    </div>
+    <div class="menu">
+        <ul>
+            <li routerLinkActive="active">
+                <a routerLink="/dashboard">
+                    <i class="pi pi-home"></i>
+                    Pagina Principal
+                </a>
+            </li>
+            <li routerLinkActive="active">
+                <a routerLink="/dashboard">
+                    <i class="pi pi-home"></i>
+                    1. Origen / Refineria
+                </a>
+            </li>
+            <li routerLinkActive="active">
+                <a routerLink="/dashboard">
+                    <i class="pi pi-home"></i>
+                    2. Distribuidor
+                </a>
+            </li>
+            <li routerLinkActive="active">
+                <a routerLink="/dashboard">
+                    <i class="pi pi-home"></i>
+                    3. Consumidor
+                </a>
+            </li>
+            <li routerLinkActive="active">
+                <a routerLink="/dashboard">
+                    <i class="pi pi-home"></i>
+                    4. Reportes
+                </a>
+            </li>
+        </ul>
+    </div>
+    <div class="cerrarSession">
+        <a class="link_cerrar_session" (click)="cerrarSession($event)">
+            <div class="contenedor_cerrar">
+                <div class="avatar">
+                    <img src="../../../../images/avatar.png" alt="Avatar" width="40" class="avatar_img">
+                </div>
+                <div class="nombres">
+                    <p>John Doe</p>
+                    <p>Fiscalizador</p>
+                </div>
+                <div class="icono">
+                    <i class="pi pi-sign-out"></i>
+                </div>
+            </div>
+        </a>
+
+    </div>
+</aside>

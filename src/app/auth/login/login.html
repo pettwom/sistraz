@@ -1,0 +1,85 @@
+<div class="fondo">
+  <div class="login-container">
+    <div class="login-card">
+      <div class="login-logo">
+        <img src="../../../../images/logo-anh.png" alt="ANH">
+      </div>
+
+      <h1 class="login-title">
+        SISTEMA DE TRAZABILIDAD GLP
+      </h1>
+
+      <div class="login-subtitle">
+        Agencia Nacional de Hidrocarburos
+      </div>
+      <hr style="border: 1px solid rgba(0,0,0,.2)!important; margin: 20px 0;">
+
+      <br>
+
+      <form [formGroup]="formLogin" (ngSubmit)="ingresar()">
+
+        <!-- TEXT CORREO ELECTRONICO  -->
+        <div class="form-group">
+          <p-floatlabel>
+            <p-iconfield iconPosition="left">
+              <p-inputicon class="pi pi-envelope" style="color: #708090" />
+              <input pInputText id="username" type="email" formControlName="usuario" autocomplete="email"
+                class="fullTam" />
+            </p-iconfield>
+            <label for="username">
+              Correo electrónico
+            </label>
+          </p-floatlabel>
+        </div>
+        <br>
+        <div class="form-group">
+          <p-inputGroup>
+            <p-floatLabel>
+              <p-iconfield iconPosition="left">
+
+                <p-inputicon class="pi pi-key" style="color: #708090" />
+                <input id="password" type="password" formControlName="password" pInputText />
+                <p-inputicon id="iconoEyes" class="pi pi-eye" style="color: #708090" (click)="verPass()" />
+              </p-iconfield>
+
+              <label for="password">Contraseña</label>
+            </p-floatLabel>
+          </p-inputGroup>
+        </div>
+
+
+        <hr style="border: 1px solid rgba(0,0,0,.2)!important; margin: 20px 0;">
+
+        <div class="captcha-container">
+          <div class="captcha-svg" [innerHTML]="captchaSvg"></div>
+          <div class="button_captacha">
+            <button type="button" class="captcha-refresh" (click)="generarCaptcha()" title="Generar otro código">
+              <i class="pi pi-refresh"></i>
+            </button>
+          </div>
+        </div>
+        <br>
+        <div class="form-group">
+          <p-floatlabel>
+            <p-iconfield iconPosition="left">
+              <p-inputicon class="pi pi-qrcode" style="color: #708090" />
+              <input pInputText id="captcha" type="text" formControlName="captcha" autocomplete="off" class="fullTam"
+                onInput="this.value = this.value.toUpperCase()" />
+            </p-iconfield>
+            <label for="username">
+              CÓDIGO DE SEGURIDAD
+            </label>
+          </p-floatlabel>
+        </div>
+
+        <hr style="border: 1px solid rgba(0,0,0,.2)!important; margin: 20px 0;">
+
+        <p-button label="INICIAR SESIÓN" type="submit" severity="success" [raised]="true" [fluid]="true"
+          styleClass="btn-login" (click)="ingresar()">
+        </p-button>
+
+      </form>
+
+    </div>
+  </div>
+</div>

@@ -1,0 +1,185 @@
+.loader-wrap {
+display: flex;
+    gap: 24px;
+    flex-direction: column;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    justify-content: center;
+}
+
+.spinner-container {
+    position: relative;
+    width: 220px;
+    height: 220px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Anillo giratorio principal */
+.ring {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    border: 6px solid transparent;
+    border-top-color: #1f7a3f;
+    border-right-color: #f2a007;
+    animation: spin 1.4s linear infinite;
+}
+
+/* Segundo anillo, más interno, gira al revés y más lento */
+.ring.inner {
+    inset: 18px;
+    border-width: 4px;
+    border-top-color: #f2a007;
+    border-left-color: #1f7a3f;
+    animation: spin-reverse 2.2s linear infinite;
+    opacity: 0.7;
+}
+
+/* Puntos orbitando, evocando el diseño radial del logo */
+.dots {
+    position: absolute;
+    inset: -14px;
+    animation: spin 3.5s linear infinite;
+}
+
+.dots span {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #f2a007;
+    top: 50%;
+    left: 50%;
+    box-shadow: 0 0 8px 1px rgba(242, 160, 7, 0.6);
+}
+
+.dots span:nth-child(1) {
+    transform: rotate(0deg) translate(124px) rotate(0deg);
+}
+
+.dots span:nth-child(2) {
+    transform: rotate(90deg) translate(124px) rotate(-90deg);
+    background: #1f7a3f;
+    box-shadow: 0 0 8px 1px rgba(31, 122, 63, 0.6);
+}
+
+.dots span:nth-child(3) {
+    transform: rotate(180deg) translate(124px) rotate(-180deg);
+}
+
+.dots span:nth-child(4) {
+    transform: rotate(270deg) translate(124px) rotate(-270deg);
+    background: #1f7a3f;
+    box-shadow: 0 0 8px 1px rgba(31, 122, 63, 0.6);
+}
+
+.logo-circle {
+    position: relative;
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 25px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.05) inset;
+    animation: pulse 1.6s ease-in-out infinite;
+    overflow: hidden;
+}
+
+.logo-circle img {
+    width: 78%;
+    height: auto;
+    display: block;
+}
+
+.label {
+    color: #eaf3ec;
+    font-size: 15px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    opacity: 0.85;
+}
+
+.label .dot-anim::after {
+    content: '';
+    animation: dots 1.4s steps(4, end) infinite;
+}
+
+.progress-track {
+    width: 220px;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    width: 40%;
+    border-radius: 4px;
+    background: linear-gradient(90deg, var(--anh-green), var(--anh-orange));
+    animation: slide 1.3s ease-in-out infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes spin-reverse {
+    to {
+        transform: rotate(-360deg);
+    }
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.035);
+    }
+}
+
+@keyframes dots {
+    0% {
+        content: '';
+    }
+
+    25% {
+        content: '.';
+    }
+
+    50% {
+        content: '..';
+    }
+
+    75% {
+        content: '...';
+    }
+
+    100% {
+        content: '';
+    }
+}
+
+@keyframes slide {
+    0% {
+        transform: translateX(-100%);
+    }
+
+    100% {
+        transform: translateX(350%);
+    }
+}

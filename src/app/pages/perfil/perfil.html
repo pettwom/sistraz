@@ -1,0 +1,228 @@
+<div class="contenedor_perfil">
+    <div class="header">
+        <div class="icono_perfil">
+            <i class="pi pi-user"></i>
+        </div>
+        <p>Perfil</p>
+        <p>Información personal y configuración de cuenta</p>
+    </div>
+    <div class="datos">
+        <div class="foto">
+            <img src="../../../../images/avatar.png" alt="">
+        </div>
+        <div class="info_persona">
+            <div class="panel1">
+                <div>PETTER JIMMY MEAVE MERCADO</div><br>
+                <div>
+                    <span class="fondo_cargo">
+                        <i class="pi pi-briefcase"></i>&nbsp;&nbsp;
+                        Profesional en Desarrollo de Trazabilidad GLP
+                    </span>
+                </div>
+            </div>
+            <div class="panel2">
+                <table>
+                    <tr>
+                        <td>
+                            <div class="icono">
+                                <div class="icono_datos">
+                                    <i class="pi pi-envelope"></i>
+                                </div>
+                            </div>
+                            <div class="texto_d">
+                                <p>Correo electronico</p>
+                                <p>pmeave@anh.ine.gob.bo</p>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="icono">
+                                <div class="icono_datos">
+                                    <i class="pi pi-phone"></i>
+                                </div>
+                            </div>
+                            <div class="texto_d">
+                                <p>Teléfono Celular</p>
+                                <p>62525886</p>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="icono">
+                                <div class="icono_datos">
+                                    <i class="pi pi-credit-card"></i>
+                                </div>
+                            </div>
+                            <div class="texto_d">
+                                <p>Carnet Identidad</p>
+                                <p>4832802 L.P.</p>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- PANEL 2 -->
+<div class="contenedor_datos_perfil">
+    <div class="informacion_persona">
+        <div class="titulo_seguridad">
+            <i class="pi pi-shield" style="color: #7324c5"></i>
+            INFORMACION PERSONAL
+        </div>
+        <hr class="lineaSeparacion">
+        <br>
+        <div class="datos-grid">
+
+            <div class="dato-card">
+                <div class="dato-icon">
+                    <i class="pi pi-user"></i>
+                </div>
+
+                <div class="dato-label">
+                    Nombres:
+                </div>
+
+                <div class="dato-valor">
+                    Petter Jimmy Meave Mercado
+                </div>
+            </div>
+
+
+            <div class="dato-card">
+                <div class="dato-icon">
+                    <i class="pi pi-id-card"></i>
+                </div>
+
+                <div class="dato-label">
+                    Interno:
+                </div>
+
+                <div class="dato-valor">
+                    2802
+                </div>
+            </div>
+
+
+            <div class="dato-card">
+                <div class="dato-icon">
+                    <i class="pi pi-users"></i>
+                </div>
+
+                <div class="dato-label">
+                    Apellidos:
+                </div>
+
+                <div class="dato-valor">
+                    Meave Mercado
+                </div>
+            </div>
+
+
+            <div class="dato-card">
+                <div class="dato-icon">
+                    <i class="pi pi-envelope"></i>
+                </div>
+
+                <div class="dato-label">
+                    Correo Electrónico:
+                </div>
+
+                <div class="dato-valor">
+                    pmeave@anh.ine.gob.bo
+                </div>
+            </div>
+
+
+            <div class="dato-card">
+                <div class="dato-icon">
+                    <i class="pi pi-calendar"></i>
+                </div>
+
+                <div class="dato-label">
+                    Fecha de Nacimiento:
+                </div>
+
+                <div class="dato-valor">
+                    29/04/1984
+                </div>
+            </div>
+
+
+            <div class="dato-card">
+                <div class="dato-icon">
+                    <i class="pi pi-phone"></i>
+                </div>
+
+                <div class="dato-label">
+                    Celular:
+                </div>
+
+                <div class="dato-valor destacado">
+                    62525886
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+    <div class="seguridad">
+        <div class="contenedor_seguridad">
+            <div class="titulo_seguridad">
+                <i class="pi pi-shield" style="color: #7324c5"></i>
+                SEGURIDAD DE LA CUENTA
+            </div>
+
+            <hr class="lineaSeparacion">
+
+            <div class="logo_seguridad">
+                <div class="panel1">
+                    <img src="../../../../images/logo_seguridad.png" width="90" alt="logo_seguridad">
+                </div>
+                <div class="panel2">
+                    <p>Protege tu información</p>
+                    <p>Mantén tu cuenta segura actualizando tu contraseña regularmente</p>
+                </div>
+            </div>
+            <br>
+            <div class="input_seguridad">
+                <form [formGroup]="formNueva">
+                    <div class="form-group">
+                        <p-inputGroup>
+                            <div class="card flex justify-content-center"  style="width: 100%">
+                                <p-floatLabel>
+                                    <p-iconfield iconPosition="left">
+
+                                        <p-inputicon class="pi pi-key" style="color: #708090" />
+                                        <p-password [(ngModel)]="pass" type="password" id="password" [toggleMask]="true"
+                                            formControlName="password" promptLabel="Introduce la contraseña" weakLabel="Débil" mediumLabel="Medio" strongLabel="Fuerte" />
+                                    </p-iconfield>
+
+                                    <label for="password">Contraseña</label>
+                                </p-floatLabel>
+                            </div>
+                        </p-inputGroup>
+                    </div>
+                    <br><br>
+                    <div class="form-group">
+                        <p-inputGroup>
+                            <div class="card flex justify-content-center" style="width: 100%">
+                                <p-floatLabel>
+                                    <p-iconfield iconPosition="left">
+
+                                        <p-inputicon class="pi pi-key" style="color: #708090" />
+                                        <p-password [(ngModel)]="newpass" id="new_password" [toggleMask]="true"
+                                            formControlName="new_password"  promptLabel="Introduce la contraseña" weakLabel="Débil" mediumLabel="Medio" strongLabel="Fuerte" />
+                                    </p-iconfield>
+
+                                    <label for="password">Nueva Contraseña</label>
+                                </p-floatLabel>
+                            </div>
+                        </p-inputGroup>
+                    </div>
+                    <hr class="lineaSeparacion">
+                    <p-button label="Cambiar Contraseña" severity="info" (click)="cambiarPassword()"/>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

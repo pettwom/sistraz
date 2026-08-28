@@ -1,0 +1,44 @@
+<nav class="navbar-container">
+
+    <button type="button" class="btn-menu" (click)="abrirMenu()">
+
+        <i class="pi pi-bars"></i>
+
+    </button>
+
+    <div class="contenedor-navbar">
+        <div class="titulo">
+            <p>Panel Principal</p>
+            <p>Resumen ejecutivo del control y flujo de Gas Licuado de Petróleo</p>
+        </div>
+        @if(connection.estado() !== 'offline'){
+        <div class="online">
+            <div class="alerta_online">
+                <ul>
+                    <li>SISTEMA EN LÍNEA</li>
+                </ul>
+            </div>
+        </div>
+        }@else{
+        <div class="offline">
+            <div class="alerta_offline">
+                <ul>
+                    <li>SIN CONEXIÓN</li>
+                </ul>
+            </div>
+        </div>
+        }
+        <div class="notificacion">
+            <div class="notificacion_icon">
+                <i class="pi pi-bell"></i>
+            </div>
+        </div>
+        <div class="perfil" routerLink="/perfil">
+            <div class="perfil_datos">
+                <i class="pi pi-user"></i>
+                PERFIL
+            </div>
+        </div>
+    </div>
+
+</nav>

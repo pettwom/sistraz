@@ -1,0 +1,40 @@
+@import "primeicons/primeicons.css";
+html,
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  /* overflow: hidden; */
+}
+
+app-root {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+* {
+  box-sizing: border-box;
+}
+router-outlet + * {
+    display: block;
+
+    animation: entradaPagina 0.45s ease-out;
+}
+
+@keyframes entradaPagina {
+
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
