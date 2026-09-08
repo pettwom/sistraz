@@ -31,7 +31,27 @@
         <div class="notificacion">
             <div class="notificacion_icon">
                 <i class="pi pi-bell"></i>
-            </div>
+            </div>&nbsp;&nbsp;&nbsp;&nbsp;
+            <button type="button" class="btn-theme" (click)="cambiarTema()" [title]="
+        themeService.darkMode()
+        ? 'Cambiar a modo claro'
+        : 'Cambiar a modo oscuro'
+    ">
+
+                @if (themeService.darkMode()) {
+
+                <i class="pi pi-sun"></i>
+
+                } @else {
+
+                <i class="pi pi-moon"></i>
+
+                }
+
+            </button>
+            <!-- <div class="notificacion_icon">
+                <i class="pi pi-moon"></i>
+            </div> -->
         </div>
         <div class="perfil" routerLink="/perfil">
             <div class="perfil_datos">

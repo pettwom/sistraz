@@ -17,11 +17,13 @@ export const appConfig: ApplicationConfig = {
     MessageService,
     provideHttpClient(),
     providePrimeNG({
-  theme: {
-    preset: Aura
-  }
-  ,
+      theme: {
+        preset: Aura,
+        options: {
+          darkModeSelector:'.dark-mode',
+        }
+      },
       ripple: true
-})
+    })
   ]
 };

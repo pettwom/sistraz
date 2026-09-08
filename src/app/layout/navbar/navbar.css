@@ -1,6 +1,6 @@
 .btn-menu {
     background-color: rgba(0, 0, 0, 0.5);
-    border: 1px solid #353535;
+    border: 1px solid var(--border-color-oscuro);
     border-radius: 5px;
     display: none;
 }
@@ -28,7 +28,7 @@
 .titulo> :first-child {
     font-size: 18px;
     font-weight: bold;
-    color: #fff;
+    color: var(--text-white);
     padding: 0;
     margin: 0;
     margin-top: 10px;
@@ -37,7 +37,7 @@
 
 .titulo> :last-child {
     font-size: 12px;
-    color: #94A3B8;
+    color: var(--text-secundary);
     padding: 0;
     margin: 0;
     margin-bottom: 10px;
@@ -49,12 +49,12 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    color: #10B981;
+    color: var(--text-online);
 
 }
 
 .alerta_online {
-    border: 1px solid #10B981;
+    border: 1px solid var(--text-online);
     border-radius: 7px;
     padding-left: 11px;
     padding-top: 0px
@@ -70,7 +70,7 @@
 }
 
 .online li::marker {
-    color: #10B981;
+    color: var(--text-online);
     font-size: 25px;
 }
 
@@ -79,12 +79,12 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    color: #b91010;
+    color: var(--text-offline);
 
 }
 
 .alerta_offline {
-    border: 1px solid #b91010;
+    border: 1px solid var(--text-offline);
     border-radius: 7px;
     padding-left: 11px;
     padding-top: 0px
@@ -99,7 +99,7 @@
 }
 
 .offline li::marker {
-    color: #b91010;
+    color: var(--text-offline);
     font-size: 25px;
 }
 
@@ -111,21 +111,25 @@
 }
 
 .notificacion_icon:hover {
-    background: #131F35;
-    border: 1px solid #1F2E4D;
+    background: var(--bg-background);
+    border: 1px solid var(--menu-hover);
+    color: var(--text-white);
     cursor: pointer;
+
 }
 
 .notificacion_icon {
-    border: 1px solid #1F2E4D;
+    border: 1px solid var(--menu-hover);
     border-radius: 50%;
     padding: 6px;
-    background-color: #090F1B;
+    background-color: var(--bg-body);
+    color: var(--menu-link);
+    transition: .2s ease-in-out;
 }
 
 .perfil {
     grid-area: 1 / 4 / 2 / 4;
-    border-left: 1px solid #1F2E4D;
+    border-left: 1px solid var(--border-color);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -134,15 +138,61 @@
 }
 
 .perfil:hover {
-    background: #131F35;
-    border: 1px solid #1F2E4D;
+    background: var(--bg-background);
+    border: 1px solid var(--border-color);
     cursor: pointer;
 }
 
 .perfil_datos> :first-child {
-    color: #FBBF24;
+    color: var(--text-perfil);
     padding: 0 7px;
     font-size: clamp(0.5rem, 0.5rem + 1vw, 1rem);
+}
+
+.btn-theme {
+
+    border: 1px solid var(--menu-hover);
+    border-radius: 50%;
+    padding: 6px;
+    background-color: var(--bg-body);
+    color: var(--menu-link);
+    transition: .2s ease-in-out;
+
+    /* width: 42px;
+    height: 42px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border: none;
+
+    border-radius: 50%;
+
+    background: transparent;
+
+    cursor: pointer;
+
+    font-size: 1.2rem; */
+
+    /* transition:
+        background-color 0.3s ease,
+        transform 0.2s ease; */
+
+}
+
+.btn-theme:hover {
+    background: var(--bg-background);
+    border: 1px solid var(--menu-hover);
+    color: var(--text-white);
+    cursor: pointer;
+}
+
+.btn-theme i {
+
+    font-size: 1.2rem;
+
 }
 
 @media (max-width: 768px) {

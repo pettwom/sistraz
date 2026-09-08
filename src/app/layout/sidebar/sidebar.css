@@ -10,7 +10,7 @@
     height: 100%;
     overflow: hidden;
 
-    background-color: #090f1b;
+    background-color: var(--bg-fondo)
 }
 
 .btn-cerrar-menu {
@@ -24,7 +24,7 @@
     width: 260px;
     padding: 10px;
     text-align: center;
-    border: 1px solid #1F2E4D;
+    border: 1px solid var(--border-color);
     justify-content: center;
     align-items: center;
     vertical-align: middle;
@@ -45,7 +45,7 @@
     width: 260px;
     padding: 10px;
     text-align: center;
-    border-top: 1px solid #1F2E4D;
+    border-top: 1px solid var(--border-color);
 }
 
 .contenedor_cerrar {
@@ -79,7 +79,7 @@
 .nombres> :first-child {
     font-size: 1rem;
     font-weight: bold;
-    color: #fff;
+    color: var(--text-white);
     margin: 0px;
     padding: 0px;
     text-align: left;
@@ -90,14 +90,14 @@
     padding-top: 2px;
     margin: 0px;
     font-size: 0.7rem;
-    color: #64748b;
+    color: var(--text-secundary);
     text-align: left;
     font-weight: bold;
 }
 
 .icono {
     grid-area: 1 / 3 / 1 / 3;
-    color: #64748b;
+    color: var(--text-iconNom);
 }
 
 .parent {
@@ -113,22 +113,22 @@
 .div1 {
     grid-area: 1 / 1 / 2 / 2;
     width: 80%;
-    border: 1px solid #fff;
+    border: 1px solid var(--border-color-logo);
     border-radius: 5px;
-    background-color: #fff;
+    background-color: var(--background-white);
     padding: 0px;
     margin-left: 10px;
 }
 
 .div2 {
     grid-area: 1 / 2 / 2 / 3;
-    color: #fff;
+    color: var(--text-white);
 }
 
 .div2> :first-child {
     font-size: 12px;
     font-weight: bold;
-    color: #fff;
+    color: var(--text-white);
     margin: 0px;
     text-align: left;
 }
@@ -137,7 +137,7 @@
     padding-top: 1px;
     margin: 0px;
     font-size: 10px;
-    color: #00A3E0;
+    color: var(--text-link);
     text-align: left;
     font-weight: bold;
 }
@@ -168,7 +168,7 @@
     gap: 12px;
     padding: 12px 20px;
     border-radius: 10px;
-    color: #79879a;
+    color: var(--menu-link);
     text-decoration: none;
     font-size: 15px;
     transition: 1s;
@@ -183,21 +183,28 @@
 
 /* Al pasar el mouse */
 .menu li:hover a {
-    background: #131F35;
-    border: 1px solid #1F2E4D;
+    background: var(--menu-hover);
+    border: 1px solid var(--border-color);
     border-radius: 10px;
-    color: #F1F5F9;
+    color: var( --text-link-hover);
+}
+
+.menu li:active a {
+    background: var(--menu-hover);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    color: var( --text-link-hover);
 }
 
 .menu li:hover a i {
-    color: #00A3E0;
+    color: var(--text-link);
     border-radius: 10px;
 }
 
 /* Página seleccionada */
 .menu li a.active {
-    background: #2563eb;
-    color: f1f5f9;
+    background: var(--menu-active);
+    color: var(--text-link-hover);
     font-weight: 600;
     border-radius: 10px;
 }
@@ -211,8 +218,8 @@
 }
 .cerrarSession:hover {
     box-shadow: 1px -3px 3px rgba(0,0,0,.1);
-    border: 1px solid #1f2e4d;
-    background-color: #131f35;
+    border: 1px solid var(--border-color);
+    background-color: var(--bg-background);
     border-radius: 15px 15px 0 0;
     cursor: pointer;
 }
@@ -260,7 +267,7 @@
         border: none;
         border-radius: 50%;
         background: transparent;
-        color: white;
+        color: var(--text-white);
         font-size: 20px;
         cursor: pointer;
         z-index: 2000;

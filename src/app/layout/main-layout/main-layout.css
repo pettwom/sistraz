@@ -30,15 +30,15 @@
 /* SIDEBAR */
 .app-sidebar {
     grid-area: sidebar;
-    background: #090f1b;
-    border: 1px solid #1F2E4D;
+    background: var(--bg-body);
+    border: 1px solid var(--border-color);
 }
 
 /* NAVBAR */
 .app-navbar {
     grid-area: navbar;
-    background: #090f1b;
-    border: 1px solid #1F2E4D;
+    background: var(--bg-navbar);
+    border: 1px solid var(--border-color);
 }
 
 
@@ -53,7 +53,8 @@
     overflow-x: hidden;
     overflow-y: auto;
 
-    background: #0f121b;
+    background: var( --bg-content);
+    color: var(--menu-link)
 }
 
 .content {

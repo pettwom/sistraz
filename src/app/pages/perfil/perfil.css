@@ -28,9 +28,9 @@
     height: auto;
 
     border-radius: 10px;
-    border: 1px solid #1f2e4d;
+    border: 1px solid var(--border-color);
 
-    background-color: #0f1625;
+    background: var(--bg-body);
 
     box-sizing: border-box;
 
@@ -95,6 +95,7 @@
     justify-content: center;
     align-items: center;
 
+    /* color: var(--text-white); */
     color: #fff;
 
     flex-shrink: 0;
@@ -225,7 +226,7 @@
 
     font-weight: bold;
 
-    color: #fff;
+    color: var(--text-white);
 
     margin-left: 23px;
 }
@@ -243,6 +244,7 @@
     border: 2px solid transparent;
     border-radius: 14px;
 
+    /* background: */
     background:
         linear-gradient(
             transparent,
@@ -254,7 +256,7 @@
             #1e549d 100%
         ) border-box;
 
-    color: #fff;
+    color: var(--text-white);
 
     font-size: clamp(
         0.6rem,
@@ -280,12 +282,8 @@
 
     border-radius: 10px;
 
-    background: linear-gradient(
-        97deg,
-        rgba(21, 31, 53, 1) 0%,
-        rgba(32, 74, 141, 1) 76%,
-        rgba(22, 38, 64, 1) 99%
-    );
+    background:var(--background-degradado);
+    /* background: linear-gradient(97deg,rgba(21, 31, 53, 1) 0%,rgba(32, 74, 141, 1) 76%,rgba(22, 38, 64, 1) 99%); */
 
     box-sizing: border-box;
 }
@@ -360,16 +358,18 @@
     width: 40px;
     height: 40px;
 
-    border: 1px solid #1c2b4f;
+    border: 1px solid var(--border-color);
+    /* border: 1px solid #1c2b4f; */
     border-radius: 50%;
 
-    background: #19263e;
+    background: var(--bg-body);
+    /* background: #19263e; */
 
     display: flex;
     justify-content: center;
     align-items: center;
 
-    color: #fff;
+    color: var(--text-white);
 
     flex-shrink: 0;
 }
@@ -446,9 +446,9 @@
     height: auto;
 
     border-radius: 10px;
-    border: 1px solid #1f2e4d;
+    border: 1px solid var(--border-color);
 
-    background-color: #0f1625;
+    background: var(--bg-body);
 
     padding: 20px;
 
@@ -469,9 +469,9 @@
     height: auto;
 
     border-radius: 10px;
-    border: 1px solid #1f2e4d;
+    border: 1px solid var(--border-color);
 
-    background-color: #0f1625;
+    background-color: var(--bg-body);
 
     display: flex;
 
@@ -507,7 +507,7 @@
 
     gap: 8px;
 
-    color: #fff;
+    color: var(--text-white);
 
     font-size: 13px;
 
@@ -572,7 +572,7 @@
 
     padding: 8px 12px;
 
-    background: #101827;
+    background: var(--bg-body);
 
     border: 1px solid #222c3f;
 
@@ -589,7 +589,7 @@
 .dato-card:hover {
     border-color: #33466a;
 
-    background: #121d30;
+    background: var(--bg-body);
 }
 
 
@@ -628,7 +628,7 @@
 .dato-label {
     padding-left: 5px;
 
-    color: #f1f5f9;
+    /* color: var(--text-link-hover); */
 
     font-size: 12px;
     font-weight: 600;
@@ -644,7 +644,7 @@
 .dato-valor {
     min-width: 0;
 
-    color: #94a3b8;
+    color: var(--text-secundary);
 
     font-size: 12px;
 
@@ -702,7 +702,7 @@
     margin-top: 10px;
     margin-bottom: 10px;
 
-    color: #fff;
+    color: var(--text-white);
 }
 
 

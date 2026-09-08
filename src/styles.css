@@ -1,6 +1,116 @@
 @import "primeicons/primeicons.css";
+:root {
 
+    --bg-body: #f5f7fa;
+
+    --bg-navbar: #ffffff;
+
+    --bg-sidebar: #ffffff;
+
+    --bg-content: #f5f7fa;
+
+    --bg-card: #ffffff;
+
+    --text-primary: #1f2937;
+
+    --text-secondary: #6b7280;
+
+    --border-color-logo:#e4e5e5;
+    --border-color: #cecece;
+
+    --hover-color: #f3f4f6;
+
+    --background-degradado: linear-gradient(97deg,rgba(227, 227, 227, 1) 1%, rgba(255, 255, 255, 1) 73%, rgba(227, 227, 227, 1) 100%);
+
+    --text-link: #00A3E0; /* cambiado */
+
+    --menu-active: #2563eb; /* cambiado */
+
+    --menu-hover: #131f35; /* cambiado */
+
+    --menu-link: #79879a; /* cambiado */
+
+    --text-link-hover: #F1F5F9; /* cambiado */
+
+    --text-perfil: #FBBF24; /* cambiado */
+
+    --text-online: #10B981; /* cambiado */
+    --text-offline: #b91010; /* cambiado */
+    --bg-content: #f1f1f1; /* cambiado */
+    --text-secundary:#94A3B8;
+}
+html.dark-mode {
+
+    --bg-body: #090f1b;/* cambiado */
+
+    --bg-navbar: #090f1b;/* cambiado */
+
+    --bg-sidebar: #090f1b;/* cambiado */
+
+    --bg-content: #080c14;/* cambiado */
+
+    --bg-card: #090f1b;/* cambiado */
+
+    --bg-background: #131F35;/* cambiado */
+    --border-color: #131F35;/* cambiado */
+    
+    --text-iconNom: #64748b; /* cambiado */
+
+    --border-white: #fff; /* cambiado */
+    
+    --background-white: #fff; /* cambiado */
+    
+    --text-white: #fff; /* cambiado */
+
+    --text-link: #00A3E0; /* cambiado */
+
+    --menu-active: #2563eb; /* cambiado */
+
+    --menu-hover: #131f35; /* cambiado */
+
+    --menu-link: #79879a; /* cambiado */
+
+    --text-link-hover: #F1F5F9; /* cambiado */
+
+    --text-perfil: #FBBF24; /* cambiado */
+
+    --text-online: #10B981; /* cambiado */
+    --text-offline: #b91010; /* cambiado */
+    /* --bg-content: #0f121b; cambiado */
+    
+    --border-color-oscuro: #353535;/* cambiado */
+
+    --background-degradado: linear-gradient(97deg,rgba(21, 31, 53, 1) 0%,rgba(32, 74, 141, 1) 76%,rgba(22, 38, 64, 1) 99%);/* cambiado */
+
+    --text-secundary:#94A3B8; 
+
+
+    /* --text-primary: #f9fafb;
+
+    --text-secondary: #d1d5db;
+
+    --border-color: #1F2E4D;
+
+    --hover-color: #374151; */
+
+}
 html,
+body {
+
+    background-color: var(--bg-body);
+
+    /* color: var(--text-primary); */
+    color: var(--menu-link);
+
+    transition:
+        background-color 0.3s ease,
+        color 0.3s ease;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+/* html,
 body {
   width: 100%;
   height: 100%;
@@ -8,9 +118,7 @@ body {
   padding: 0;
 }
 
-body {
-  /* overflow: hidden; */
-}
+ */
 
 app-root {
   display: block;

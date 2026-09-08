@@ -8,6 +8,8 @@ import { RouterLink } from '@angular/router';
 import { fromEvent, merge, of, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ConnectionService } from '../../services/connection.services';
+import { ThemesService } from '../../services/themes.service';
+
 
 @Component({
   selector: 'app-navbar',
@@ -20,11 +22,17 @@ export class Navbar {
   toggleMenu = new EventEmitter<void>();
   isOnline: boolean = navigator.onLine;
   networkStatus$: Subscription = Subscription.EMPTY;
+  connection = inject(ConnectionService)
+  themeService = inject(ThemesService);
 
   abrirMenu() {
     console.log('navbar: click')
     this.toggleMenu.emit();
   }
 
-  connection = inject(ConnectionService)
+  cambiarTema(): void {
+
+    this.themeService.toggleDarkMode();
+
+  }
 }
