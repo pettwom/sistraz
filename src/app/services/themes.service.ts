@@ -22,12 +22,64 @@ export class ThemesService {
   }
   private aplicarTema(esOscuro: boolean): void {
     const html = document.documentElement;
+          // Animación de salida
+      html.animate(
+        [
+          { opacity: 1 },
+          { opacity: 0.7 }
+        ],
+        {
+          duration: 200,
+          easing: 'ease-in',
+          fill: 'forwards'
+        }
+      );
     if (esOscuro) {
-      html.classList.add('dark-mode');
-      localStorage.setItem(this.STORAGE_KEY, 'dark');
+      const html = document.documentElement;
+
+
+
+      setTimeout(() => {
+
+        // Cambiar a modo oscuro
+        html.classList.add('dark-mode');
+        localStorage.setItem(this.STORAGE_KEY, 'dark');
+
+        // Animación de entrada
+        html.animate(
+          [
+            { opacity: 0.2 },
+            { opacity: 1 }
+          ],
+          {
+            duration: 800,
+            easing: 'ease-out',
+            fill: 'forwards'
+          }
+        );
+
+      }, 400);
+      // html.classList.add('dark-mode');
+      // localStorage.setItem(this.STORAGE_KEY, 'dark');
     } else {
-      html.classList.remove('dark-mode');
-      localStorage.setItem(this.STORAGE_KEY, 'light');
+      setTimeout(() => {
+        html.classList.remove('dark-mode');
+        localStorage.setItem(this.STORAGE_KEY, 'light');
+                // Animación de entrada
+        html.animate(
+          [
+            { opacity: 0.3 },
+            { opacity: 1 }
+          ],
+          {
+            duration: 800,
+            easing: 'ease-out',
+            fill: 'forwards'
+          }
+        );
+      }, 200);
+      // html.classList.remove('dark-mode');
+      // localStorage.setItem(this.STORAGE_KEY, 'light');
     }
   }
 }
