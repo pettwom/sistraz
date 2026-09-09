@@ -1,35 +1,40 @@
 <div class="main-layout">
   <p-toast></p-toast>
-  
+
   @if (loadingService.cargando()) {
 
-    <app-loading></app-loading>
+  <app-loading></app-loading>
 
-  } 
+  }
 
-    <div class="layout">
+  <div class="layout">
 
-      <!-- Menú lateral -->
-      <app-sidebar class="app-sidebar" [class.sidebar-open]="menuAbierto" (closeMenu)="cerrarMenu()">
-        (tituloSeleccionado)="cambiarTitulos($event)">
-      </app-sidebar>
-      
-      <!-- Fondo oscuro cuando el menú está abierto -->
-      @if (menuAbierto) {
-          <div class="overlay" (click)="cerrarMenu()"></div>
-      }
+    <!-- Menú lateral -->
+    <app-sidebar 
+      class="app-sidebar" 
+      [class.sidebar-open]="menuAbierto" 
+      (closeMenu)="cerrarMenu()"
+      (textoSeleccionado)="recibirTexto($event)">
+    </app-sidebar>
 
-      <!-- Barra superior -->
-      <app-navbar class="app-navbar" (toggleMenu)="toggleMenu()">
-        [titulo]="tituloNavbar"
-        [subtitulo]="subtituloNavbar">
-      </app-navbar>
+    <!-- Fondo oscuro cuando el menú está abierto -->
+    @if (menuAbierto) {
+    <div class="overlay" (click)="cerrarMenu()"></div>
+    }
 
-      <!-- Contenido de cada página -->
-      <main class="content">
-        <router-outlet></router-outlet>
-      </main>
+    <!-- Barra superior -->
+    <app-navbar 
+      class="app-navbar" 
+      (toggleMenu)="toggleMenu()" 
+      [titulo]="tituloNavbar" 
+      [subtitulo]="subtituloNavbar">
+    </app-navbar>
 
-    </div>
-  
+    <!-- Contenido de cada página -->
+    <main class="content">
+      <router-outlet></router-outlet>
+    </main>
+
+  </div>
+
 </div>

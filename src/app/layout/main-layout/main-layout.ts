@@ -27,22 +27,18 @@ export class MainLayout {
   menuAbierto = false;
   // Servicio global del loading
   loadingService = inject(LoadingService);
-  tituloNavbar:string = '';
-  subtituloNavbar:string = '';
 
-  cambiarTitulos(evento:{titulo:string, subtitulo:string}){
-    console.log(evento.titulo, ',',evento.subtitulo,'<=== mainlayout');
-    
+
+  tituloNavbar: string = 'Panel Principal';
+  subtituloNavbar: string = 'Resumen ejecutivo del control y flujo de Gas Licuado de Petróleo';
+
+  recibirTexto(evento: { titulo: string, subtitulo: string }) {
     this.tituloNavbar = evento.titulo;
     this.subtituloNavbar = evento.subtitulo;
   }
 
   toggleMenu() {
-    console.log('main-layout recibió evento');
-
     this.menuAbierto = !this.menuAbierto;
-
-    console.log('menuAbierto:', this.menuAbierto);
   }
 
   cerrarMenu() {

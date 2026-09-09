@@ -17,20 +17,20 @@ import { ConfirmPopupModule } from 'primeng/confirmpopup';
   styleUrl: './navbar.css',
   providers: [ConfirmationService, MessageService],
 })
-export class Navbar implements OnInit{
-  
+export class Navbar implements OnInit {
+
   // ==========================================
   // EVENTO PARA ABRIR / CERRAR SIDEBAR
   // ==========================================
 
-  @Output()
-  toggleMenu = new EventEmitter<void>();
-  @Input()  titulo:string = '';
-  @Input()  subtitulo:string = '';
-ngOnInit(): void {
-    console.log(this.titulo,'<???====');
+  @Output() toggleMenu = new EventEmitter<void>();
+  @Input() titulo: string = '';
+  @Input() subtitulo: string = '';
+
+  ngOnInit(): void {
+
   }
-  
+
   notificaciones = [
     {
       id: 1,
@@ -71,8 +71,6 @@ ngOnInit(): void {
   // ==========================================
 
   abrirMenu(): void {
-    console.log('navbar: click');
-
     this.toggleMenu.emit();
   }
 
@@ -115,13 +113,13 @@ ngOnInit(): void {
   }
   mostrarNotificaciones(event: Event): void {
 
-  this.confirmationService.confirm({
-    target: event.currentTarget as EventTarget,
-    message: '',
-    acceptVisible: false,
-    rejectVisible: false,
-    defaultFocus: 'none'
-  });
+    this.confirmationService.confirm({
+      target: event.currentTarget as EventTarget,
+      message: '',
+      acceptVisible: false,
+      rejectVisible: false,
+      defaultFocus: 'none'
+    });
 
-}
+  }
 }

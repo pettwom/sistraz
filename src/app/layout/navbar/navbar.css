@@ -38,6 +38,7 @@
     padding: 0;
     margin: 0;
     margin-top: 10px;
+    margin-bottom: 5px;
     font-family: 'inter', sans-serif;
 }
 
@@ -550,8 +551,14 @@
     .perfil>.perfil_datos>:last-child {
         font-size: clamp(0.7rem, 0.5rem + 2vw, 0.7rem);
     }
-
+    
     .titulo {
         width: calc(80% - 40px);
+    }
+    .titulo>:last-child{
+        display: none;
+    }
+    .titulo>:first-child{
+        font-size: clamp(0.9rem, 0.7rem + 2vw, 0.9rem);
     }
 }

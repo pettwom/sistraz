@@ -1,9 +1,5 @@
 import { Component, EventEmitter, Output} from '@angular/core';
 import { RouterLink, Router, RouterLinkActive  } from '@angular/router';
-interface TextoMenu {
-titulo: string;
-subtitulo: string;
-}
 
 @Component({
   selector: 'app-sidebar',
@@ -13,16 +9,18 @@ subtitulo: string;
 })
 export class Sidebar {
   @Output() closeMenu = new EventEmitter<void>();
-  @Output() textoSeleccionado = new EventEmitter<TextoMenu>();
+  @Output() textoSeleccionado = new EventEmitter<{
+    titulo: string;
+    subtitulo: string;
+  }>();
   
   titulo: string = '';
   constructor(private router: Router){}
   
   seleccionarMenu(titulo:string, subtitulo:string):void{
-    const textoMenu: TextoMenu = { titulo, subtitulo };
-    this.textoSeleccionado.emit(textoMenu);
-    console.log('===>', titulo, subtitulo, '<====');
+    this.textoSeleccionado.emit({ titulo, subtitulo });
   }
+
   cerrarMenu() {
     this.closeMenu.emit();
   }
