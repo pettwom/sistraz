@@ -72,7 +72,7 @@
 
 .nombres {
     grid-area: 1 / 2 / 1 / 2;
-    width: 150px;
+    max-width: 100%;
     padding-left: 10px;
 }
 
@@ -167,6 +167,7 @@
     align-items: center;
     gap: 12px;
     padding: 12px 20px;
+    border: 1px solid var(--menu-link-hover);
     border-radius: 10px;
     color: var(--menu-link);
     text-decoration: none;
@@ -236,7 +237,7 @@
     .cerrarSession {
         width: 200px;
 
-        overflow-x: hidden;
+        overflow: hidden;
     }
 
     .logo>.parent>.div1>img {
@@ -283,6 +284,12 @@
     .danger {
         background-color: brown;
         color: #fff;
+        margin:5px;
+    }
+    .danger:hover {
+        background-color: rgb(199, 134, 134);
+        color: #a09e9e;
+        margin:5px;
     }
 
     .btn-cerrar-menu:hover {
@@ -292,7 +299,8 @@
     .logo,
     .menu,
     .cerrarSession {
-        width: 245px;
+        
+        width: 100%;
     }
 
 }

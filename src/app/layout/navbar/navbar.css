@@ -1,7 +1,13 @@
 .btn-menu {
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: var(--icono-menu_responsive);
+    color: var(--text-white);
     border: 1px solid var(--border-color-oscuro);
     border-radius: 5px;
+    POSITION: relative;
+    FLOAT: left;
+    margin: 5px;
+    padding: 6px;
+    transition: .2s ease-in-out;
     display: none;
 }
 

@@ -31,6 +31,9 @@
 
   --menu-hover: #131f35;
   /* cambiado */
+  
+  --menu-link-hover: #090f1b;
+  /* cambiado */
 
   --menu-link: #79879a;
   /* cambiado */
@@ -49,6 +52,7 @@
   /* cambiado */
   --text-secundary: #94A3B8;
 
+   --icono-menu_responsive : #e4e7ee;
 }
 
 html.dark-mode {
@@ -97,6 +101,9 @@ html.dark-mode {
   --menu-link: #79879a;
   /* cambiado */
 
+    --menu-link-hover: #090f1b;
+  /* cambiado */
+
   --text-link-hover: #F1F5F9;
   /* cambiado */
 
@@ -116,6 +123,8 @@ html.dark-mode {
   /* cambiado */
 
   --text-secundary: #94A3B8;
+
+  --icono-menu_responsive : #090f1b;
 
 
   /* --text-primary: #f9fafb;
