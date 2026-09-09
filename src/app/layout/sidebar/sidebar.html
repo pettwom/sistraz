@@ -15,34 +15,82 @@
     </div>
     <div class="menu">
         <ul>
-            <li routerLinkActive="active">
-                <a routerLink="/dashboard">
+            <li>
+                <a 
+                routerLink="/dashboard" 
+                routerLinkActive="active"
+                [routerLinkActiveOptions]="{ exact: true }">
                     <i class="pi pi-home"></i>
                     Pagina Principal
                 </a>
             </li>
-            <li routerLinkActive="active">
-                <a routerLink="/dashboard">
+            <li >
+                <a 
+                routerLinkActive="active"
+                routerLink="/produccion" 
+                [routerLinkActiveOptions]="{ exact: true }">
                     <i class="pi pi-home"></i>
-                    1. Origen / Refineria
+                    1. Producción
                 </a>
             </li>
-            <li routerLinkActive="active">
-                <a routerLink="/dashboard">
+            <li >
+                <a 
+                routerLink="/transporte" 
+                routerLinkActive="active"
+                [routerLinkActiveOptions]="{ exact: true }"
+                >
                     <i class="pi pi-home"></i>
-                    2. Distribuidor
+                    2. Transporte
                 </a>
             </li>
-            <li routerLinkActive="active">
-                <a routerLink="/dashboard">
+            <li>
+                <a 
+                routerLink="/almacenamiento" 
+                routerLinkActive="active"
+                [routerLinkActiveOptions]="{ exact: true }"
+                >
                     <i class="pi pi-home"></i>
-                    3. Consumidor
+                    3. Almacenamiento
                 </a>
             </li>
-            <li routerLinkActive="active">
-                <a routerLink="/dashboard">
+            <li>
+                <a
+                routerLink="/tanque" 
+                routerLinkActive="active"
+                [routerLinkActiveOptions]="{ exact: true }"
+                >
                     <i class="pi pi-home"></i>
-                    4. Reportes
+                    4. Tanque de almacenamiento
+                </a>
+            </li>
+            <li>
+                <a
+                routerLink="/envasado" 
+                routerLinkActive="active"
+                [routerLinkActiveOptions]="{ exact: true }"
+                >
+                    <i class="pi pi-home"></i>
+                    5. Envasado
+                </a>
+            </li>
+            <li>
+                <a
+                routerLink="/despacho" 
+                routerLinkActive="active"
+                [routerLinkActiveOptions]="{ exact: true }"
+                >
+                    <i class="pi pi-home"></i>
+                    6. Despacho
+                </a>
+            </li>
+            <li>
+                <a
+                routerLink="/configuracion" 
+                routerLinkActive="active"
+                [routerLinkActiveOptions]="{ exact: true }"
+                >
+                    <i class="pi pi-home"></i>
+                    Configuraciósn
                 </a>
             </li>
         </ul>
