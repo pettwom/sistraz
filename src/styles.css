@@ -155,6 +155,20 @@ body {
   padding: 0;
 }
 
+.ftco-animate {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.ftco-animated {
+  visibility: visible;
+}
+
+.fadeInUp {
+  animation: fadeInUp 0.8s ease forwards;
+}
+
+
 app-root {
   display: block;
   width: 100%;
@@ -172,7 +186,7 @@ router-outlet+* {
   animation: entradaPagina 0.45s ease-out;
 }
 
-.ftco-animate {
+/* .ftco-animate {
   opacity: 0;
   visibility: hidden;
   transform: translateY(20px);
@@ -183,7 +197,7 @@ router-outlet+* {
   opacity: 1 !important;
   visibility: visible !important;
   transform: translateY(0);
-}
+} */
 
 @keyframes entradaPagina {
 
@@ -196,4 +210,17 @@ router-outlet+* {
     opacity: 1;
     transform: translateY(0);
   }
+}
+@keyframes fadeInUp {
+
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
 }

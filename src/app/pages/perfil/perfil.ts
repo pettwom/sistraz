@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { ImportsModule } from '../../imports';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { FtcoAnimateDirective } from '../../shared/directive/ftco-animate.directive';
+
 import {
   FormBuilder,
   FormControl,
@@ -15,7 +16,7 @@ import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-perfil',
-  imports: [ImportsModule, ReactiveFormsModule,FtcoAnimateDirective],
+  imports: [ImportsModule, ReactiveFormsModule, FtcoAnimateDirective],
   standalone:true,
   templateUrl: './perfil.html',
   styleUrl: './perfil.css'
