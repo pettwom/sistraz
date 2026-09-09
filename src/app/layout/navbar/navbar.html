@@ -1,35 +1,51 @@
 <nav class="navbar-container">
 
-    <button type="button" class="btn-menu" (click)="abrirMenu()">
+  <button type="button" class="btn-menu" (click)="abrirMenu()">
 
-        <i class="pi pi-bars"></i>
+    <i class="pi pi-bars"></i>
 
-    </button>
+  </button>
 
-    <div class="contenedor-navbar">
-        <div class="titulo">
-            <p>Panel Principal</p>
-            <p>Resumen ejecutivo del control y flujo de Gas Licuado de Petróleo</p>
-        </div>
-        @if(connection.estado() !== 'offline'){
-        <div class="online">
-            <div class="alerta_online">
-                <ul>
-                    <li>SISTEMA EN LÍNEA</li>
-                </ul>
-            </div>
-        </div>
-        }@else{
-        <div class="offline">
-            <div class="alerta_offline">
-                <ul>
-                    <li>SIN CONEXIÓN</li>
-                </ul>
-            </div>
-        </div>
+  <div class="contenedor-navbar">
+    <div class="titulo">
+      <p>Panel Principal</p>
+      <p>Resumen ejecutivo del control y flujo de Gas Licuado de Petróleo</p>
+    </div>
+    @if(connection.estado() !== 'offline'){
+    <div class="online">
+      <div class="alerta_online">
+        <ul>
+          <li>SISTEMA EN LÍNEA</li>
+        </ul>
+      </div>
+    </div>
+    }@else{
+    <div class="offline">
+      <div class="alerta_offline">
+        <ul>
+          <li>SIN CONEXIÓN</li>
+        </ul>
+      </div>
+    </div>
+    }
+    <div class="notificacion ">
+      <button type="button" class="notificacion_icon" (click)="mostrarNotificaciones($event)">
+
+        <i class="pi pi-bell"></i>
+
+        @if(notificaciones.length > 0) {
+        <span class="notificacion_badge">
+          {{ notificaciones.length }}
+        </span>
         }
-        <div class="notificacion ">
-            <div class="card flex justify-content-center gap-2">
+
+      </button>
+      <!-- <div class="notificacion_icon">
+
+        <i class="pi pi-bell"></i>
+
+      </div> -->
+      <!-- <div class="card flex justify-content-center gap-2">
                 <p-toast />
                 <p-confirmpopup>
                     <ng-template pTemplate="content" let-message>
@@ -43,35 +59,110 @@
                 <p-button (onClick)="confirm($event)" class="notificacion_icon">
                     <i class="pi pi-bell"></i>
                 </p-button>
-            </div>
-            &nbsp;&nbsp;&nbsp;&nbsp;
-            <button type="button" class="btn-theme" (click)="cambiarTema()" [title]="
+            </div> -->
+      &nbsp;&nbsp;&nbsp;&nbsp;
+      <button type="button" class="btn-theme" (click)="cambiarTema()" [title]="
                     themeService.darkMode()
                     ? 'Cambiar a modo claro'
                     : 'Cambiar a modo oscuro'
                 ">
 
-                @if (themeService.darkMode()) {
+        @if (themeService.darkMode()) {
 
-                <i class="pi pi-sun"></i>
+        <i class="pi pi-sun"></i>
 
-                } @else {
+        } @else {
 
-                <i class="pi pi-moon"></i>
+        <i class="pi pi-moon"></i>
 
-                }
+        }
 
-            </button>
-            <!-- <div class="notificacion_icon">
+      </button>
+      <!-- <div class="notificacion_icon">
                 <i class="pi pi-moon"></i>
             </div> -->
-        </div>
-        <div class="perfil" routerLink="/perfil">
-            <div class="perfil_datos">
-                <i class="pi pi-user"></i>
-                PERFIL
-            </div>
-        </div>
     </div>
+    <p-confirmpopup
+  styleClass="popup-notificaciones">
+
+  <ng-template #content>
+
+    <div class="notificaciones-panel">
+
+      <div class="notificaciones-header">
+
+        <div>
+          <h3>Notificaciones</h3>
+
+          <span>
+            {{ notificaciones.length }} mensajes
+          </span>
+        </div>
+
+        <i class="pi pi-bell"></i>
+
+      </div>
+
+
+      <div class="notificaciones-lista">
+
+        @for (notificacion of notificaciones; track notificacion.id) {
+
+          <div class="notificacion-item">
+
+            <div class="notificacion-item-icon">
+
+              <i [class]="notificacion.icono"></i>
+
+            </div>
+
+            <div class="notificacion-contenido">
+
+              <div class="notificacion-titulo">
+                {{ notificacion.titulo }}
+              </div>
+
+              <div class="notificacion-mensaje">
+                {{ notificacion.mensaje }}
+              </div>
+
+              <div class="notificacion-fecha">
+                <i class="pi pi-clock"></i>
+
+                {{ notificacion.fecha }}
+              </div>
+
+            </div>
+
+          </div>
+
+        } @empty {
+
+          <div class="sin-notificaciones">
+
+            <i class="pi pi-bell-slash"></i>
+
+            <span>
+              No tiene notificaciones
+            </span>
+
+          </div>
+
+        }
+
+      </div>
+
+    </div>
+
+  </ng-template>
+
+</p-confirmpopup>
+    <div class="perfil" routerLink="/perfil">
+      <div class="perfil_datos">
+        <i class="pi pi-user"></i>
+        PERFIL
+      </div>
+    </div>
+  </div>
 
 </nav>

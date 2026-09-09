@@ -110,23 +110,361 @@
     align-items: center;
 }
 
-.notificacion_icon:hover {
+/* .notificacion_icon:hover {
     background: var(--bg-background);
-    /* border: 1px solid var(--menu-hover); */
+
     color: var(--text-white);
     cursor: pointer;
 
 }
 
 .notificacion_icon {
-    /* border: 1px solid var(--menu-hover); */
+
     border-radius: 50%;
     padding: 6px;
     background-color: var(--bg-body);
     color: var(--menu-link);
     transition: .2s ease-in-out;
+} */
+/* BOTÓN CAMPANA */
+
+.notificacion_icon {
+
+    position: relative;
+
+    width: 40px;
+    height: 40px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: none;
+
+    border-radius: 50%;
+
+    background: transparent;
+
+    color: var(--menu-link);
+
+    cursor: pointer;
+
+    transition:
+        background-color .25s ease,
+        color .25s ease,
+        transform .2s ease;
 }
 
+
+.notificacion_icon:hover {
+
+    background-color: var(--bg-background);
+
+    color: var(--text-white);
+
+    transform: translateY(-1px);
+}
+
+
+.notificacion_icon i {
+
+    font-size: 1.15rem;
+}
+
+
+/* CONTADOR ROJO */
+
+.notificacion_badge {
+
+    position: absolute;
+
+    top: 1px;
+    right: 0px;
+
+    min-width: 17px;
+    height: 17px;
+
+    padding: 0 4px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 20px;
+
+    background: #ef4444;
+
+    color: white;
+
+    font-size: 10px;
+    font-weight: 700;
+
+    border: 2px solid var(--bg-body);
+}
+/* ======================================================
+   POPUP DE NOTIFICACIONES
+====================================================== */
+
+:host ::ng-deep .popup-notificaciones {
+
+    width: 380px;
+
+    max-width: calc(100vw - 30px);
+
+    padding: 0 !important;
+
+    border-radius: 12px !important;
+
+    overflow: hidden;
+
+}
+
+
+/* Quitar padding estándar de PrimeNG */
+
+:host ::ng-deep .popup-notificaciones .p-confirmpopup-content {
+
+    padding: 0 !important;
+
+}
+
+
+/* Ocultar footer por seguridad */
+
+:host ::ng-deep .popup-notificaciones .p-confirmpopup-footer {
+
+    display: none !important;
+
+}
+
+
+/* PANEL */
+
+.notificaciones-panel {
+
+    width: 100%;
+
+    min-width: 350px;
+
+}
+
+
+/* CABECERA */
+
+.notificaciones-header {
+
+    display: flex;
+
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 16px 18px;
+
+    border-bottom: 1px solid var(--border-color);
+
+}
+
+
+.notificaciones-header h3 {
+
+    margin: 0;
+
+    font-size: 15px;
+
+    font-weight: 700;
+
+    color: var(--text-white);
+
+}
+
+
+.notificaciones-header span {
+
+    display: block;
+
+    margin-top: 3px;
+
+    font-size: 11px;
+
+    color: var(--text-secundary);
+
+}
+
+
+.notificaciones-header > i {
+
+    font-size: 18px;
+
+    color: var(--menu-link);
+
+}
+
+
+/* LISTA */
+
+.notificaciones-lista {
+
+    max-height: 380px;
+
+    overflow-y: auto;
+
+}
+
+
+/* NOTIFICACIÓN */
+
+.notificacion-item {
+
+    display: flex;
+
+    gap: 12px;
+
+    padding: 14px 16px;
+
+    border-bottom: 1px solid var(--border-color);
+
+    cursor: pointer;
+
+    transition: background-color .2s ease;
+
+}
+
+
+.notificacion-item:hover {
+
+    background-color: var(--bg-background);
+
+}
+
+
+.notificacion-item:last-child {
+
+    border-bottom: none;
+
+}
+
+
+/* ICONO */
+
+.notificacion-item-icon {
+
+    width: 38px;
+    height: 38px;
+
+    min-width: 38px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background-color: var(--bg-background);
+
+    color: var(--menu-link);
+
+}
+
+
+.notificacion-item-icon i {
+
+    font-size: 15px;
+
+}
+
+
+/* TEXTO */
+
+.notificacion-contenido {
+
+    flex: 1;
+
+    min-width: 0;
+
+}
+
+
+.notificacion-titulo {
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+    color: var(--text-white);
+
+    margin-bottom: 4px;
+
+}
+
+
+.notificacion-mensaje {
+
+    font-size: 11px;
+
+    line-height: 1.4;
+
+    color: var(--text-secundary);
+
+}
+
+
+.notificacion-fecha {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 4px;
+
+    margin-top: 7px;
+
+    font-size: 10px;
+
+    color: var(--text-secundary);
+
+}
+
+
+.notificacion-fecha i {
+
+    font-size: 9px;
+
+}
+
+
+/* SIN NOTIFICACIONES */
+
+.sin-notificaciones {
+
+    height: 160px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 10px;
+
+    color: var(--text-secundary);
+
+}
+
+
+.sin-notificaciones i {
+
+    font-size: 30px;
+
+}
+
+
+.sin-notificaciones span {
+
+    font-size: 12px;
+
+}
 .perfil {
     grid-area: 1 / 4 / 2 / 4;
     border-left: 1px solid var(--border-color);
