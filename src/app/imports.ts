@@ -13,7 +13,7 @@
     import { CheckboxModule } from 'primeng/checkbox';
     import { ChipModule } from 'primeng/chip';
     import { ConfirmDialogModule } from 'primeng/confirmdialog';
-    import { ConfirmPopupModule } from 'primeng/confirmpopup';
+    import { ConfirmPopup, ConfirmPopupModule } from 'primeng/confirmpopup';
     import { ColorPickerModule } from 'primeng/colorpicker';
     import { ContextMenuModule } from 'primeng/contextmenu';
     import { DataViewModule } from 'primeng/dataview';
@@ -99,6 +99,7 @@
 
     const PRIME_NG_IMPORTS = [
       AvatarModule,
+  
       AvatarGroupModule,
       AnimateOnScrollModule,
       FormsModule,
@@ -118,6 +119,7 @@
       ColorPickerModule,
       ConfirmDialogModule,
       ConfirmPopupModule,
+      ConfirmPopup,
       ContextMenuModule,
       DataViewModule,
       DialogModule,

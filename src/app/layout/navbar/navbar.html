@@ -28,15 +28,28 @@
             </div>
         </div>
         }
-        <div class="notificacion">
-            <div class="notificacion_icon">
-                <i class="pi pi-bell"></i>
-            </div>&nbsp;&nbsp;&nbsp;&nbsp;
+        <div class="notificacion ">
+            <div class="card flex justify-content-center gap-2">
+                <p-toast />
+                <p-confirmpopup>
+                    <ng-template pTemplate="content" let-message>
+                        <div
+                            class="flex flex-column align-items-center w-full gap-3 border-bottom-1 surface-border p-3 mb-3">
+                            <i [class]="message.icon" class="text-6xl text-primary-500"></i>
+                            <p>{{ message.message }}</p>
+                        </div>
+                    </ng-template>
+                </p-confirmpopup>
+                <p-button (onClick)="confirm($event)" class="notificacion_icon">
+                    <i class="pi pi-bell"></i>
+                </p-button>
+            </div>
+            &nbsp;&nbsp;&nbsp;&nbsp;
             <button type="button" class="btn-theme" (click)="cambiarTema()" [title]="
-        themeService.darkMode()
-        ? 'Cambiar a modo claro'
-        : 'Cambiar a modo oscuro'
-    ">
+                    themeService.darkMode()
+                    ? 'Cambiar a modo claro'
+                    : 'Cambiar a modo oscuro'
+                ">
 
                 @if (themeService.darkMode()) {
 
