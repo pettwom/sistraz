@@ -19,7 +19,8 @@
                 <a 
                 routerLink="/dashboard" 
                 routerLinkActive="active"
-                [routerLinkActiveOptions]="{ exact: true }">
+                [routerLinkActiveOptions]="{ exact: true }" 
+                (click)="seleccionarMenu('Dashboard','Bienvenido al sistema de trazabilidad')">
                     <i class="pi pi-home"></i>
                     Pagina Principal
                 </a>
@@ -28,7 +29,8 @@
                 <a 
                 routerLinkActive="active"
                 routerLink="/produccion" 
-                [routerLinkActiveOptions]="{ exact: true }">
+                [routerLinkActiveOptions]="{ exact: true }"
+                (click)="seleccionarMenu('Producción','Plantas de Tratamiento y Refinerías declaran su Certificado de Calidad por lote producido.')">
                     <i class="pi pi-home"></i>
                     1. Producción
                 </a>
@@ -38,7 +40,7 @@
                 routerLink="/transporte" 
                 routerLinkActive="active"
                 [routerLinkActiveOptions]="{ exact: true }"
-                >
+                (click)="seleccionarMenu('Transporte','YPFB Transporte o Transporte por Cisternas declara la Guía, indicando la Planta de Destino y tomando volumen del Lote de origen.')">
                     <i class="pi pi-home"></i>
                     2. Transporte
                 </a>
@@ -48,6 +50,7 @@
                 routerLink="/almacenamiento" 
                 routerLinkActive="active"
                 [routerLinkActiveOptions]="{ exact: true }"
+                (click)="seleccionarMenu('Almacenamiento','El Operador/Planta se autocompleta según la Planta de Destino declarada en la Guía de Transporte vinculada. Solo se selecciona el Tanque.')"
                 >
                     <i class="pi pi-home"></i>
                     3. Almacenamiento
@@ -58,6 +61,7 @@
                 routerLink="/tanque" 
                 routerLinkActive="active"
                 [routerLinkActiveOptions]="{ exact: true }"
+                (click)="seleccionarMenu('Tanque de almacenamiento','Cada tanque genera su propio Lote y Certificado de Calidad, que identifica todas las Actas de Recepción mezcladas en él. Este Lote/Certificado es el vinculante para Engarrafado.')"
                 >
                     <i class="pi pi-home"></i>
                     4. Tanque de almacenamiento
@@ -68,6 +72,7 @@
                 routerLink="/envasado" 
                 routerLinkActive="active"
                 [routerLinkActiveOptions]="{ exact: true }"
+                (click)="seleccionarMenu('Envasado','Engarrafado YPFB o Privadas declara el Reporte, consumiendo volumen del Lote de Tanque / Certificado vinculado.')"
                 >
                     <i class="pi pi-home"></i>
                     5. Envasado
@@ -78,6 +83,7 @@
                 routerLink="/despacho" 
                 routerLinkActive="active"
                 [routerLinkActiveOptions]="{ exact: true }"
+                (click)="seleccionarMenu('Despacho','La Distribuidora declara la Factura y Guía de Despacho en unidades de garrafas de 10 kg, consumiendo el saldo del Lote envasado vinculado.')"
                 >
                     <i class="pi pi-home"></i>
                     6. Despacho

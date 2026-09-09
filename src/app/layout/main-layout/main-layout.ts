@@ -27,6 +27,15 @@ export class MainLayout {
   menuAbierto = false;
   // Servicio global del loading
   loadingService = inject(LoadingService);
+  tituloNavbar:string = '';
+  subtituloNavbar:string = '';
+
+  cambiarTitulos(evento:{titulo:string, subtitulo:string}){
+    console.log(evento.titulo, ',',evento.subtitulo,'<=== mainlayout');
+    
+    this.tituloNavbar = evento.titulo;
+    this.subtituloNavbar = evento.subtitulo;
+  }
 
   toggleMenu() {
     console.log('main-layout recibió evento');

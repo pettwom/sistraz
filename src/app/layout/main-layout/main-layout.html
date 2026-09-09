@@ -10,7 +10,9 @@
     <div class="layout">
 
       <!-- Menú lateral -->
-      <app-sidebar class="app-sidebar" [class.sidebar-open]="menuAbierto" (closeMenu)="cerrarMenu()"></app-sidebar>
+      <app-sidebar class="app-sidebar" [class.sidebar-open]="menuAbierto" (closeMenu)="cerrarMenu()">
+        (tituloSeleccionado)="cambiarTitulos($event)">
+      </app-sidebar>
       
       <!-- Fondo oscuro cuando el menú está abierto -->
       @if (menuAbierto) {
@@ -18,7 +20,10 @@
       }
 
       <!-- Barra superior -->
-      <app-navbar class="app-navbar" (toggleMenu)="toggleMenu()"></app-navbar>
+      <app-navbar class="app-navbar" (toggleMenu)="toggleMenu()">
+        [titulo]="tituloNavbar"
+        [subtitulo]="subtituloNavbar">
+      </app-navbar>
 
       <!-- Contenido de cada página -->
       <main class="content">

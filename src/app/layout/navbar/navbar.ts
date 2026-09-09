@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, inject, Output, Input, ViewChild, OnInit } from '@angular/core';
 import { Perfil } from '../../pages/perfil/perfil';
 import { RouterLink } from '@angular/router';
 import { fromEvent, merge, of, Subscription } from 'rxjs';
@@ -17,14 +17,20 @@ import { ConfirmPopupModule } from 'primeng/confirmpopup';
   styleUrl: './navbar.css',
   providers: [ConfirmationService, MessageService],
 })
-export class Navbar {
+export class Navbar implements OnInit{
+  
   // ==========================================
   // EVENTO PARA ABRIR / CERRAR SIDEBAR
   // ==========================================
 
   @Output()
   toggleMenu = new EventEmitter<void>();
-
+  @Input()  titulo:string = '';
+  @Input()  subtitulo:string = '';
+ngOnInit(): void {
+    console.log(this.titulo,'<???====');
+  }
+  
   notificaciones = [
     {
       id: 1,
