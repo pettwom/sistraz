@@ -9,7 +9,7 @@ import { ImportsModule } from '../../imports';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 import { Router } from '@angular/router';
-import { ServiceServices } from '../../services/service.services';
+import { AuthService } from '../../services/auth.service';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -29,7 +29,7 @@ export class Login {
     private fb: FormBuilder,
     private router: Router,
     private sanitizer: DomSanitizer,
-    private services: ServiceServices
+    private authService: AuthService
   ) {
 
     this.formLogin = this.fb.group({
@@ -136,56 +136,111 @@ export class Login {
   }
 
   ingresar() {
-
     if (this.formLogin.invalid) {
       this.formLogin.markAllAsTouched();
       return;
     }
 
-    const captchaIngresado = this.formLogin.value.captcha?.trim().toUpperCase();
+    const captchaIngresado =
+      this.formLogin.value.captcha?.trim().toUpperCase();
+
+    const captchaActual =
+      this.captchaTexto?.trim().toUpperCase();
 
     console.log(captchaIngresado, 'captcha');
 
-    if (captchaIngresado !== this.captchaTexto && this.captchaTexto !== '') {
+    if (
+      captchaActual &&
+      captchaIngresado !== captchaActual
+    ) {
       Swal.fire({
         title: 'Error',
         icon: 'error',
-        text: 'Captcha Incorrecto',
+        text: 'Captcha incorrecto',
         showCancelButton: false,
         showConfirmButton: false,
         timer: 1500
-      })
+      });
+
       this.generarCaptcha();
       return;
     }
-    const usuario = this.formLogin.value.usuario?.trim();
-    const password = this.formLogin.value.password;
 
-    // temporalmente
-    this.services.post('/Auth/login', { usuario, password }).subscribe({
-      next: (resultado: any) => {
-        localStorage.setItem('token', resultado.token)
-        localStorage.setItem('usuario', JSON.stringify(resultado.usuario))
-        this.router.navigate(['dashboard']);
+    const usuario =
+      this.formLogin.value.usuario?.trim();
+
+    const password =
+      this.formLogin.value.password;
+
+    if (!usuario || !password) {
+      return;
+    }
+
+    this.authService.login(usuario, password).subscribe({
+
+      next: (response) => {
+
+        console.log('RESPUESTA LOGIN:', response);
+
+        if (response.exito) {
+
+          if (response.token) {
+            localStorage.setItem(
+              'token',
+              response.token
+            );
+          }
+
+          if (response.usuario) {
+            localStorage.setItem(
+              'usuario',
+              JSON.stringify(response.usuario)
+            );
+          }
+
+          this.router.navigate(['/dashboard']);
+
+        } else {
+
+          Swal.fire({
+            title: 'Error',
+            icon: 'error',
+            text:
+              response.mensaje ??
+              'No se pudo iniciar sesión',
+            showCancelButton: false,
+            showConfirmButton: false,
+            timer: 1500
+          });
+
+          this.generarCaptcha();
+        }
       },
+
       error: (error) => {
-        console.log(error);
+
+        console.error(
+          'ERROR LOGIN:',
+          error
+        );
+
+        const mensaje =
+          error.error?.mensaje ??
+          error.error?.message ??
+          'Ocurrió un error durante la autenticación';
+
         Swal.fire({
           title: 'Error',
           icon: 'error',
-          text: error.error?.message ?? 'Usuario o contraseña incorrectos',
+          text: mensaje,
           showCancelButton: false,
           showConfirmButton: false,
           timer: 1500
-        })
+        });
+
         this.generarCaptcha();
       }
+
     });
-
-
-
-    this.router.navigate(['/dashboard']);
-
   }
-
 }

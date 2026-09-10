@@ -7,7 +7,7 @@ import { definePreset } from '@primeuix/themes';
 import Aura from '@primeuix/themes/aura';
 import { routes } from './app.routes';
 import { MessageService } from 'primeng/api';
-import { authInterceptor } from './core/interceptor/auth.terceptors';
+import { authInterceptor } from './core/interceptor/auth.interceptors';
 
 export const appConfig: ApplicationConfig = {
   providers: [
