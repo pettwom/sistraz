@@ -26,7 +26,7 @@
 }
 
 .titulo {
-    grid-area: 1 / 1 / 1 / 3;
+    grid-area: 1 / 1 / 1 / 2;
     margin: 0;
     padding-left: 20px;
 }

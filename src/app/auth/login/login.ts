@@ -9,6 +9,8 @@ import { ImportsModule } from '../../imports';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 import { Router } from '@angular/router';
+import { ServiceServices } from '../../services/service.services';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-login',
@@ -26,7 +28,8 @@ export class Login {
   constructor(
     private fb: FormBuilder,
     private router: Router,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private services: ServiceServices
   ) {
 
     this.formLogin = this.fb.group({
@@ -133,27 +136,54 @@ export class Login {
   }
 
   ingresar() {
-  
+
     if (this.formLogin.invalid) {
       this.formLogin.markAllAsTouched();
-      alert('Código CAPTCHA incorrecto');
       return;
     }
 
-    const captchaIngresado =
-      this.formLogin.value.captcha
-        ?.trim()
-        .toUpperCase();
+    const captchaIngresado = this.formLogin.value.captcha?.trim().toUpperCase();
+
     console.log(captchaIngresado, 'captcha');
 
     if (captchaIngresado !== this.captchaTexto && this.captchaTexto !== '') {
-      alert('Código CAPTCHA incorrecto');
+      Swal.fire({
+        title: 'Error',
+        icon: 'error',
+        text: 'Captcha Incorrecto',
+        showCancelButton: false,
+        showConfirmButton: false,
+        timer: 1500
+      })
       this.generarCaptcha();
       return;
     }
-    console.log('CAPTCHA correcto');
+    const usuario = this.formLogin.value.usuario?.trim();
+    const password = this.formLogin.value.password;
+
     // temporalmente
-    localStorage.setItem('token', 'token-prueba');
+    this.services.post('/Auth/login', { usuario, password }).subscribe({
+      next: (resultado: any) => {
+        localStorage.setItem('token', resultado.token)
+        localStorage.setItem('usuario', JSON.stringify(resultado.usuario))
+        this.router.navigate(['dashboard']);
+      },
+      error: (error) => {
+        console.log(error);
+        Swal.fire({
+          title: 'Error',
+          icon: 'error',
+          text: error.error?.message ?? 'Usuario o contraseña incorrectos',
+          showCancelButton: false,
+          showConfirmButton: false,
+          timer: 1500
+        })
+        this.generarCaptcha();
+      }
+    });
+
+
+
     this.router.navigate(['/dashboard']);
 
   }

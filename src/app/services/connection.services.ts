@@ -19,8 +19,7 @@ export class ConnectionService {
 
   private subscription?: Subscription;
 
-  private readonly backendUrl =
-    environment.base_url;
+  private readonly backendUrl = environment.base_url;
 
 
   constructor(
@@ -39,12 +38,8 @@ export class ConnectionService {
 
 
     // Detectar cuando se pierde la red
-    window.addEventListener(
-      'offline',
-      () => {
-
+    window.addEventListener('offline',() => {
         this.estado.set('offline');
-
       }
     );
 
@@ -87,7 +82,7 @@ export class ConnectionService {
     // Hay red, ahora verificamos el backend
 
     this.http.get(
-      `${this.backendUrl}/health`,
+      `${this.backendUrl}/api/Auth/login`,
       {
         observe: 'response'
       }
