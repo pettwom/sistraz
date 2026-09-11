@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { interval, Subscription, catchError, of } from 'rxjs';
 
 import { environment } from '../../environments/environment';
+import Swal from 'sweetalert2';
 
 export type ConnectionStatus =
   | 'online'
@@ -38,9 +39,10 @@ export class ConnectionService {
 
 
     // Detectar cuando se pierde la red
-    window.addEventListener('offline',() => {
-        this.estado.set('offline');
-      }
+    window.addEventListener('offline', () => {
+      this.estado.set('offline');
+
+    }
     );
 
 
@@ -57,7 +59,7 @@ export class ConnectionService {
 
     // Verificar backend periódicamente
     this.subscription = interval(
-      15000
+      1000
     ).subscribe(() => {
 
       this.verificarConexion();
@@ -82,35 +84,39 @@ export class ConnectionService {
     // Hay red, ahora verificamos el backend
 
     this.http.get(
-      `${this.backendUrl}/api/Auth/login`,
+      `${this.backendUrl}/Auth/estado`,
       {
         observe: 'response'
       }
     )
-    .pipe(
+      .pipe(
 
-      catchError(() => {
+        catchError(() => {
 
-        this.estado.set(
-          'backend-offline'
-        );
+          this.estado.set(
+            'backend-offline'
+          );
 
-        return of(null);
+          return of(null);
 
-      })
+        })
 
-    )
-    .subscribe(response => {
+      )
+      .subscribe(response => {
 
-      if (response) {
+        if (response) {
 
-        this.estado.set(
-          'online'
-        );
+          this.estado.set('online');
 
-      }
+        } else {
 
-    });
+          this.estado.set('offline');
+
+
+
+        }
+
+      });
 
   }
 
