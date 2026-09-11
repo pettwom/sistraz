@@ -136,8 +136,18 @@ export class Login {
   }
 
   ingresar() {
+    console.log(this.formLogin,'1. parte inicial');
+    
     if (this.formLogin.invalid) {
       this.formLogin.markAllAsTouched();
+            Swal.fire({
+        title: 'Error',
+        icon: 'warning',
+        text: 'Verifique los datos por favor!!',
+        showCancelButton: false,
+        showConfirmButton: false,
+        timer: 2000
+      });
       return;
     }
 
@@ -147,32 +157,25 @@ export class Login {
     const captchaActual =
       this.captchaTexto?.trim().toUpperCase();
 
-    console.log(captchaIngresado, 'captcha');
-
-    if (
-      captchaActual &&
-      captchaIngresado !== captchaActual
-    ) {
-      Swal.fire({
-        title: 'Error',
-        icon: 'error',
-        text: 'Captcha incorrecto',
-        showCancelButton: false,
-        showConfirmButton: false,
-        timer: 1500
-      });
-
-      this.generarCaptcha();
-      return;
-    }
-
     const usuario =
       this.formLogin.value.usuario?.trim();
 
     const password =
       this.formLogin.value.password;
 
-    if (!usuario || !password) {
+    if (
+      captchaActual &&
+      captchaIngresado !== captchaActual || (!usuario || !password)
+    ) {
+      Swal.fire({
+        title: 'Error',
+        icon: 'warning',
+        text: 'Verifique los datos por favor!!',
+        showCancelButton: false,
+        showConfirmButton: false,
+        timer: 1500
+      });
+      this.generarCaptcha();
       return;
     }
 
