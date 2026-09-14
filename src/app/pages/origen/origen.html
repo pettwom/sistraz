@@ -111,6 +111,7 @@
     </div>
 </p-card>
 <br>
+{{produccion}}
 <p-card>
     <div class="card">
         <p-table #dt1 [value]="produccion"
@@ -149,27 +150,27 @@
                         {{ produccion.lote }}
                     </td>
                     <td>
-                        {{produccion.nombre}}
+                        {{ produccion.nombre}}
                     </td>
                     <td>
-                        {{produccion.numCertificacion}}
+                        {{ produccion.numCertificacion }}
                     </td>
                     <td>
-                        {{produccion.fechaMuestreo}}
+                        {{ produccion.fechaMuestreo }}
                     </td>
                     <td>
-                        {{produccion.volTotal}}
+                        {{ produccion.volTotal }}
                     </td>
                     <td>
-                        @if(produccion.pais != null){
-                            {{produccion.pais}}
+                        @if( produccion.pais != null){
+                            {{ produccion.pais }}
                         }@else{
                         '---------'
                         }
                     </td>
                     <td>
-                        @if(produccion.puntoIngreso != null){
-                             {{produccion.puntoIngreso}}
+                        @if( produccion.puntoIngreso != null){
+                             {{ produccion.puntoIngreso }}
                         }@else{
                         '---------'
                         }

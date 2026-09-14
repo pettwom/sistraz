@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ServiceServices } from '../../services/service.services';
 import { Table } from 'primeng/table';
+
 interface Country {
   name: string;
   code: string;
@@ -13,9 +14,9 @@ interface ExportColumn {
   dataKey: string;
 }
 interface Column {
-    field: string;
-    header: string;
-    customExportHeader?: string;
+  field: string;
+  header: string;
+  customExportHeader?: string;
 }
 @Component({
   selector: 'app-origen',
@@ -33,7 +34,8 @@ export class Origen implements OnInit {
   countries: Country[] = [];
   selectedCountry: Country | null = null;
   formProduccion: FormGroup;
-  produccion!: any;
+  produccion: any[] = [];
+
   selectedCustomers!: any;
 
   @ViewChild('dt') dt!: Table;
@@ -55,9 +57,9 @@ export class Origen implements OnInit {
       ]
     })
   }
-      exportCSV() {
-        this.dt.exportCSV();
-    }
+  exportCSV() {
+    this.dt.exportCSV();
+  }
 
   ngOnInit() {
     this.countries = [
@@ -73,10 +75,15 @@ export class Origen implements OnInit {
       { name: 'United States', code: 'US' }
     ];
     this.serivce.get('/prod')
-      .subscribe((resultado) => {
-        console.log('1. produccion = ',resultado);
-        
-        this.produccion = resultado
+      .subscribe({
+        next: (resultado) => {
+          console.log('1. produccion = ', resultado);
+
+          this.produccion = resultado as any[];
+        },
+        error: (error) => {
+          console.log(error);
+        }
       })
   }
 
