@@ -18,6 +18,6 @@ export class App  implements OnInit {
   ngOnInit(): void {
     console.log('Petter App.ts');
     
-    this.themeService.cargarTema();
+    this.themeService.inicializarTema();
   }
 }

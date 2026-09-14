@@ -32,7 +32,7 @@ export class MainLayout implements OnInit {
   ){}
 
   ngOnInit(): void {
-    this.themesService.cargarTema()
+    this.themesService.inicializarTema()
   }
   tituloNavbar: string = 'Panel Principal';
   subtituloNavbar: string = 'Resumen ejecutivo del control y flujo de Gas Licuado de Petróleo';

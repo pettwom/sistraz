@@ -1,93 +1,83 @@
 import { Injectable, signal } from '@angular/core';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class ThemesService {
-  private readonly STORAGE_KEY = 'sistraz-theme';
-  darkMode = signal<boolean>(false);
+
+  private readonly STORAGE_KEY = 'theme';
+
+  darkMode = signal<boolean>(true);
+
   constructor() {
-    this.cargarTema();
+    this.inicializarTema();
   }
-  toggleDarkMode(): void {
-    const nuevoEstado = !this.darkMode();
-    this.darkMode.set(nuevoEstado);
-    this.aplicarTema(nuevoEstado);
-  }
-  public cargarTema(): void {
-    const temaGuardado = localStorage.getItem(this.STORAGE_KEY);
+
+  inicializarTema(): void {
+
     const html = document.documentElement;
-    if (temaGuardado === 'dark') {
+
+    const temaGuardado =
+      localStorage.getItem(this.STORAGE_KEY);
+
+    // Si nunca se guardó un tema,
+    // arrancar en modo oscuro
+    if (temaGuardado === null) {
+
       html.classList.add('dark-mode');
+
+      localStorage.setItem(
+        this.STORAGE_KEY,
+        'dark'
+      );
+
+      this.darkMode.set(true);
+
+      return;
+    }
+
+    // Si estaba guardado dark
+    if (temaGuardado === 'dark') {
+
+      html.classList.add('dark-mode');
+
+      this.darkMode.set(true);
+
     } else {
+
       html.classList.remove('dark-mode');
-    }
-    const esOscuro = temaGuardado === 'dark';
-    this.darkMode.set(esOscuro);
-    this.aplicarTema(esOscuro);
-    console.log(esOscuro, 'en themes.service');
 
+      this.darkMode.set(false);
+    }
   }
-  private aplicarTema(esOscuro: boolean): void {
+
+  toggleDarkMode(): void {
+
     const html = document.documentElement;
-    // Animación de salida
-    html.animate(
-      [
-        { opacity: 1 },
-        { opacity: 0.7 }
-      ],
-      {
-        duration: 200,
-        easing: 'ease-in',
-        fill: 'forwards'
-      }
-    );
-    if (esOscuro) {
-      const html = document.documentElement;
 
+    const nuevoEstado =
+      !this.darkMode();
 
+    if (nuevoEstado) {
 
-      setTimeout(() => {
+      html.classList.add('dark-mode');
 
-        // Cambiar a modo oscuro
-        html.classList.add('dark-mode');
-        localStorage.setItem(this.STORAGE_KEY, 'dark');
+      localStorage.setItem(
+        this.STORAGE_KEY,
+        'dark'
+      );
 
-        // Animación de entrada
-        html.animate(
-          [
-            { opacity: 0.2 },
-            { opacity: 1 }
-          ],
-          {
-            duration: 800,
-            easing: 'ease-out',
-            fill: 'forwards'
-          }
-        );
-
-      }, 400);
-      // html.classList.add('dark-mode');
-      // localStorage.setItem(this.STORAGE_KEY, 'dark');
     } else {
-      setTimeout(() => {
-        html.classList.remove('dark-mode');
-        localStorage.setItem(this.STORAGE_KEY, 'light');
-        // Animación de entrada
-        html.animate(
-          [
-            { opacity: 0.3 },
-            { opacity: 1 }
-          ],
-          {
-            duration: 800,
-            easing: 'ease-out',
-            fill: 'forwards'
-          }
-        );
-      }, 200);
-      // html.classList.remove('dark-mode');
-      // localStorage.setItem(this.STORAGE_KEY, 'light');
+
+      html.classList.remove('dark-mode');
+
+      localStorage.setItem(
+        this.STORAGE_KEY,
+        'light'
+      );
     }
+
+    this.darkMode.set(nuevoEstado);
   }
+
 }
