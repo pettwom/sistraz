@@ -1,1 +1,49 @@
-<p>origen works!</p>
+<p-drawer [(visible)]="sidebarVisible" position="right" styleClass="drawer-personalizado">
+    <ng-template pTemplate="header">
+        <div class="flex align-items-center gap-2">
+
+            <span class="font-bold">
+                Añadir Producción
+            </span>
+        </div>
+    </ng-template>
+    <div class="iconosNumber">
+
+        <p-button (onClick)="activeIndex = 0" rounded [styleClass]="activeIndex === 0
+        ? 'boton-tab activo'
+        : 'boton-tab'" [outlined]="activeIndex !== 0" label="1">
+        </p-button>
+
+        <p-button (onClick)="activeIndex = 1" rounded [styleClass]="activeIndex === 1
+        ? 'boton-tab activo'
+        : 'boton-tab'" [outlined]="activeIndex !== 1" label="2">
+        </p-button>
+
+    </div>
+
+    <p-tabs [(value)]="activeIndex">
+
+        <p-tablist>
+            <p-tab [value]="0">Local</p-tab>
+            <p-tab [value]="1">Importación</p-tab>
+        </p-tablist>
+
+        <p-tabpanels>
+
+            <p-tabpanel [value]="0">
+                <p>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit...
+                </p>
+            </p-tabpanel>
+
+            <p-tabpanel [value]="1">
+                <p>
+                    Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium...
+                </p>
+            </p-tabpanel>
+
+        </p-tabpanels>
+
+    </p-tabs>
+</p-drawer>
+<p-button (onClick)="sidebarVisible = true" icon="pi pi-plus" />

@@ -31,7 +31,7 @@
 
   --menu-hover: #131f35;
   /* cambiado */
-  
+
   --menu-link-hover: #090f1b;
   /* cambiado */
 
@@ -52,7 +52,7 @@
   /* cambiado */
   --text-secundary: #94A3B8;
 
-   --icono-menu_responsive : #e4e7ee;
+  --icono-menu_responsive: #e4e7ee;
 }
 
 html.dark-mode {
@@ -101,7 +101,7 @@ html.dark-mode {
   --menu-link: #79879a;
   /* cambiado */
 
-    --menu-link-hover: #090f1b;
+  --menu-link-hover: #090f1b;
   /* cambiado */
 
   --text-link-hover: #F1F5F9;
@@ -124,7 +124,7 @@ html.dark-mode {
 
   --text-secundary: #94A3B8;
 
-  --icono-menu_responsive : #090f1b;
+  --icono-menu_responsive: #090f1b;
 
 
   /* --text-primary: #f9fafb;
@@ -145,9 +145,9 @@ body {
   /* color: var(--text-primary); */
   color: var(--menu-link);
 
-   transition:
+  transition:
     background-color 0.3s ease,
-    color 0.3s ease; 
+    color 0.3s ease;
 
   width: 100%;
   height: 100%;
@@ -168,12 +168,65 @@ body {
   animation: fadeInUp 0.8s ease forwards;
 }
 
+.drawer-personalizado {
+  background-color: var(--bg-content) !important;
+  color: var(--menu-link) !important;
+  border: 1px solid var(--border-color) !important;
+}
 
+.p-tabs {
+  background-color: var(--bg-content) !important;
+
+}
+
+.p-tablist {
+  background-color: var(--bg-content) !important;
+  margin-top: 15px !important;
+}
+
+
+.p-tab {
+  color: var(--tab-text);
+  background: transparent;
+}
+
+.p-tab-active {
+  color: var(--text-link) !important;
+}
+
+/* Línea debajo del tab seleccionado */
+.p-tablist-active-bar {
+  background: var(--text-link) !important;
+}
+
+.p-tabpanels,
+.p-tabpanel {
+  background-color: var(--bg-content) !important;
+  color: var(--tab-text);
+}
+.iconosNumber>p-button>.p-button:focus,
+.iconosNumber>p-button>.p-button:active,
+.iconosNumber>p-button>.p-button::after,
+.iconosNumber>p-button>.p-button{
+border:0!important;
+color:var(--text-secondary)
+}
+.boton-tab {
+    width: 2rem;
+    height: 2rem;
+    padding: 0;
+}
+
+.boton-tab.activo {
+    background: var(--text-link) !important;
+    border-color: var(--primary-color) !important;
+    color: white !important;
+}
 app-root {
   display: block;
   width: 100%;
   height: 100%;
-  
+
 }
 
 * {
@@ -211,6 +264,7 @@ router-outlet+* {
     transform: translateY(0);
   }
 }
+
 @keyframes fadeInUp {
 
   from {

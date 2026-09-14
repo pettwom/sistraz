@@ -13,9 +13,23 @@
             </div>
         </div>
     </div>
+    <!-- {{menuOption}} -->
     <div class="menu">
         <ul>
+
+            @for (a of menuOption; track $index) {
             <li>
+                <a 
+                routerLink="{{a.enlace}}" 
+                routerLinkActive="active" 
+                [routerLinkActiveOptions]="{ exact: true }"
+                    (click)="seleccionarMenu(a.titulo, a.descripcion)">
+                    <i class="pi pi-home"></i>
+                    {{a.titulo}}
+                </a>
+            </li>
+            }
+            <!-- <li>
                 <a 
                 routerLink="/dashboard" 
                 routerLinkActive="active"
@@ -98,7 +112,7 @@
                     <i class="pi pi-home"></i>
                     Configuraciósn
                 </a>
-            </li>
+            </li> -->
         </ul>
     </div>
     <div class="cerrarSession">

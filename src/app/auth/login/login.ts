@@ -11,6 +11,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import Swal from 'sweetalert2';
+import { ServiceServices } from '../../services/service.services';
 
 @Component({
   selector: 'app-login',
@@ -24,12 +25,14 @@ export class Login {
   formLogin: FormGroup;
   captchaTexto = '';
   captchaSvg!: SafeHtml;
+  MenuOption: any = {};
 
   constructor(
     private fb: FormBuilder,
     private router: Router,
     private sanitizer: DomSanitizer,
-    private authService: AuthService
+    private authService: AuthService,
+    private serivce: ServiceServices
   ) {
 
     this.formLogin = this.fb.group({
@@ -135,12 +138,35 @@ export class Login {
     this.formLogin.patchValue({ captcha: '' });
   }
 
+  obtenerMenu(usuario: { idUsuarioHydro: number } | null | undefined) {
+    if (!usuario?.idUsuarioHydro) {
+      return;
+    }
+    this.serivce.get<any[]>(`Menu/${usuario?.idUsuarioHydro}/122`)
+      .subscribe({
+        next: (resultado) => {
+          this.MenuOption = resultado;
+          localStorage.setItem('MenuOption', JSON.stringify(this.MenuOption));
+        },
+        error: (error) => {
+          Swal.fire({
+            title: 'Error',
+            icon: 'warning',
+            text: error.message,
+            showCancelButton: false,
+            showConfirmButton: false,
+            timer: 2000
+          });
+        }
+      });
+  }
+
   ingresar() {
-    console.log(this.formLogin,'1. parte inicial');
-    
+    console.log(this.formLogin, '1. parte inicial');
+
     if (this.formLogin.invalid) {
       this.formLogin.markAllAsTouched();
-            Swal.fire({
+      Swal.fire({
         title: 'Error',
         icon: 'warning',
         text: 'Verifique los datos por favor!!',
@@ -200,7 +226,10 @@ export class Login {
               JSON.stringify(response.usuario)
             );
           }
-
+          this.obtenerMenu(response.usuario);
+          
+          console.log(localStorage);
+          
           this.router.navigate(['/dashboard']);
 
         } else {

@@ -1,0 +1,5 @@
+.iconosNumber {
+    display: flex !important;
+    justify-content: end !important;
+    gap: 15px;
+}

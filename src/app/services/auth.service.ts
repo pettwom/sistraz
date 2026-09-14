@@ -39,6 +39,7 @@ export class AuthService {
     localStorage.removeItem(
       this.USER_KEY
     );
+    localStorage.clear();
     this.usuario.set(null);
 
   }
