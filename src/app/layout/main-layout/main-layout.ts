@@ -6,7 +6,7 @@ import { Navbar } from '../navbar/navbar';
 import { Loading } from '../../shared/loading/loading';
 import { ImportsModule } from '../../imports';
 import { LoadingService } from '../../services/loading.services';
-
+import { ThemesService } from '../../services/themes.service';
 
 @Component({
   selector: 'app-main-layout',
@@ -23,12 +23,17 @@ import { LoadingService } from '../../services/loading.services';
   templateUrl: './main-layout.html',
   styleUrl: './main-layout.css'
 })
-export class MainLayout {
+export class MainLayout implements OnInit {
   menuAbierto = false;
   // Servicio global del loading
   loadingService = inject(LoadingService);
+  constructor(
+    private themesService: ThemesService
+  ){}
 
-
+  ngOnInit(): void {
+    this.themesService.cargarTema()
+  }
   tituloNavbar: string = 'Panel Principal';
   subtituloNavbar: string = 'Resumen ejecutivo del control y flujo de Gas Licuado de Petróleo';
 

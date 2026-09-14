@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Output, OnInit} from '@angular/core';
 import { RouterLink, Router, RouterLinkActive  } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
-
+import { MenuStateService } from '../../services/menu.state.service';
 @Component({
   selector: 'app-sidebar',
   imports: [RouterLink, RouterLinkActive],
@@ -17,7 +17,11 @@ export class Sidebar implements OnInit {
   
   titulo: string = '';
   menuOption:any[]=[];
-  constructor(private router: Router, private login: AuthService) {}
+  constructor(
+    private router: Router, 
+    private login: AuthService,
+    public menuState: MenuStateService
+  ) {}
 
   ngOnInit(): void {
     const menuStorage = localStorage.getItem('MenuOption'); 

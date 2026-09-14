@@ -12,6 +12,7 @@ import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import Swal from 'sweetalert2';
 import { ServiceServices } from '../../services/service.services';
+import { MenuStateService } from '../../services/menu.state.service';
 
 @Component({
   selector: 'app-login',
@@ -32,7 +33,8 @@ export class Login {
     private router: Router,
     private sanitizer: DomSanitizer,
     private authService: AuthService,
-    private serivce: ServiceServices
+    private serivce: ServiceServices,
+    private menuState: MenuStateService
   ) {
 
     this.formLogin = this.fb.group({
@@ -145,8 +147,10 @@ export class Login {
     this.serivce.get<any[]>(`Menu/${usuario?.idUsuarioHydro}/122`)
       .subscribe({
         next: (resultado) => {
+          this.menuState.setMenu(resultado);
           this.MenuOption = resultado;
           localStorage.setItem('MenuOption', JSON.stringify(this.MenuOption));
+          this.router.navigate(['/dashboard']);
         },
         error: (error) => {
           Swal.fire({
@@ -227,10 +231,10 @@ export class Login {
             );
           }
           this.obtenerMenu(response.usuario);
-          
+
           console.log(localStorage);
-          
-          this.router.navigate(['/dashboard']);
+
+          // this.router.navigate(['/dashboard']);
 
         } else {
 

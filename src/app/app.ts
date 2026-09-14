@@ -1,30 +1,23 @@
 import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-// import { ImportsModule } from './imports';
-// import { FormGroup, FormBuilder, ReactiveFormsModule } from '@angular/forms';
-
+import { ThemesService } from './services/themes.service';
 
 @Component({
-  // imports: [RouterOutlet, ReactiveFormsModule, ImportsModule],
   imports: [RouterOutlet],
   standalone: true,
   selector: 'app-root',
   styleUrl: './app.css',
   templateUrl: './app.html',
 })
-export class App {
-  // formGroup: FormGroup;
+export class App  implements OnInit {
 
-  // cities = [
-  //   { name: 'La Paz', code: 'LP' },
-  //   { name: 'Cochabamba', code: 'CB' },
-  //   { name: 'Santa Cruz', code: 'SC' },
-  //   { name: 'Oruro', code: 'OR' }
-  // ];
+  constructor(
+    private themeService: ThemesService
+  ) {}
 
-  // constructor(private fb: FormBuilder) {
-  //   this.formGroup = this.fb.group({
-  //     selectedCities: [[]],
-  //   });
-  // }
+  ngOnInit(): void {
+    console.log('Petter App.ts');
+    
+    this.themeService.cargarTema();
+  }
 }

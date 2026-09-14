@@ -17,13 +17,16 @@
     <div class="menu">
         <ul>
 
-            @for (a of menuOption; track $index) {
+            @for (
+            a of menuState.menu();
+            track a.idMenu
+            ) {
             <li>
                 <a 
                 routerLink="{{a.enlace}}" 
                 routerLinkActive="active" 
                 [routerLinkActiveOptions]="{ exact: true }"
-                    (click)="seleccionarMenu(a.titulo, a.descripcion)">
+                    (click)="seleccionarMenu(a.titulo, a.descripcion?? '')">
                     <i class="pi pi-home"></i>
                     {{a.titulo}}
                 </a>

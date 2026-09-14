@@ -14,26 +14,34 @@ export class ThemesService {
     this.darkMode.set(nuevoEstado);
     this.aplicarTema(nuevoEstado);
   }
-  private cargarTema(): void {
+  public cargarTema(): void {
     const temaGuardado = localStorage.getItem(this.STORAGE_KEY);
+    const html = document.documentElement;
+    if (temaGuardado === 'dark') {
+      html.classList.add('dark-mode');
+    } else {
+      html.classList.remove('dark-mode');
+    }
     const esOscuro = temaGuardado === 'dark';
     this.darkMode.set(esOscuro);
     this.aplicarTema(esOscuro);
+    console.log(esOscuro, 'en themes.service');
+
   }
   private aplicarTema(esOscuro: boolean): void {
     const html = document.documentElement;
-          // Animación de salida
-      html.animate(
-        [
-          { opacity: 1 },
-          { opacity: 0.7 }
-        ],
-        {
-          duration: 200,
-          easing: 'ease-in',
-          fill: 'forwards'
-        }
-      );
+    // Animación de salida
+    html.animate(
+      [
+        { opacity: 1 },
+        { opacity: 0.7 }
+      ],
+      {
+        duration: 200,
+        easing: 'ease-in',
+        fill: 'forwards'
+      }
+    );
     if (esOscuro) {
       const html = document.documentElement;
 
@@ -65,7 +73,7 @@ export class ThemesService {
       setTimeout(() => {
         html.classList.remove('dark-mode');
         localStorage.setItem(this.STORAGE_KEY, 'light');
-                // Animación de entrada
+        // Animación de entrada
         html.animate(
           [
             { opacity: 0.3 },
