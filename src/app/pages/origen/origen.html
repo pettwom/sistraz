@@ -111,7 +111,6 @@
     </div>
 </p-card>
 <br>
-{{produccion}}
 <p-card>
     <div class="card">
         <p-table #dt1 [value]="produccion"
@@ -130,7 +129,7 @@
             </ng-template>
             <ng-template #header>
                 <tr>
-                    <th pSortableColumn="name" style="width:18%; color: var(--text-link)">Nro. LOTE <p-sortIcon
+                    <th pSortableColumn="name" style="width:18%">Nro. LOTE <p-sortIcon
                             field="name" /></th>
                     <th pSortableColumn="country.name" style="width:15%">Planta/Operador<p-sortIcon
                             field="country.name" /></th>
@@ -144,10 +143,11 @@
                     <th pSortableColumn="status" style="width:10%">Estado <p-sortIcon field="status" /></th>
                 </tr>
             </ng-template>
-            <ng-template #body let-customer>
+            <ng-template #body let-produccion>
                 <tr [pSelectableRow]="produccion">
                     <td>
-                        {{ produccion.lote }}
+                        <span style="color: var(--text-link)">{{ produccion.lote }}</span>
+                        
                     </td>
                     <td>
                         {{ produccion.nombre}}
@@ -165,18 +165,18 @@
                         @if( produccion.pais != null){
                             {{ produccion.pais }}
                         }@else{
-                        '---------'
+                            "---------"
                         }
                     </td>
                     <td>
                         @if( produccion.puntoIngreso != null){
                              {{ produccion.puntoIngreso }}
                         }@else{
-                        '---------'
+                            "---------"
                         }
                     </td>
                     <td>
-                        estado
+                        <p-tag severity="success" value="Success">Activo</p-tag>
                     </td>
                 </tr>
             </ng-template>

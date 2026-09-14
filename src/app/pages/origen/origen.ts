@@ -34,9 +34,9 @@ export class Origen implements OnInit {
   countries: Country[] = [];
   selectedCountry: Country | null = null;
   formProduccion: FormGroup;
-  produccion: any[] = [];
+  produccion: any[]=[];
 
-  selectedCustomers!: any;
+  selectedCustomers: any[]=[];
 
   @ViewChild('dt') dt!: Table;
 
@@ -79,7 +79,9 @@ export class Origen implements OnInit {
         next: (resultado) => {
           console.log('1. produccion = ', resultado);
 
-          this.produccion = resultado as any[];
+this.produccion = Array.isArray(resultado)
+          ? resultado
+          : [];
         },
         error: (error) => {
           console.log(error);
