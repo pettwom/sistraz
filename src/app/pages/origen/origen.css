@@ -3,3 +3,8 @@
     justify-content: end !important;
     gap: 15px;
 }
+.button-derecha{
+    display: flex;
+    justify-content: end;
+    gap: 1rem;
+}

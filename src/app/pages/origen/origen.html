@@ -31,9 +31,59 @@
         <p-tabpanels>
 
             <p-tabpanel [value]="0">
-                <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit...
-                </p>
+
+                <p-card header="">
+                    <form [formGroup]="formProduccion" (ngSubmit)="almacenar()">
+                        <div class="card flex justify-center w-full">
+                            <p-select [options]="countries" [(ngModel)]="selectedCountry" formControlName="planta_id"
+                                optionLabel="name" [filter]="true" filterBy="name" [showClear]="true"
+                                placeholder="Seleccione un país" class="w-full">
+                                <ng-template #selectedItem let-selectedOption>
+                                    @if (selectedOption) {
+                                    <div class="flex items-center gap-2">
+                                        <div>
+                                            {{ selectedOption.name }}
+                                        </div>
+                                    </div>
+                                    }
+                                </ng-template>
+                                <ng-template #item let-country>
+                                    <div class="flex items-center gap-2">
+                                        <div>
+                                            {{ country.name }}
+                                        </div>
+                                    </div>
+                                </ng-template>
+                            </p-select>
+                        </div>
+                        <br>
+                        <br>
+                        <p-floatlabel>
+                            <p-inputmask mask="aaa-999999" placeholder="AAA-999999" class="w-full" id="cert_produccion"
+                                formControlName="nro_certificado" type="text" (onBlur)="convertirMayusculas($event)" />
+                            <label for="cert_produccion">N° Certificado</label>
+                        </p-floatlabel>
+                        <br>
+                        <br>
+                        <p-floatlabel>
+                            <input class="w-full" id="volumen_produccion" pInputText type="number"
+                                formControlName="vol_total" [(ngModel)]="vol_total" />
+                            <label for="volumen_produccion">Volumen Total (Tn)</label>
+                        </p-floatlabel>
+                        <br>
+                        <div class="card flex justify-center">
+                            <p-datepicker class="max-w-full" formControlName="fecha_muestra" [(ngModel)]="date"
+                                [inline]="true" [showWeek]="true" />
+                        </div>
+                        <hr style="border: 1px solid var(--border-color);margin-bottom: 10px;">
+                        <p-button label="Guardar registro" type="submit" severity="info">
+                            <i class="pi pi-save"></i>
+                        </p-button>
+                    </form>
+                </p-card>
+
+
+
             </p-tabpanel>
 
             <p-tabpanel [value]="1">
@@ -46,4 +96,95 @@
 
     </p-tabs>
 </p-drawer>
-<p-button (onClick)="sidebarVisible = true" icon="pi pi-plus" />
+
+<p-card header="">
+    <div class="button-derecha">
+
+        <p-button (click)="dt.exportCSV()" [raised]="true" severity="secondary">
+            <i class="pi pi-download"></i>
+            Exportar
+        </p-button>
+        <p-button (onClick)="sidebarVisible = true" [raised]="true" severity="info">
+            <i class="pi pi-plus"></i>
+            Nuevo Registro
+        </p-button>
+    </div>
+</p-card>
+<br>
+<p-card>
+    <div class="card">
+        <p-table #dt1 [value]="produccion"
+            [globalFilterFields]="['name', 'country.name', 'representative.name', 'status']" selectionMode="single"
+            [(selection)]="selectedCustomers" dataKey="id" [tableStyle]="{ 'min-width': '50rem'}"
+            class="tabla-personalizada" [rows]="5" [paginator]="true" stateStorage="session"
+            stateKey="statedemo-session">
+            <ng-template #caption>
+                <p-iconfield iconPosition="left">
+                    <p-inputicon>
+                        <i class="pi pi-search"></i>
+                    </p-inputicon>
+                    <input pInputText type="text" (input)="dt1.filterGlobal($event.target.value, 'contains')"
+                        placeholder="Busqueda Global" />
+                </p-iconfield>
+            </ng-template>
+            <ng-template #header>
+                <tr>
+                    <th pSortableColumn="name" style="width:18%; color: var(--text-link)">Nro. LOTE <p-sortIcon
+                            field="name" /></th>
+                    <th pSortableColumn="country.name" style="width:15%">Planta/Operador<p-sortIcon
+                            field="country.name" /></th>
+                    <th pSortableColumn="country.name" style="width:10%">Nro. Certificado<p-sortIcon
+                            field="country.name" /></th>
+                    <th pSortableColumn="representative.name" style="width:10%">Fecha Muestreo<p-sortIcon
+                            field="representative.name" /></th>
+                    <th pSortableColumn="status" style="width:10%">Volumen Total (Tn) <p-sortIcon field="status" /></th>
+                    <th pSortableColumn="status" style="width:10%">Pais<p-sortIcon field="status" /></th>
+                    <th pSortableColumn="status" style="width:10%">Punto Ingreso <p-sortIcon field="status" /></th>
+                    <th pSortableColumn="status" style="width:10%">Estado <p-sortIcon field="status" /></th>
+                </tr>
+            </ng-template>
+            <ng-template #body let-customer>
+                <tr [pSelectableRow]="produccion">
+                    <td>
+                        {{ produccion.lote }}
+                    </td>
+                    <td>
+                        {{produccion.nombre}}
+                    </td>
+                    <td>
+                        {{produccion.numCertificacion}}
+                    </td>
+                    <td>
+                        {{produccion.fechaMuestreo}}
+                    </td>
+                    <td>
+                        {{produccion.volTotal}}
+                    </td>
+                    <td>
+                        @if(produccion.pais != null){
+                            {{produccion.pais}}
+                        }@else{
+                        '---------'
+                        }
+                    </td>
+                    <td>
+                        @if(produccion.puntoIngreso != null){
+                             {{produccion.puntoIngreso}}
+                        }@else{
+                        '---------'
+                        }
+                    </td>
+                    <td>
+                        estado
+                    </td>
+                </tr>
+            </ng-template>
+            <ng-template emptymessage>
+                <tr>
+                    <td colspan="8">No existen registros</td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+
+</p-card>

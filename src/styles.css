@@ -1,5 +1,22 @@
 @import "primeicons/primeicons.css";
 
+app-root {
+  display: block;
+  width: 100%;
+  height: 100%;
+
+}
+
+* {
+  box-sizing: border-box;
+}
+
+router-outlet+* {
+  display: block;
+  transition: opacity 0.3s ease;
+  animation: entradaPagina 0.45s ease-out;
+}
+
 :root {
 
   --bg-body: #f5f7fa;
@@ -53,6 +70,9 @@
   --text-secundary: #94A3B8;
 
   --icono-menu_responsive: #e4e7ee;
+
+  --text-tab: #6750a3;
+  /* cambiado */
 }
 
 html.dark-mode {
@@ -90,6 +110,9 @@ html.dark-mode {
   /* cambiado */
 
   --text-link: #00A3E0;
+  /* cambiado */
+
+  --text-tab: #6750a3;
   /* cambiado */
 
   --menu-active: #2563eb;
@@ -155,6 +178,10 @@ body {
   padding: 0;
 }
 
+.w-full {
+  width: 100%;
+}
+
 .ftco-animate {
   opacity: 0;
   visibility: hidden;
@@ -174,6 +201,10 @@ body {
   border: 1px solid var(--border-color) !important;
 }
 
+.p-drawer-right {
+  width: 27rem !important;
+}
+
 .p-tabs {
   background-color: var(--bg-content) !important;
 
@@ -191,12 +222,12 @@ body {
 }
 
 .p-tab-active {
-  color: var(--text-link) !important;
+  color: var(--text-tab) !important;
 }
 
 /* Línea debajo del tab seleccionado */
 .p-tablist-active-bar {
-  background: var(--text-link) !important;
+  background: var(--text-tab) !important;
 }
 
 .p-tabpanels,
@@ -204,40 +235,61 @@ body {
   background-color: var(--bg-content) !important;
   color: var(--tab-text);
 }
+
 .iconosNumber>p-button>.p-button:focus,
 .iconosNumber>p-button>.p-button:active,
 .iconosNumber>p-button>.p-button::after,
-.iconosNumber>p-button>.p-button{
-border:0!important;
-color:var(--text-secondary)
+.iconosNumber>p-button>.p-button {
+  border: 0 !important;
+  color: var(--text-secondary)
 }
+
 .boton-tab {
-    width: 2rem;
-    height: 2rem;
-    padding: 0;
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
 }
 
 .boton-tab.activo {
-    background: var(--text-link) !important;
-    border-color: var(--primary-color) !important;
-    color: white !important;
-}
-app-root {
-  display: block;
-  width: 100%;
-  height: 100%;
-
+  background: var(--text-tab) !important;
+  border-color: var(--primary-color) !important;
+  color: white !important;
 }
 
-* {
-  box-sizing: border-box;
+.p-card-body {
+
+  background-color: var(--bg-body);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
 }
 
-router-outlet+* {
-  display: block;
-  transition: opacity 0.3s ease;
-  animation: entradaPagina 0.45s ease-out;
+.p-datepicker-panel,
+.p-datepicker-header {
+  background-color: var(--bg-body) !important;
 }
+
+.p-datepicker-day-selected {
+  background-color: var(--text-tab) !important;
+  color: var(--text-white) !important;
+}
+ .p-datatable-header,.p-paginator, p-table{
+background-color: transparent!important;
+} 
+.tabla-personalizada .p-datatable-thead > tr > th {
+  background: #080f1a !important;
+  color: var(--text-white) !important;
+  border: 1px solid var(--border-color);
+}
+
+.tabla-personalizada .p-datatable-tbody > tr > td {
+  background: #0f1626 !important;
+  color: var(--text-white) !important;
+  border: 1px solid var(--border-color);
+}
+
+/* .tabla-personalizada .p-datatable-tbody > tr:hover > td {
+  background: #334155 !important;
+} */
 
 /* .ftco-animate {
   opacity: 0;

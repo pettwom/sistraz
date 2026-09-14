@@ -96,6 +96,7 @@
     import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     import { HttpClientModule } from '@angular/common/http';
     import { NgModule } from '@angular/core';
+    import { DatePickerModule } from 'primeng/datepicker';
 
 
     const PRIME_NG_IMPORTS = [
@@ -197,7 +198,8 @@
       IconFieldModule,
       InputIconModule,
       AutoFocusModule,
-      FloatLabelModule
+      FloatLabelModule,
+      DatePickerModule
     ];
 
     const PRIME_NG_EXPORTS = PRIME_NG_IMPORTS;
