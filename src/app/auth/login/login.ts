@@ -166,8 +166,6 @@ export class Login {
   }
 
   ingresar() {
-    console.log(this.formLogin, '1. parte inicial');
-
     if (this.formLogin.invalid) {
       this.formLogin.markAllAsTouched();
       Swal.fire({
@@ -213,8 +211,6 @@ export class Login {
 
       next: (response) => {
 
-        console.log('RESPUESTA LOGIN:', response);
-
         if (response.exito) {
 
           if (response.token) {
@@ -231,10 +227,6 @@ export class Login {
             );
           }
           this.obtenerMenu(response.usuario);
-
-          console.log(localStorage);
-
-          // this.router.navigate(['/dashboard']);
 
         } else {
 

@@ -20,16 +20,12 @@
         </p-button>
 
     </div>
-
     <p-tabs [(value)]="activeIndex">
-
         <p-tablist>
             <p-tab [value]="0">Local</p-tab>
             <p-tab [value]="1">Importación</p-tab>
         </p-tablist>
-
         <p-tabpanels>
-
             <p-tabpanel [value]="0">
 
                 <p-card header="">
@@ -67,22 +63,21 @@
                         <br>
                         <p-floatlabel>
                             <input class="w-full" id="volumen_produccion" pInputText type="number"
-                                formControlName="vol_total" [(ngModel)]="vol_total" />
+                                formControlName="vol_total"/>
                             <label for="volumen_produccion">Volumen Total (Tn)</label>
                         </p-floatlabel>
                         <br>
                         <div class="card flex justify-center">
-                            <p-datepicker class="max-w-full" formControlName="fecha_muestra" [(ngModel)]="date"
-                                [inline]="true" [showWeek]="true" />
+                            <p-datepicker class="max-w-full" formControlName="fecha_muestra"                                 [inline]="true" [showWeek]="true" />
                         </div>
+
                         <hr style="border: 1px solid var(--border-color);margin-bottom: 10px;">
+
                         <p-button label="Guardar registro" type="submit" severity="info">
                             <i class="pi pi-save"></i>
                         </p-button>
                     </form>
                 </p-card>
-
-
 
             </p-tabpanel>
 
@@ -91,16 +86,14 @@
                     Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium...
                 </p>
             </p-tabpanel>
-
         </p-tabpanels>
-
     </p-tabs>
 </p-drawer>
 
 <p-card header="">
     <div class="button-derecha">
 
-        <p-button (click)="dt.exportCSV()" [raised]="true" severity="secondary">
+        <p-button (click)="exportarExcel()" [raised]="true" severity="secondary">
             <i class="pi pi-download"></i>
             Exportar
         </p-button>
@@ -113,10 +106,23 @@
 <br>
 <p-card>
     <div class="card">
-        <p-table #dt1 [value]="produccion"
-            [globalFilterFields]="['name', 'country.name', 'representative.name', 'status']" selectionMode="single"
-            [(selection)]="selectedCustomers" dataKey="id" [tableStyle]="{ 'min-width': '50rem'}"
-            class="tabla-personalizada" [rows]="5" [paginator]="true" stateStorage="session"
+        <p-table #dt1 [value]="produccion()"
+            [globalFilterFields]="['lote', 
+            'nombre',
+            'numCertificacion', 
+            'fechaMuestreo', 
+            'volTotal',
+            'pais',
+            'puntoIngreso',
+            'estado']" 
+            selectionMode="single"
+            [(selection)]="selectedCustomers" 
+            dataKey="lote" 
+            [tableStyle]="{ 'min-width': '50rem'}"
+            class="tabla-personalizada" 
+            [rows]="5" 
+            [paginator]="true" 
+            stateStorage="session"
             stateKey="statedemo-session">
             <ng-template #caption>
                 <p-iconfield iconPosition="left">
@@ -129,25 +135,46 @@
             </ng-template>
             <ng-template #header>
                 <tr>
-                    <th pSortableColumn="name" style="width:18%">Nro. LOTE <p-sortIcon
-                            field="name" /></th>
-                    <th pSortableColumn="country.name" style="width:15%">Planta/Operador<p-sortIcon
-                            field="country.name" /></th>
-                    <th pSortableColumn="country.name" style="width:10%">Nro. Certificado<p-sortIcon
-                            field="country.name" /></th>
-                    <th pSortableColumn="representative.name" style="width:10%">Fecha Muestreo<p-sortIcon
-                            field="representative.name" /></th>
-                    <th pSortableColumn="status" style="width:10%">Volumen Total (Tn) <p-sortIcon field="status" /></th>
-                    <th pSortableColumn="status" style="width:10%">Pais<p-sortIcon field="status" /></th>
-                    <th pSortableColumn="status" style="width:10%">Punto Ingreso <p-sortIcon field="status" /></th>
-                    <th pSortableColumn="status" style="width:10%">Estado <p-sortIcon field="status" /></th>
+                    <th pSortableColumn="produccion.lote" style="width:18%">
+                        Nro. LOTE 
+                        <p-sortIcon field="produccion.lote" />
+                    </th>
+                    <th pSortableColumn="produccion.nombre" style="width:15%">
+                        Planta/Operador
+                        <p-sortIcon field="produccion.nombre" />
+                    </th>
+                    <th pSortableColumn="produccion.numCertificacion" style="width:10%">
+                        Nro. Certificado
+                        <p-sortIcon field="produccion.numCertificacion" />
+                    </th>
+                    <th pSortableColumn="producion.fechaMuestreo" style="width:10%">
+                        Fecha Muestreo
+                        <p-sortIcon field="producion.fechaMuestreo" />
+                    </th>
+                    <th pSortableColumn="produccion.volTotal" style="width:10%">
+                        Volumen Total (Tn) 
+                        <p-sortIcon field="produccion.volTotal" />
+                    </th>
+                    <th pSortableColumn="produccion.pais" style="width:10%">
+                        Pais
+                        <p-sortIcon field="produccion.pais" />
+                    </th>
+                    <th pSortableColumn="produccion.puntoIngreso" style="width:10%">
+                        Punto Ingreso 
+                        <p-sortIcon field="produccion.puntoIngreso" />
+                    </th>
+                    <th pSortableColumn="produccion.estado" style="width:10%">
+                        Estado 
+                        <p-sortIcon field="produccion.estado" />
+                    </th>
                 </tr>
             </ng-template>
             <ng-template #body let-produccion>
                 <tr [pSelectableRow]="produccion">
                     <td>
-                        <span style="color: var(--text-link)">{{ produccion.lote }}</span>
-                        
+                        <span style="color: var(--text-link)">
+                            {{ produccion.lote }}
+                        </span>
                     </td>
                     <td>
                         {{ produccion.nombre}}
@@ -156,27 +183,35 @@
                         {{ produccion.numCertificacion }}
                     </td>
                     <td>
-                        {{ produccion.fechaMuestreo }}
+                        {{ produccion.fechaMuestreo | date: 'dd-MM-yyyy HH:mm'}}
                     </td>
                     <td>
                         {{ produccion.volTotal }}
                     </td>
                     <td>
-                        @if( produccion.pais != null){
+                        @if( produccion.pais != "")
+                        {
                             {{ produccion.pais }}
-                        }@else{
-                            "---------"
+                        }
+                        @else
+                        {
+                            ---------
                         }
                     </td>
                     <td>
-                        @if( produccion.puntoIngreso != null){
+                        @if( produccion.puntoIngreso != "")
+                        {
                              {{ produccion.puntoIngreso }}
-                        }@else{
-                            "---------"
+                        }
+                        @else
+                        {
+                            ---------
                         }
                     </td>
                     <td>
-                        <p-tag severity="success" value="Success">Activo</p-tag>
+                        <p-tag severity="success" value="Success">
+                            Activo
+                        </p-tag>
                     </td>
                 </tr>
             </ng-template>
