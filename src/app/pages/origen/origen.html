@@ -180,7 +180,7 @@
                         {{ produccion.nombre}}
                     </td>
                     <td>
-                        {{ produccion.numCertificacion }}
+                        {{ produccion.numCertificado }}
                     </td>
                     <td>
                         {{ produccion.fechaMuestreo | date: 'dd-MM-yyyy HH:mm'}}
@@ -189,7 +189,7 @@
                         {{ produccion.volTotal }}
                     </td>
                     <td>
-                        @if( produccion.pais != "")
+                        @if( produccion.pais != null)
                         {
                             {{ produccion.pais }}
                         }
@@ -199,7 +199,7 @@
                         }
                     </td>
                     <td>
-                        @if( produccion.puntoIngreso != "")
+                        @if( produccion.puntoIngreso != null)
                         {
                              {{ produccion.puntoIngreso }}
                         }
@@ -209,9 +209,7 @@
                         }
                     </td>
                     <td>
-                        <p-tag severity="success" value="Success">
-                            Activo
-                        </p-tag>
+                        <p-tag severity="success" value="{{produccion.estado}}"></p-tag>
                     </td>
                 </tr>
             </ng-template>
