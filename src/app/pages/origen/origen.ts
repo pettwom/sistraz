@@ -150,7 +150,31 @@ export class Origen implements OnInit {
               this.mensaje('Se almaceno correctamete!!', 'success');
             },
             error: (error) => {
-              this.mensaje(error.message, 'error')
+              console.log('STATUS:', error.status);
+              console.log('RESPUESTA:', error.error);
+
+              if (error.status === 409) {
+
+                Swal.fire({
+                  icon: 'warning',
+                  title: 'Registro duplicado',
+                  text: error.error?.mensaje,
+                  willOpen: () => {
+                    Swal.getContainer()?.style.setProperty('z-index', '99999');
+                  }
+                });
+
+                return;
+              }
+
+              Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: error.error?.mensaje ?? 'Ocurrió un error inesperado',
+                willOpen: () => {
+                  Swal.getContainer()?.style.setProperty('z-index', '99999');
+                }
+              });
             }
           });
         }
