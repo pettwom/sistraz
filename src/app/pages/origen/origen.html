@@ -30,11 +30,10 @@
 
                 <p-card header="">
                     <form [formGroup]="formProduccion" (ngSubmit)="almacenar()">
-                        <div class="card flex justify-center w-full">
-                            <p-select [options]="plantas" formControlName="planta_id"
-                                optionLabel="nombre" [filter]="true" filterBy="nombre" 
-                                [showClear]="true"
-                                placeholder="Seleccione una planta" class="w-full">
+                        <div class="card flex justify-center agregar-planta">
+                            <p-select [options]="plantas" formControlName="planta_id" optionLabel="nombre"
+                                [filter]="true" filterBy="nombre" [showClear]="true" placeholder="Seleccione una planta"
+                                class="w-full">
                                 <ng-template #selectedItem let-selectedOption>
                                     @if (selectedOption) {
                                     <div class="flex items-center gap-2">
@@ -52,12 +51,56 @@
                                     </div>
                                 </ng-template>
                             </p-select>
+                            <p-button severity="help" pTooltip="Agregar Planta / Importador" icon="pi pi-plus"
+                                tooltipPosition="left" (click)="showDialog()" />
+                            <p-dialog header="Nueva Planta" [(visible)]="visible" [modal]="true"
+                                [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }" [style]="{ width: '50vw' }"
+                                [draggable]="false" [resizable]="false">
+                                <form [formGroup]="formPlanta" (submit)="AgregarPlanta()">
+                                    <hr style="border: 0px;margin-bottom: 10px;">
+                                    <p-floatlabel>
+
+                                        <input class="w-full" id="cod_planta" pInputText type="text"
+                                            formControlName="cod_planta"
+                                            (input)="convertirMayusculas($event, 'cod_planta')" />
+                                        <label for="cod_planta">Código Planta *</label>
+                                    </p-floatlabel>
+                                    <br>
+                                    <br>
+                                    <p-floatlabel>
+                                        <input class="w-full" id="desc_planta" pInputText type="text"
+                                            formControlName="desc_planta"
+                                            (input)="convertirMayusculas($event, 'desc_planta')" />
+                                        <label for="desc_planta">Descripción Planta *</label>
+                                    </p-floatlabel>
+                                    <br>
+                                    <br>
+                                    <div class="card flex justify-center">
+                                        <p-select [options]="departamento" optionLabel="name" optionValue="name"
+                                            [checkmark]="true" placeholder="Seleccionar Departamento" [showClear]="true"
+                                            formControlName="ciudad" class="w-full md:w-56" />
+                                    </div>
+                                    <br>
+                                    <br>
+                                    <p-floatlabel>
+                                        <textarea pTextarea id="obs_planta" formControlName="obs_planta" rows="5"
+                                            cols="30" style="resize: none" class="h-full w-full"
+                                            (input)="convertirMayusculas($event,'obs_planta')"></textarea>
+                                        <label for="obs_planta">Observación</label>
+                                    </p-floatlabel>
+                                    <br>
+                                    <p-tag severity="danger" value="Los Campos requeridos estan con *" />
+                                    <hr style="border: 1px solid var(--text-link);margin-bottom: 10px;">
+                                    <p-button icon="pi pi-save" label="Crear Planta" type="submit" severity="info" />
+                                </form>
+                            </p-dialog>
                         </div>
                         <br>
                         <br>
                         <p-floatlabel>
-                            <p-inputmask mask="aaa-999999" placeholder="AAA-999999" class="h-full w-full" id="cert_produccion"
-                                formControlName="nro_certificado" type="text" (onBlur)="convertirMayusculas($event)" />
+                            <p-inputmask mask="aaa-999999" placeholder="AAA-999999" class="h-full w-full"
+                                id="cert_produccion" formControlName="nro_certificado" type="text"
+                                (onBlur)="convertirMayusculas($event,'nro_certificado')" />
                             <label for="cert_produccion">N° Certificado</label>
                         </p-floatlabel>
                         <br>
@@ -67,6 +110,7 @@
                                 formControlName="vol_total" />
                             <label for="volumen_produccion">Volumen Total (Tn)</label>
                         </p-floatlabel>
+
                         <br>
                         <div class="card flex justify-center">
                             <p-datepicker class="max-w-full" formControlName="fecha_muestra" [inline]="true"
@@ -81,9 +125,7 @@
 
                         <hr style="border: 1px solid var(--border-color);margin-bottom: 10px;">
 
-                        <p-button label="Guardar registro" type="submit" severity="info">
-                            <i class="pi pi-save"></i>
-                        </p-button>
+                        <p-button icon="pi pi-save" label="Guardar registro" type="submit" severity="info" />
                     </form>
                 </p-card>
 

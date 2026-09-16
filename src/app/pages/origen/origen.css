@@ -3,8 +3,14 @@
     justify-content: end !important;
     gap: 15px;
 }
-.button-derecha{
+
+.button-derecha {
     display: flex;
     justify-content: end;
     gap: 1rem;
+}
+
+.agregar-planta {
+    display: flex;
+    gap: 2rem;
 }
