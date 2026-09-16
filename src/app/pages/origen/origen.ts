@@ -7,11 +7,7 @@ import { Table } from 'primeng/table';
 import { ThemeUtils } from '@primeuix/themes';
 import Swal from 'sweetalert2';
 import * as XLSX from 'xlsx';
-
-interface Country {
-  name: string;
-  code: string;
-}
+import { CatalogoService, SelectOption } from '../../services/catalogo.service';
 interface ExportColumn {
   title: string;
   dataKey: string;
@@ -34,11 +30,10 @@ export class Origen implements OnInit {
   date: Date[] | undefined;
   vol_total: number = 0;
   nro_certificado: string = '';
-  countries: Country[] = [];
-  selectedCountry: Country | null = null;
+  plantas: SelectOption[] = [];
+  selectedCountry: SelectOption | null = null;
   formProduccion: FormGroup;
-  // produccion: any[] = [];
-  produccion = signal<any[]>([]); //cambio 1
+  produccion = signal<any[]>([]);
   selectedCustomers: any[] = [];
   @ViewChild('dt1') dt1!: Table;
   cols!: Column[];
@@ -48,13 +43,14 @@ export class Origen implements OnInit {
     private fb: FormBuilder,
     private router: Router,
     private serivce: ServiceServices,
+    private catalogo: CatalogoService
   ) {
     this.formProduccion = this.fb.group({
       planta_id: ['', Validators.required],
       nro_certificado: ['', Validators.required],
       vol_total: ['', Validators.required],
-      fecha_muestra: ['', Validators.required
-      ]
+      fecha_muestra: ['', Validators.required],
+      observacion: ['']
     })
   }
 
@@ -120,77 +116,6 @@ export class Origen implements OnInit {
     );
   }
 
-  exportCSV() {
-    const datos = this.produccion();
-
-    if (!datos || datos.length === 0) {
-      Swal.fire({
-        title: 'Precaución',
-        icon: 'warning',
-        text: 'No existe datos para exportar',
-        timer: 2000,
-        showCancelButton: false,
-        showConfirmButton: false
-      })
-      return;
-    }
-
-    const encabezados = [
-      'Nro. LOTE',
-      'Planta/Operador',
-      'Nro. Certificado',
-      'Fecha Muestreo',
-      'Volumen Total (Tn)',
-      'Pais',
-      'Punto Ingreso',
-      'Estado'
-    ];
-
-    const filas = datos.map(item => [
-      item.lote ?? '',
-      item.nombre ?? '',
-      item.numCertificacion ?? '',
-      item.fechaMuestreo ?? '',
-      item.volTotal ?? '',
-      item.pais ?? '',
-      item.puntoIngreso ?? '',
-      'Activo'
-    ]);
-
-    const contenido = [
-      encabezados,
-      ...filas
-    ]
-      .map(fila =>
-        fila
-          .map(valor =>
-            `"${String(valor).replace(/"/g, '""')}"`
-          )
-          .join(';')
-      )
-      .join('\n');
-
-    // BOM para que Excel reconozca correctamente UTF-8
-    const blob = new Blob(
-      ['\uFEFF' + contenido],
-      {
-        type: 'text/csv;charset=utf-8;'
-      }
-    );
-
-    const url = URL.createObjectURL(blob);
-
-    const enlace = document.createElement('a');
-
-    enlace.href = url;
-
-    enlace.download =
-      `produccion_${this.obtenerFecha()}.csv`;
-
-    enlace.click();
-
-    URL.revokeObjectURL(url);
-  }
   obtenerFecha(): string {
 
     const fecha = new Date();
@@ -209,18 +134,14 @@ export class Origen implements OnInit {
   }
 
   ngOnInit() {
-    this.countries = [
-      { name: 'Australia', code: 'AU' },
-      { name: 'Brazil', code: 'BR' },
-      { name: 'China', code: 'CN' },
-      { name: 'Egypt', code: 'EG' },
-      { name: 'France', code: 'FR' },
-      { name: 'Germany', code: 'DE' },
-      { name: 'India', code: 'IN' },
-      { name: 'Japan', code: 'JP' },
-      { name: 'Spain', code: 'ES' },
-      { name: 'United States', code: 'US' }
-    ];
+    this.catalogo.getPlantas().subscribe({
+      next: (resultado)=>{
+        this.plantas = resultado
+      },
+      error: (error)=>{
+
+      }
+    })
     this.cargarProduccion();
   }
 
@@ -229,17 +150,13 @@ export class Origen implements OnInit {
     this.serivce.get('/prod')
       .subscribe({
         next: (resultado: any) => {
-          console.log('1. produccion = ', resultado);
-
 
           this.produccion.set(Array.isArray(resultado) ? resultado : [])//cambio 2
-          // this.produccion = Array.isArray(resultado)
-          //   ? resultado
-          //   : [];
+
         },
         error: (error) => {
           console.log(error);
-          this.produccion.set([]);//cambio 3
+          this.produccion.set([]);
         }
       })
 

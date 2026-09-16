@@ -31,22 +31,23 @@
                 <p-card header="">
                     <form [formGroup]="formProduccion" (ngSubmit)="almacenar()">
                         <div class="card flex justify-center w-full">
-                            <p-select [options]="countries" [(ngModel)]="selectedCountry" formControlName="planta_id"
-                                optionLabel="name" [filter]="true" filterBy="name" [showClear]="true"
-                                placeholder="Seleccione un país" class="w-full">
+                            <p-select [options]="plantas" formControlName="planta_id"
+                                optionLabel="nombre" [filter]="true" filterBy="nombre" 
+                                [showClear]="true"
+                                placeholder="Seleccione una planta" class="w-full">
                                 <ng-template #selectedItem let-selectedOption>
                                     @if (selectedOption) {
                                     <div class="flex items-center gap-2">
                                         <div>
-                                            {{ selectedOption.name }}
+                                            {{ selectedOption.nombre }}
                                         </div>
                                     </div>
                                     }
                                 </ng-template>
-                                <ng-template #item let-country>
+                                <ng-template #item let-plantas>
                                     <div class="flex items-center gap-2">
                                         <div>
-                                            {{ country.name }}
+                                            {{ plantas.nombre }}
                                         </div>
                                     </div>
                                 </ng-template>
@@ -55,7 +56,7 @@
                         <br>
                         <br>
                         <p-floatlabel>
-                            <p-inputmask mask="aaa-999999" placeholder="AAA-999999" class="w-full" id="cert_produccion"
+                            <p-inputmask mask="aaa-999999" placeholder="AAA-999999" class="h-full w-full" id="cert_produccion"
                                 formControlName="nro_certificado" type="text" (onBlur)="convertirMayusculas($event)" />
                             <label for="cert_produccion">N° Certificado</label>
                         </p-floatlabel>
@@ -63,13 +64,20 @@
                         <br>
                         <p-floatlabel>
                             <input class="w-full" id="volumen_produccion" pInputText type="number"
-                                formControlName="vol_total"/>
+                                formControlName="vol_total" />
                             <label for="volumen_produccion">Volumen Total (Tn)</label>
                         </p-floatlabel>
                         <br>
                         <div class="card flex justify-center">
-                            <p-datepicker class="max-w-full" formControlName="fecha_muestra"                                 [inline]="true" [showWeek]="true" />
+                            <p-datepicker class="max-w-full" formControlName="fecha_muestra" [inline]="true"
+                                [showWeek]="true" />
                         </div>
+                        <br>
+                        <p-floatlabel>
+                            <textarea pTextarea id="over_label" formControlName="observacion" rows="5" cols="30"
+                                style="resize: none" class="h-full w-full"></textarea>
+                            <label for="over_label">Observación</label>
+                        </p-floatlabel>
 
                         <hr style="border: 1px solid var(--border-color);margin-bottom: 10px;">
 
@@ -106,24 +114,16 @@
 <br>
 <p-card>
     <div class="card">
-        <p-table #dt1 [value]="produccion()"
-            [globalFilterFields]="['lote', 
+        <p-table #dt1 [value]="produccion()" [globalFilterFields]="['lote', 
             'nombre',
             'numCertificacion', 
             'fechaMuestreo', 
             'volTotal',
             'pais',
             'puntoIngreso',
-            'estado']" 
-            selectionMode="single"
-            [(selection)]="selectedCustomers" 
-            dataKey="lote" 
-            [tableStyle]="{ 'min-width': '50rem'}"
-            class="tabla-personalizada" 
-            [rows]="5" 
-            [paginator]="true" 
-            stateStorage="session"
-            stateKey="statedemo-session">
+            'estado']" selectionMode="single" [(selection)]="selectedCustomers" dataKey="lote"
+            [tableStyle]="{ 'min-width': '50rem'}" class="tabla-personalizada" [rows]="5" [paginator]="true"
+            stateStorage="session" stateKey="statedemo-session">
             <ng-template #caption>
                 <p-iconfield iconPosition="left">
                     <p-inputicon>
@@ -136,7 +136,7 @@
             <ng-template #header>
                 <tr>
                     <th pSortableColumn="produccion.lote" style="width:18%">
-                        Nro. LOTE 
+                        Nro. LOTE
                         <p-sortIcon field="produccion.lote" />
                     </th>
                     <th pSortableColumn="produccion.nombre" style="width:15%">
@@ -152,7 +152,7 @@
                         <p-sortIcon field="producion.fechaMuestreo" />
                     </th>
                     <th pSortableColumn="produccion.volTotal" style="width:10%">
-                        Volumen Total (Tn) 
+                        Volumen Total (Tn)
                         <p-sortIcon field="produccion.volTotal" />
                     </th>
                     <th pSortableColumn="produccion.pais" style="width:10%">
@@ -160,11 +160,11 @@
                         <p-sortIcon field="produccion.pais" />
                     </th>
                     <th pSortableColumn="produccion.puntoIngreso" style="width:10%">
-                        Punto Ingreso 
+                        Punto Ingreso
                         <p-sortIcon field="produccion.puntoIngreso" />
                     </th>
                     <th pSortableColumn="produccion.estado" style="width:10%">
-                        Estado 
+                        Estado
                         <p-sortIcon field="produccion.estado" />
                     </th>
                 </tr>
@@ -180,7 +180,8 @@
                         {{ produccion.nombre}}
                     </td>
                     <td>
-                        {{ produccion.numCertificado }}
+                        <p-tag severity="info" value="{{ produccion.numCertificado }}"></p-tag>
+
                     </td>
                     <td>
                         {{ produccion.fechaMuestreo | date: 'dd-MM-yyyy HH:mm'}}
@@ -189,23 +190,23 @@
                         {{ produccion.volTotal }}
                     </td>
                     <td>
-                        @if( produccion.pais != null)
+                        @if( produccion.tipoOperacion == 1 )
                         {
-                            {{ produccion.pais }}
+                        {{ produccion.pais }}
                         }
                         @else
                         {
-                            ---------
+                        <p-tag severity="danger" value="{{produccion.pais}}"></p-tag>
                         }
                     </td>
                     <td>
                         @if( produccion.puntoIngreso != null)
                         {
-                             {{ produccion.puntoIngreso }}
+                        {{ produccion.puntoIngreso }}
                         }
                         @else
                         {
-                            ---------
+                        ---------
                         }
                     </td>
                     <td>
