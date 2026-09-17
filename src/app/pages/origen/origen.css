@@ -24,3 +24,20 @@
 .titulo_img_dialog>img {
     width: 25px !important;
 }
+
+:host ::ng-deep .texto-calendario .p-datepicker,
+:host ::ng-deep .texto-calendario .p-inputtext,
+:host ::ng-deep .texto-calendario * {
+    font-size: 0.75rem !important; /* Prueba un valor drástico como 0.75rem para notar el cambio */
+    /* width: 100%;
+    height: 100%; */
+}
+
+:host ::ng-deep .p-datepicker-today > .p-datepicker-day {
+    background-color: var(--bg-background);
+}
+
+:host ::ng-deep .texto-calendario .p-datepicker {
+    transform: scale(0.1);
+    transform-origin: top left; /* Evita desalineaciones al encogerse */
+}
