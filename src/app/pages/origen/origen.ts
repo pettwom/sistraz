@@ -86,6 +86,15 @@ export class Origen implements OnInit {
   // FUNCION INICIAL
   // ******************************************************
   ngOnInit() {
+    this.cargarSelectPlanta();
+    this.cargarProduccion();
+
+  }
+
+  // ******************************************************
+  // FUNCION DEL SISTEMA
+  // ****************************************************** 
+  cargarSelectPlanta() {
     this.catalogo.getPlantas().subscribe({
       next: (resultado) => {
         this.plantas = resultado
@@ -94,13 +103,8 @@ export class Origen implements OnInit {
         this.mensaje(error, 'error')
       }
     })
-    this.cargarProduccion();
-
   }
 
-  // ******************************************************
-  // FUNCION DEL SISTEMA
-  // ******************************************************  
   cargarProduccion(): void {
 
     this.serivce.get('/prod')
@@ -136,7 +140,7 @@ export class Origen implements OnInit {
       Swal.fire({
         title: 'Precaución',
         icon: 'warning',
-        text: 'Esta Seguro de Crear esta Planta!!',
+        html: '<span>Esta Seguro de Crear esta 🚧 <b>Planta</b> 🚧 !! <br/> Los datos no podran ser Eliminados</span>',
         confirmButtonText: 'Si estoy Seguro',
         cancelButtonText: 'No',
         showCancelButton: true,
@@ -147,6 +151,8 @@ export class Origen implements OnInit {
         if (result.isConfirmed) {
           this.serivce.post("prod/addPlanta", this.formPlanta.value).subscribe({
             next: (resultado) => {
+              this.visible = false;
+              this.cargarSelectPlanta();
               this.mensaje('Se almaceno correctamete!!', 'success');
             },
             error: (error) => {
@@ -182,6 +188,13 @@ export class Origen implements OnInit {
 
     } else {
       this.mensaje('Debe Completar todos los campos requeridos', 'error');
+    }
+  }
+
+  alCerrar($event: any) {
+    console.log(this.sidebarVisible)
+    if (this.sidebarVisible == true) {
+      this.visible = false
     }
   }
 

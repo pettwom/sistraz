@@ -14,3 +14,13 @@
     display: flex;
     gap: 2rem;
 }
+
+.titulo_img_dialog {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.titulo_img_dialog>img {
+    width: 25px !important;
+}

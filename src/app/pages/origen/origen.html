@@ -1,4 +1,5 @@
-<p-drawer [(visible)]="sidebarVisible" position="right" styleClass="drawer-personalizado">
+<p-drawer [(visible)]="sidebarVisible" (onHide)="alCerrar($event)"
+    position="right" styleClass="drawer-personalizado">
     <ng-template pTemplate="header">
         <div class="flex align-items-center gap-2">
 
@@ -32,13 +33,13 @@
                     <form [formGroup]="formProduccion" (ngSubmit)="almacenar()">
                         <div class="card flex justify-center agregar-planta">
                             <p-select [options]="plantas" formControlName="planta_id" optionLabel="nombre"
-                                [filter]="true" filterBy="nombre" [showClear]="true" placeholder="Seleccione una planta"
+                                [filter]="true" filterBy="codigo" [showClear]="true" placeholder="Seleccione una planta"
                                 class="w-full">
                                 <ng-template #selectedItem let-selectedOption>
                                     @if (selectedOption) {
                                     <div class="flex items-center gap-2">
                                         <div>
-                                            {{ selectedOption.nombre }}
+                                            {{ selectedOption.codigo }}
                                         </div>
                                     </div>
                                     }
@@ -46,16 +47,24 @@
                                 <ng-template #item let-plantas>
                                     <div class="flex items-center gap-2">
                                         <div>
-                                            {{ plantas.nombre }}
+                                            {{ plantas.codigo }}
                                         </div>
                                     </div>
                                 </ng-template>
                             </p-select>
-                            <p-button severity="help" pTooltip="Agregar Planta / Importador" icon="pi pi-plus"
-                                tooltipPosition="left" (click)="showDialog()" />
-                            <p-dialog header="Nueva Planta" [(visible)]="visible" [modal]="true"
+                            <p-button severity="help" pTooltip="Agregar Planta / Importador" tooltipPosition="left"
+                                (click)="showDialog()">
+                                <img src="planta_gas.ico" width="20" alt="">
+                            </p-button>
+                            <p-dialog [(visible)]="visible" [modal]="true"
                                 [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }" [style]="{ width: '50vw' }"
                                 [draggable]="false" [resizable]="false">
+                                <ng-template #header>
+                                    <div class="inline-flex items-center justify-center gap-2 titulo_img_dialog">
+                                        <p-avatar image="planta_gas1.png" shape="circle" />
+                                        <span class="font-bold whitespace-nowrap">Nueva Planta</span>
+                                    </div>
+                                </ng-template>
                                 <form [formGroup]="formPlanta" (submit)="AgregarPlanta()">
                                     <hr style="border: 0px;margin-bottom: 10px;">
                                     <p-floatlabel>
