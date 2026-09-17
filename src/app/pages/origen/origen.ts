@@ -105,6 +105,9 @@ export class Origen implements OnInit {
     })
   }
 
+  // ******************************************************
+  // FUNCION QUE PERMITE CARGAR LA TABLA DE PRODUCCION
+  // ****************************************************** 
   cargarProduccion(): void {
 
     this.serivce.get('/prod')
@@ -119,19 +122,37 @@ export class Origen implements OnInit {
       })
 
   }
-
+  // ******************************************************
+  // FUNCION QUE PERMITE CREAR UN LOTE E INICIAR LA TRAZABILIDAD
+  // ****************************************************** 
   almacenar() {
     console.log(this.formProduccion);
-    // this.serivce.post("api/prod/add", this.formProduccion).subscribe(
-    //   {
-    //     next: (resultado) => {
-    //       console.log(resultado);
-    //       this.mensaje('Se almacenaron correctamente los datos', 'success')
-    //     },
-    //     error: (error) => {
-    //       this.mensaje(error, 'error');
-    //     }
-    //   })
+    Swal.fire({
+      title: 'Precaución',
+      icon: 'success',
+      html: '🚧 Esta Seguro de Registrar un nuevo <b>Lote</b>? 🚧',
+      showConfirmButton: true,
+      showCancelButton: true,
+      confirmButtonText: 'Si, Estoy Seguro',
+      cancelButtonText: 'No',
+        willOpen: () => {
+          Swal.getContainer()?.style.setProperty('z-index', '99999');
+        }
+    }).then((resultado) => {
+      if (resultado.isConfirmed) {
+        this.serivce.post("api/prod/add", this.formProduccion).subscribe(
+          {
+            next: (resultado) => {
+              console.log(resultado);
+              this.mensaje('Se almacenaron correctamente los datos', 'success')
+            },
+            error: (error) => {
+              this.mensaje(error, 'error');
+            }
+          })
+      }
+    })
+
   }
 
   AgregarPlanta() {
@@ -231,7 +252,10 @@ export class Origen implements OnInit {
       text: mensaje,
       showCancelButton: false,
       showConfirmButton: false,
-      timer: 2000
+      timer: 2000,
+        willOpen: () => {
+          Swal.getContainer()?.style.setProperty('z-index', '99999');
+        }
     })
   }
 
