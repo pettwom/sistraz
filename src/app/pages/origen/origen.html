@@ -223,7 +223,10 @@
                 <tr [pSelectableRow]="produccion">
                     <td>
                         <span style="color: var(--text-link)">
-                            <a (click)="showDialog('trazabilidad',produccion.lote)">
+                            <a (click)="showDialog('trazabilidad',produccion.lote)" 
+                            pTooltip="Muestra la trazabilidad" 
+                            tooltipPosition="top"
+                            >
                                 {{ produccion.lote }}
                             </a>
 
