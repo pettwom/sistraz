@@ -223,30 +223,24 @@
                 <tr [pSelectableRow]="produccion">
                     <td>
                         <span style="color: var(--text-link)">
-                            {{ produccion.lote }}
+                            <a (click)="showDialog('trazabilidad',produccion.lote)">
+                                {{ produccion.lote }}
+                            </a>
+
                         </span>
                     </td>
                     <td>
                         {{ produccion.nombre}}
                     </td>
                     <td style="display: flex; justify-content: center; align-items: center; gap:1rem;">
-
-                        @if(produccion.numCertificado === null){
-                        <p-button severity="warn" (click)="showDialog('registroCert',produccion.idPlanta)"
-                            icon="pi pi-plus">
-
-                        </p-button>
-                        <p-button severity="info" (click)="showDialog('upload', produccion.idPlanta )" [rounded]="true"
-                            icon="pi pi-upload"></p-button>
-                        }
-                        @else
-                        {
-
+                        @if(produccion.numCertificado !== null){
                         <p-tag severity="warn" value="{{ produccion.numCertificado }}" />
-                        <p-button severity="info" (click)="showDialog('upload', produccion.idPlanta )" [rounded]="true"
-                            icon="pi pi-upload"></p-button>
+                        <!-- <p-button severity="info" (click)="showDialog('upload', produccion.idPlanta )" [rounded]="true"
+                                icon="pi pi-upload"></p-button> -->
                         }
-
+                        @else{
+                        <p-tag severity="danger" value="No existe certifiado" />
+                        }
                     </td>
                     <td>
                         {{ produccion.fechaMuestreo | date: 'dd-MM-yyyy HH:mm'}}
@@ -792,4 +786,216 @@
 
         <p-button label="Almacenar" [outlined]="true" severity="secondary" (click)="visible = false" />
     </ng-template>
+</p-dialog>
+
+<!-- MOSTRAR TRAZABILIDAD -->
+
+<p-dialog [(visible)]="mostrarTrazabilidad" [modal]="true" [maximizable]="true">
+    <div class="trazabilidad-container">
+        <!-- ============================= -->
+        <!-- CABECERA -->
+        <!-- ============================= -->
+        @if (eventos.length > 0) {
+            <!-- <ng-template #header> -->
+            <!-- <div class="inline-flex items-center justify-center gap-2"> -->
+                <div class="trazabilidad-header">
+                    <div>
+                        <span class="subtitulo">
+                            CÓDIGO DE TRAZABILIDAD
+                        </span>
+                        <h2>
+                            {{ codigoTrazabilidad }}
+                        </h2>
+                    </div>
+                    <div class="header-info">
+                        <div class="dato-header">
+                            <span>Eventos</span>
+                            <strong>{{ eventos.length }}</strong>
+                        </div>
+                        <div class="dato-header">
+                            <span>Volumen inicial</span>
+                            <strong>
+                                {{ volumenInicial | number:'1.0-2' }}
+                            </strong>
+                        </div>
+                        <p-tag value="CONFIRMADO" severity="success">
+                        </p-tag>
+                    </div>
+                </div>
+            <!-- </div> -->
+        <!-- </ng-template> -->
+        <!-- ============================= -->
+        <!-- EVENTOS -->
+        <!-- ============================= -->
+        <div class="timeline">
+            @for (evento of eventos; track evento.IdEvento; let ultimo = $last) {
+            <div class="timeline-item">
+                <!-- LINEA -->
+                <div class="timeline-marker">
+                    <div class="marker">
+                        <i [class]="iconoEvento(evento.TipoEvento)"></i>
+                    </div>
+                    @if (!ultimo) {
+                    <div class="linea"></div>
+                    }
+                </div>
+                <!-- CONTENIDO -->
+                <div class="evento">
+                    <!-- HEADER EVENTO -->
+                    <div class="evento-header">
+                        <div>
+                            <span class="evento-numero">
+                                EVENTO {{ evento.IdEvento }}
+                            </span>
+                            <h3>
+                                {{ evento.TipoEvento }}
+                            </h3>
+                        </div>
+                        <div class="evento-fecha">
+                            <i class="pi pi-calendar"></i>
+                            {{ formatearFecha(evento.FechaEvento) }}
+                            <p-tag [value]="evento.Estado" severity="success">
+                            </p-tag>
+                        </div>
+                    </div>
+                    <!-- FLUJO -->
+                    <div class="flujo">
+                        <!-- ORIGEN -->
+                        <div class="seccion-flujo">
+                            <div class="titulo-seccion">
+                                <i class="pi pi-sign-in"></i>
+                                ORIGEN
+                                <span class="contador">
+                                    {{ evento.Origenes.length }}
+                                </span>
+                            </div>
+                            <div class="instancias">
+                                @for (
+                                origen of evento.Origenes;
+                                track origen.idInstancia
+                                ) {
+                                <div class="instancia-card">
+                                    <div class="instancia-icono">
+                                        <i [class]="iconoTipo(origen.tipo)"></i>
+                                    </div>
+                                    <div class="instancia-info">
+                                        <span class="tipo">
+                                            {{ nombreTipo(origen.tipo) }}
+                                        </span>
+                                        <strong>
+                                            {{ origen.codigo }}
+                                        </strong>
+                                        <span class="nombre">
+                                            {{ origen.nombre }}
+                                        </span>
+                                    </div>
+                                    <div class="volumen">
+                                        <strong>
+                                            {{ origen.volumen | number:'1.0-2' }}
+                                        </strong>
+                                        <span>
+                                            Volumen
+                                        </span>
+                                    </div>
+                                </div>
+                                }
+                            </div>
+                        </div>
+                        <!-- FLECHA -->
+                        <div class="flecha-flujo">
+                            <div class="linea-flecha"></div>
+                            <i class="pi pi-angle-right"></i>
+                        </div>
+                        <!-- DESTINO -->
+                        <div class="seccion-flujo">
+                            <div class="titulo-seccion">
+                                <i class="pi pi-sign-out"></i>
+                                DESTINO
+                                <span class="contador">
+                                    {{ evento.Destinos.length }}
+                                </span>
+                            </div>
+                            <div class="instancias">
+                                @for (
+                                destino of evento.Destinos;
+                                track destino.idInstancia
+                                ) {
+                                <div class="instancia-card">
+                                    <div class="instancia-icono">
+                                        <i [class]="iconoTipo(destino.tipo)"></i>
+                                    </div>
+                                    <div class="instancia-info">
+                                        <span class="tipo">
+                                            {{ nombreTipo(destino.tipo) }}
+                                        </span>
+                                        <strong>
+                                            {{ destino.codigo }}
+                                        </strong>
+                                        <span class="nombre">
+                                            {{ destino.nombre }}
+                                        </span>
+                                    </div>
+                                    <div class="volumen">
+                                        <strong>
+                                            {{ destino.volumen | number:'1.0-2' }}
+                                        </strong>
+                                        <span>
+                                            Volumen
+                                        </span>
+                                    </div>
+                                </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <!-- CERTIFICADOS -->
+                    @if (evento.Certificados.length > 0) {
+                    <div class="certificados">
+                        <div class="certificado-titulo">
+                            <i class="pi pi-file-pdf"></i>
+                            Certificados asociados
+                        </div>
+                        <div class="certificado-lista">
+                            @for (
+                            certificado of evento.Certificados;
+                            track certificado.idCertificado
+                            ) {
+                            <div class="certificado">
+                                <div class="certificado-icono">
+                                    <i class="pi pi-file"></i>
+                                </div>
+                                <div>
+                                    <span>Certificado</span>
+                                    <strong>
+                                        {{ certificado.numero }}
+                                    </strong>
+                                </div>
+                                <div class="certificado-fecha">
+                                    <span>Fecha de emisión</span>
+                                    <strong>
+                                        {{ formatearFecha(certificado.fechaEmision) }}
+                                    </strong>
+                                </div>
+                                <p-button icon="pi pi-eye" [rounded]="true" [text]="true" pTooltip="Ver certificado">
+                                </p-button>
+                            </div>
+                            }
+                        </div>
+                    </div>
+                    }
+                </div>
+            </div>
+            }
+        </div>
+        } @else {
+        <div class="sin-resultados">
+            <i class="pi pi-search"></i>
+            <h3>Sin trazabilidad</h3>
+            <p>
+                Ingrese un código de trazabilidad para consultar
+                el recorrido del producto.
+            </p>
+        </div>
+        }
+    </div>
 </p-dialog>

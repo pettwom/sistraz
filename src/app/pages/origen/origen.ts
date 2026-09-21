@@ -23,7 +23,33 @@ interface Departamento {
   name: string;
   code: string;
 }
+export interface InstanciaTrazabilidad {
+  tipo: string;
+  codigo: string;
+  nombre: string;
+  volumen: number;
+  idInstancia: number;
+}
 
+export interface CertificadoTrazabilidad {
+  tipo: string;
+  numero: string;
+  fechaEmision: string;
+  fechaMuestreo: string;
+  idCertificado: number;
+}
+
+export interface TrazabilidadEvento {
+  IdLote: number;
+  CodigoTrazabilidad: string;
+  IdEvento: number;
+  TipoEvento: string;
+  FechaEvento: string;
+  Estado: string;
+  Origenes: InstanciaTrazabilidad[];
+  Destinos: InstanciaTrazabilidad[];
+  Certificados: CertificadoTrazabilidad[];
+}
 @Component({
   selector: 'app-origen',
   imports: [ImportsModule],
@@ -61,7 +87,101 @@ export class Origen implements OnInit {
   files: File[] = [];
   totalSize: number = 0;
   totalSizePercent: number = 0;
+  mostrarTrazabilidad: boolean = false;
 
+  eventos: TrazabilidadEvento[] = [];
+   get codigoTrazabilidad(): string {
+    return this.eventos.length > 0
+      ? this.eventos[0].CodigoTrazabilidad
+      : '';
+  }
+
+  get volumenInicial(): number {
+    return this.eventos.length > 0 &&
+           this.eventos[0].Origenes.length > 0
+      ? this.eventos[0].Origenes[0].volumen
+      : 0;
+  }
+
+  iconoTipo(tipo: string): string {
+
+    switch (tipo) {
+
+      case 'PLT':
+        return 'pi pi-building';
+
+      case 'TRA':
+        return 'pi pi-truck';
+
+      case 'ALM':
+        return 'pi pi-database';
+
+      case 'ENG':
+        return 'pi pi-box';
+
+      case 'DIS':
+        return 'pi pi-map-marker';
+
+      default:
+        return 'pi pi-circle';
+    }
+  }
+
+  nombreTipo(tipo: string): string {
+
+    switch (tipo) {
+
+      case 'PLT':
+        return 'Planta';
+
+      case 'TRA':
+        return 'Transporte';
+
+      case 'ALM':
+        return 'Almacenamiento';
+
+      case 'ENG':
+        return 'Engarrafadora';
+
+      case 'DIS':
+        return 'Distribuidor';
+
+      default:
+        return tipo;
+    }
+  }
+
+  iconoEvento(evento: string): string {
+
+    switch (evento) {
+
+      case 'DESPACHO':
+        return 'pi pi-send';
+
+      case 'RECEPCION':
+        return 'pi pi-inbox';
+
+      case 'TRASVASE':
+        return 'pi pi-arrow-right-arrow-left';
+
+      case 'DISTRIBUCION':
+        return 'pi pi-truck';
+
+      default:
+        return 'pi pi-circle';
+    }
+  }
+
+  formatearFecha(fecha: string): string {
+
+    return new Intl.DateTimeFormat('es-BO', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    }).format(new Date(fecha));
+  }
   departamento: Departamento[] = [
     { name: 'CHUQUISACA', code: 'ch' },
     { name: 'LA PAZ', code: 'lp' },
@@ -75,6 +195,7 @@ export class Origen implements OnInit {
   ];
   form: any;
   visibleRegCert: boolean = false;
+  resultadoTraz: any;
   constructor(
     private fb: FormBuilder,
     private router: Router,
@@ -292,10 +413,6 @@ export class Origen implements OnInit {
     }
   }
 
-  RegistroDespacho() {
-
-  }
-
   despacharOrigen() {
     Swal.fire({
       title: 'Precaución',
@@ -342,6 +459,25 @@ export class Origen implements OnInit {
     // Cambia visualmente el input
     input.value = valor;
     this.formProduccion.get(campo)?.setValue(valor, { emitEvent: false })
+  }
+
+  // ******************************************************
+  // MUESTRA LA TRAZABILIDAD
+  // ******************************************************
+
+  resultTrazabilidad(traz: string) {
+    this.serivce.get("TrazabilidadView?" + "codigoTrazabilidad=" + traz)
+      .subscribe({
+        next: (res => {
+          console.log(res);
+
+          this.eventos = res as TrazabilidadEvento[];
+
+        }),
+        error: (error => {
+          this.mensaje(error, 'error');
+        })
+      });
   }
 
   obtenerFecha(): string {
@@ -452,6 +588,9 @@ export class Origen implements OnInit {
         this.visibleRegCert = true;
         this.idPlanta = data;
         break;
+      case 'trazabilidad':
+        this.mostrarTrazabilidad = true;
+        this.resultTrazabilidad(String(data));
     }
   }
   // ======================================================

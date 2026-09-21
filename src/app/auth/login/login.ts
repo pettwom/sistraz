@@ -174,6 +174,7 @@ export class Login {
   }
 
   ingresar() {
+    this.load();
     if (this.formLogin.invalid) {
       this.formLogin.markAllAsTouched();
       Swal.fire({
@@ -218,7 +219,7 @@ export class Login {
     this.authService.login(usuario, password).subscribe({
 
       next: (response) => {
-        this.load();
+
         if (response.exito) {
 
           if (response.token) {
