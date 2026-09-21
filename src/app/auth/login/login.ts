@@ -27,7 +27,15 @@ export class Login {
   captchaTexto = '';
   captchaSvg!: SafeHtml;
   MenuOption: any = {};
+  cargando: boolean = false;
 
+  load() {
+    this.cargando = true;
+
+    setTimeout(() => {
+      this.cargando = false
+    }, 2000);
+  }
   constructor(
     private fb: FormBuilder,
     private router: Router,
@@ -210,7 +218,7 @@ export class Login {
     this.authService.login(usuario, password).subscribe({
 
       next: (response) => {
-
+        this.load();
         if (response.exito) {
 
           if (response.token) {
@@ -226,8 +234,8 @@ export class Login {
               JSON.stringify(response.usuario)
             );
           }
-          this.obtenerMenu(response.usuario);
 
+          this.obtenerMenu(response.usuario);
         } else {
 
           Swal.fire({

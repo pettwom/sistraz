@@ -1,8 +1,11 @@
-import {HttpInterceptorFn} from '@angular/common/http';
+import {
+  HttpErrorResponse,
+  HttpInterceptorFn
+} from '@angular/common/http';
 
-import {inject} from '@angular/core';
+import { inject } from '@angular/core';
 
-import {Router} from '@angular/router';
+import { Router } from '@angular/router';
 
 import {
   catchError,
@@ -10,220 +13,426 @@ import {
   throwError
 } from 'rxjs';
 
-import { LoadingService } from '../../services/loading.services';
+import {
+  LoadingService
+} from '../../services/loading.services';
 
 
-export const httpInterceptor: HttpInterceptorFn = (req, next) => {
+export const httpInterceptor: HttpInterceptorFn =
+  (req, next) => {
 
-  const router = inject(Router);
+    // =====================================================
+    // SERVICIOS
+    // =====================================================
 
-  const loadingService = inject(LoadingService);
+    const router = inject(Router);
 
+    const loadingService = inject(LoadingService);
 
-  // =====================================================
-  // MOSTRAR LOADING
-  // =====================================================
+    const endpointsIgnorados: string[] = [
+      '/Auth/estado'
+    ];
 
-  loadingService.show();
+    const ignorarInterceptor =
+      endpointsIgnorados.some(
+        endpoint =>
+          req.url
+            .toLowerCase()
+            .includes(endpoint.toLowerCase())
+      );
 
+    // =====================================================
+    // SI ES Auth/estado NO HACER NADA
+    // =====================================================
 
-  // =====================================================
-  // OBTENER TOKEN
-  // =====================================================
+    if (ignorarInterceptor) {
+      return next(req);
+    }
+    
 
-  const token = localStorage.getItem('token');
+    // =====================================================
+    // RUTAS ANGULAR QUE NO MOSTRARÁN MENSAJES GLOBALES
+    // =====================================================
+    //
+    // Esto corresponde a rutas del FRONTEND:
+    //
+    // /produccion
+    // /transporte
+    // etc.
+    //
+    // Si NO quieres excluir una pantalla completa,
+    // simplemente deja el array vacío.
+    // =====================================================
 
+    const rutasSinMensajes: string[] = [
 
-  // =====================================================
-  // RUTAS QUE NO NECESITAN TOKEN
-  // =====================================================
+      // '/produccion'
 
-  const urlsSinToken = [
-
-    '/api/login',
-
-    '/api/auth/login',
-
-    '/api/refresh-token'
-
-  ];
-
-
-  const excluirToken = urlsSinToken.some(url =>
-    req.url.includes(url)
-  );
-
-
-  // =====================================================
-  // REQUEST ORIGINAL
-  // =====================================================
-
-  let request = req;
-
-
-  // =====================================================
-  // AGREGAR TOKEN
-  // =====================================================
-
-  if (token && !excluirToken) {
-
-    request = req.clone({
-
-      setHeaders: {
-
-        Authorization: `Bearer ${token}`,
-
-        Accept: 'application/json'
-
-      }
-
-    });
-
-  }
+    ];
 
 
-  // =====================================================
-  // MOSTRAR PETICIÓN EN CONSOLA
-  // =====================================================
-
-  console.log(
-    'HTTP REQUEST:',
-    request.method,
-    request.url
-  );
-
-
-  // =====================================================
-  // ENVIAR PETICIÓN
-  // =====================================================
-
-  return next(request).pipe(
-
-
-    // ===================================================
-    // MANEJO DE ERRORES
-    // ===================================================
-
-    catchError((error) => {
-
-      console.error(
-        'HTTP ERROR:',
-        error.status,
-        error
+    const omitirPorRuta =
+      rutasSinMensajes.some(
+        ruta =>
+          router.url.startsWith(ruta)
       );
 
 
-      switch (error.status) {
+    // =====================================================
+    // DETERMINAR SI SE OMITEN MENSAJES
+    // =====================================================
+
+    const omitirMensajes =
+      ignorarInterceptor ||
+      omitirPorRuta;
 
 
-        // ===============================================
-        // 400
-        // ===============================================
+    // =====================================================
+    // MOSTRAR LOADING
+    // =====================================================
 
-        case 400:
-
-          console.error(
-            'Solicitud incorrecta'
-          );
-
-          break;
+    loadingService.show();
 
 
-        // ===============================================
-        // 401
-        // ===============================================
+    // =====================================================
+    // OBTENER TOKEN
+    // =====================================================
 
-        case 401:
-
-          console.error(
-            'Sesión no autorizada o expirada'
-          );
-
-          localStorage.removeItem('token');
-
-          loadingService.reset();
-
-          router.navigate(['/login']);
-
-          break;
+    const token =
+      localStorage.getItem('token');
 
 
-        // ===============================================
-        // 403
-        // ===============================================
+    // =====================================================
+    // ENDPOINTS QUE NO NECESITAN TOKEN
+    // =====================================================
 
-        case 403:
+    const urlsSinToken: string[] = [
 
-          console.error(
-            'No tiene permisos'
-          );
+      '/api/login',
 
-          break;
+      '/api/auth/login',
 
+      '/Auth/login',
 
-        // ===============================================
-        // 404
-        // ===============================================
+      '/api/refresh-token'
 
-        case 404:
-
-          console.error(
-            'Recurso no encontrado'
-          );
-
-          break;
+    ];
 
 
-        // ===============================================
-        // 500
-        // ===============================================
-
-        case 500:
-
-          console.error(
-            'Error interno del servidor'
-          );
-
-          break;
-
-
-        // ===============================================
-        // OTROS ERRORES
-        // ===============================================
-
-        default:
-
-          console.error(
-            'Error HTTP no controlado'
-          );
-
-          break;
-
-      }
-
-
-      return throwError(
-        () => error
+    const excluirToken =
+      urlsSinToken.some(
+        url =>
+          req.url
+            .toLowerCase()
+            .includes(
+              url.toLowerCase()
+            )
       );
 
-    }),
+
+    // =====================================================
+    // REQUEST ORIGINAL
+    // =====================================================
+
+    let request = req;
 
 
-    // ===================================================
-    // OCULTAR LOADING AL FINALIZAR
-    // ===================================================
+    // =====================================================
+    // AGREGAR TOKEN JWT
+    // =====================================================
 
-    finalize(() => {
+    if (
+      token &&
+      !excluirToken
+    ) {
 
-      loadingService.hide();
+      request = req.clone({
 
-      console.log(
-        'HTTP FINALIZADO:',
-        request.url
-      );
+        setHeaders: {
 
-    })
+          Authorization:
+            `Bearer ${token}`,
 
-  );
+          Accept:
+            'application/json'
 
-};
+        }
+
+      });
+
+    }
+
+
+    // =====================================================
+    // MOSTRAR PETICIÓN EN CONSOLA
+    // =====================================================
+
+    console.log(
+      'HTTP REQUEST:',
+      request.method,
+      request.url
+    );
+
+
+    // =====================================================
+    // ENVIAR PETICIÓN
+    // =====================================================
+
+    return next(request).pipe(
+
+
+      // ===================================================
+      // MANEJO DE ERRORES
+      // ===================================================
+
+      catchError(
+        (error: HttpErrorResponse) => {
+
+
+          console.error(
+            'HTTP ERROR:',
+            error.status,
+            error
+          );
+
+
+          // =================================================
+          // 401 - SESIÓN EXPIRADA
+          // =================================================
+          //
+          // IMPORTANTE:
+          //
+          // El 401 NUNCA se ignora.
+          //
+          // Aunque el endpoint esté dentro de:
+          //
+          // endpointsSinMensajes
+          //
+          // igualmente debemos cerrar la sesión.
+          // =================================================
+
+          if (error.status === 401) {
+
+            console.error(
+              'Sesión no autorizada o expirada'
+            );
+
+
+            // ===============================================
+            // MATAR SESIÓN DEL FRONTEND
+            // ===============================================
+
+            localStorage.clear();
+
+
+            // ===============================================
+            // REINICIAR LOADING
+            // ===============================================
+
+            loadingService.reset();
+
+
+            // ===============================================
+            // REDIRECCIONAR AL LOGIN
+            // ===============================================
+
+            router.navigateByUrl(
+              '/login',
+              {
+                replaceUrl: true
+              }
+            );
+
+
+            // ===============================================
+            // DEVOLVER ERROR
+            // ===============================================
+
+            return throwError(
+              () => error
+            );
+
+          }
+
+
+          // =================================================
+          // OMITIR MENSAJES GLOBALES
+          // =================================================
+          //
+          // Aquí entrará, por ejemplo:
+          //
+          // /prod/addProd
+          //
+          // El interceptor NO mostrará el mensaje.
+          //
+          // El error continuará hacia el componente.
+          // =================================================
+
+          if (omitirMensajes) {
+
+            console.log(
+              'Mensaje global omitido:',
+              request.url
+            );
+
+
+            return throwError(
+              () => error
+            );
+
+          }
+
+
+          // =================================================
+          // MANEJO GLOBAL DE ERRORES
+          // =================================================
+
+          switch (error.status) {
+
+
+            // ===============================================
+            // 400 - BAD REQUEST
+            // ===============================================
+
+            case 400:
+
+              console.error(
+                'Solicitud incorrecta'
+              );
+
+              break;
+
+
+            // ===============================================
+            // 403 - FORBIDDEN
+            // ===============================================
+
+            case 403:
+
+              console.error(
+                'No tiene permisos para realizar esta acción'
+              );
+
+              break;
+
+
+            // ===============================================
+            // 404 - NOT FOUND
+            // ===============================================
+
+            case 404:
+
+              console.error(
+                'Recurso no encontrado'
+              );
+
+              break;
+
+
+            // ===============================================
+            // 408 - TIMEOUT
+            // ===============================================
+
+            case 408:
+
+              console.error(
+                'Tiempo de espera agotado'
+              );
+
+              break;
+
+
+            // ===============================================
+            // 500 - INTERNAL SERVER ERROR
+            // ===============================================
+
+            case 500:
+
+              console.error(
+                'Error interno del servidor'
+              );
+
+              break;
+
+
+            // ===============================================
+            // 502 - BAD GATEWAY
+            // ===============================================
+
+            case 502:
+
+              console.error(
+                'Error de comunicación con el servidor'
+              );
+
+              break;
+
+
+            // ===============================================
+            // 503 - SERVICE UNAVAILABLE
+            // ===============================================
+
+            case 503:
+
+              console.error(
+                'Servicio no disponible'
+              );
+
+              break;
+
+
+            // ===============================================
+            // OTROS ERRORES
+            // ===============================================
+
+            default:
+
+              console.error(
+                'Error HTTP no controlado:',
+                error.status
+              );
+
+              break;
+
+          }
+
+
+          // =================================================
+          // DEVOLVER ERROR AL COMPONENTE
+          // =================================================
+
+          return throwError(
+            () => error
+          );
+
+        }
+      ),
+
+
+      // ===================================================
+      // OCULTAR LOADING
+      // ===================================================
+      //
+      // finalize se ejecuta:
+      //
+      // ✓ cuando la petición termina correctamente
+      // ✓ cuando existe un error
+      // ✓ cuando existe un 401
+      //
+      // ===================================================
+
+      finalize(() => {
+
+        loadingService.hide();
+
+
+        console.log(
+          'HTTP FINALIZADO:',
+          request.url
+        );
+
+      })
+
+    );
+
+  };

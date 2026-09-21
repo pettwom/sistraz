@@ -1,6 +1,6 @@
 import { Component, OnInit, signal, ViewChild } from '@angular/core';
 import { ImportsModule } from '../../imports';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ServiceServices } from '../../services/service.services';
 import { Table } from 'primeng/table';
@@ -8,6 +8,8 @@ import { ThemeUtils } from '@primeuix/themes';
 import Swal from 'sweetalert2';
 import * as XLSX from 'xlsx';
 import { CatalogoService, SelectOption } from '../../services/catalogo.service';
+import { PrimeNG } from 'primeng/config';
+import { MessageService } from 'primeng/api';
 interface ExportColumn {
   title: string;
   dataKey: string;
@@ -42,14 +44,24 @@ export class Origen implements OnInit {
   selectedCountry: SelectOption | null = null;
   formProduccion: FormGroup;
   formPlanta: FormGroup;
+  formDespacho: FormGroup;
+  tabs: number = 0;
   produccion = signal<any[]>([]);
   selectedCustomers: any[] = [];
   @ViewChild('dt1') dt1!: Table;
   cols!: Column[];
   exportColumns!: ExportColumn[];
   visible: boolean = false;
-  // ciudad: City[] | undefined;
-  // selectedCity: City | undefined;
+  visibleDespacho: boolean = false;
+  visibleUpload: boolean = false;
+  idPlanta: number = 0;
+  disabled: boolean = false;
+  tabDespacho: number = 4;
+  pasoDespacho: number = 1;
+  files: File[] = [];
+  totalSize: number = 0;
+  totalSizePercent: number = 0;
+
   departamento: Departamento[] = [
     { name: 'CHUQUISACA', code: 'ch' },
     { name: 'LA PAZ', code: 'lp' },
@@ -61,11 +73,15 @@ export class Origen implements OnInit {
     { name: 'BENI', code: 'bn' },
     { name: 'PANDO', code: 'pn' },
   ];
+  form: any;
+  visibleRegCert: boolean = false;
   constructor(
     private fb: FormBuilder,
     private router: Router,
     private serivce: ServiceServices,
-    private catalogo: CatalogoService
+    private catalogo: CatalogoService,
+    private config: PrimeNG,
+    private messageService: MessageService
   ) {
     this.formPlanta = this.fb.group({
       cod_planta: ['', Validators.required],
@@ -80,15 +96,56 @@ export class Origen implements OnInit {
       fecha_muestra: ['', Validators.required],
       observacion: ['']
     })
+    this.formDespacho = this.fb.group({
+      cantCisterna: [1, [
+        Validators.required,
+        Validators.min(1),
+        Validators.maxLength(2)
+      ]],
+
+      cisternas: this.fb.array([]),
+    })
+    this.actualizarCisternas(1);
   }
 
+  crearCisterna(): FormGroup {
+    return this.fb.group({
+      placa: ['', Validators.required],
+      presinto: ['', Validators.required],
+      volTotalTransporte: ['', Validators.required],
+      conductor: ['', Validators.required]
+    });
+  }
+
+  get cisternas(): FormArray {
+    return this.formDespacho.get('cisternas') as FormArray;
+  }
+
+  actualizarCisternas(cantidad: number): void {
+    if (cantidad > 20) {
+      this.formDespacho.value.cantCisterna = this.formDespacho.value.cantCisterna.slice(0, 2);
+      return;
+    }
+    const cant = Number(cantidad) || 0;
+    // Agregar cisternas
+    while (this.cisternas.length < cant) {
+      this.cisternas.push(this.crearCisterna());
+    }
+    // Quitar cisternas
+    while (this.cisternas.length > cant) {
+      this.cisternas.removeAt(this.cisternas.length - 1);
+    }
+  }
   // ******************************************************
   // FUNCION INICIAL
   // ******************************************************
   ngOnInit() {
     this.cargarSelectPlanta();
     this.cargarProduccion();
-
+    this.formDespacho.get('cantCisterna')?.valueChanges
+      .subscribe(valor => {
+        this.actualizarCisternas(Number(valor));
+      });
   }
 
   // ******************************************************
@@ -114,6 +171,7 @@ export class Origen implements OnInit {
       .subscribe({
         next: (resultado: any) => {
           this.produccion.set(Array.isArray(resultado) ? resultado : [])
+          console.log(this.produccion())
         },
         error: (error) => {
           this.mensaje(error, 'error');
@@ -127,31 +185,46 @@ export class Origen implements OnInit {
   // ****************************************************** 
   almacenar() {
     console.log(this.formProduccion);
-    Swal.fire({
-      title: 'Precaución',
-      icon: 'success',
-      html: '🚧 Esta Seguro de Registrar un nuevo <b>Lote</b>? 🚧',
-      showConfirmButton: true,
-      showCancelButton: true,
-      confirmButtonText: 'Si, Estoy Seguro',
-      cancelButtonText: 'No',
+    if (this.formProduccion.valid) {
+      Swal.fire({
+        title: 'Precaución',
+        icon: 'success',
+        html: '🚧 Esta Seguro de Registrar un nuevo <b>Lote</b>? 🚧',
+        showConfirmButton: true,
+        showCancelButton: true,
+        confirmButtonText: 'Si, Estoy Seguro',
+        cancelButtonText: 'No',
         willOpen: () => {
           Swal.getContainer()?.style.setProperty('z-index', '99999');
         }
-    }).then((resultado) => {
-      if (resultado.isConfirmed) {
-        this.serivce.post("api/prod/add", this.formProduccion).subscribe(
-          {
-            next: (resultado) => {
-              console.log(resultado);
-              this.mensaje('Se almacenaron correctamente los datos', 'success')
-            },
-            error: (error) => {
-              this.mensaje(error, 'error');
-            }
-          })
-      }
-    })
+      }).then((resultado) => {
+        if (resultado.isConfirmed) {
+          const form = this.formProduccion.value;
+          const dto = {
+            plantaId: form.planta_id.idPlanta,
+            nroCertificado: form.nro_certificado,
+            volTotal: form.vol_total,
+            fechaMuestra: form.fecha_muestra,
+            observacion: form.observacion
+          }
+
+          this.serivce.post("prod/addProd", dto).subscribe(
+            {
+              next: (resultado) => {
+                console.log(resultado);
+                this.cargarProduccion();
+                this.sidebarVisible = false;
+                this.mensaje('Se almacenaron correctamente los datos', 'success')
+              },
+              error: (error) => {
+                this.mensaje(error.error?.mensaje ?? error.message ?? 'Ocurrió un error', 'error');
+              }
+            })
+        }
+      })
+    } else {
+      this.mensaje('Debe llenar todos los campos requeridos', 'error');
+    }
 
   }
 
@@ -219,6 +292,47 @@ export class Origen implements OnInit {
     }
   }
 
+  RegistroDespacho() {
+
+  }
+
+  despacharOrigen() {
+    Swal.fire({
+      title: 'Precaución',
+      icon: 'warning',
+      html: '🚧 Desea despachar GLP ? 🚧',
+      showCancelButton: true,
+      showConfirmButton: true,
+      confirmButtonText: 'Si, estoy seguro',
+      cancelButtonText: 'No',
+      willOpen: () => {
+        Swal.getContainer()?.style.setProperty('z-index', '99999');
+      }
+    }).then((result) => {
+      if (result.isConfirmed) {
+        console.log(this.formDespacho);
+        console.log(this.formDespacho.value.cisternas);
+        console.log(this.formDespacho.value.cisternas[1].placa);
+        alert(this.idPlanta)
+        // this.serivce.post('prod/addDespachar', idPlanta)
+        // .subscribe({
+        //   next: (result)=>{
+        //     console.log('1. despachar Origen',result)
+        //   },
+        //   error: (error)=>{}
+        // })
+      }
+    })
+  }
+
+  cantCisterna() {
+    this.form = this.formDespacho.value.cantCisterna
+    if (this.form) {
+      this.disabled = true;
+    } else {
+      this.disabled = false;
+    }
+  }
   // ******************************************************
   // CODIGO COMPLEMENTARIO
   // ******************************************************
@@ -253,9 +367,9 @@ export class Origen implements OnInit {
       showCancelButton: false,
       showConfirmButton: false,
       timer: 2000,
-        willOpen: () => {
-          Swal.getContainer()?.style.setProperty('z-index', '99999');
-        }
+      willOpen: () => {
+        Swal.getContainer()?.style.setProperty('z-index', '99999');
+      }
     })
   }
 
@@ -321,8 +435,244 @@ export class Origen implements OnInit {
     );
   }
 
-  showDialog() {
-    this.visible = true;
+  showDialog(lugar: string, data: number = 0) {
+    switch (lugar) {
+      case 'planta':
+        this.visible = true;
+        break;
+      case 'despacho':
+        this.visibleDespacho = true;
+        this.idPlanta = data;
+        break;
+      case 'upload':
+        this.visibleUpload = true;
+        this.idPlanta = data;
+        break;
+      case 'registroCert':
+        this.visibleRegCert = true;
+        this.idPlanta = data;
+        break;
+    }
+  }
+  // ======================================================
+  // CONFIGURACIÓN DE ARCHIVOS
+  // ======================================================
+
+  private readonly MAX_FILE_SIZE = 3.5 * 1024 * 1024; // 3.5 MB
+
+
+  choose(event: Event, callback: () => void): void {
+    callback();
   }
 
+  // ======================================================
+  // SELECCIONAR ARCHIVOS
+  // ======================================================
+
+  onSelectedFiles(
+    event: { currentFiles: File[] }
+  ): void {
+    const archivosValidos: File[] = [];
+    for (const file of event.currentFiles) {
+      // Validar tipo
+      const esPdf = file.type === 'application/pdf';
+      const esImagen = file.type.startsWith('image/');
+      if (!esPdf && !esImagen) {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Archivo no permitido',
+          detail: `${file.name}: solo se permiten PDF o imágenes.`,
+          life: 4000
+        });
+        continue;
+      }
+      // Validar tamaño
+      if (file.size > this.MAX_FILE_SIZE) {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Archivo demasiado grande',
+          detail: `${file.name} supera el máximo de 3.5 MB.`,
+          life: 4000
+        });
+        continue;
+      }
+      archivosValidos.push(file);
+    }
+    this.files = archivosValidos;
+    this.calcularTotalArchivos();
+  }
+
+  // ======================================================
+  // CALCULAR TAMAÑO TOTAL
+  // ======================================================
+
+  private calcularTotalArchivos(): void {
+
+    this.totalSize = this.files.reduce(
+      (total: number, file: File) =>
+        total + file.size,
+      0
+    );
+
+
+    this.totalSizePercent = Math.min(
+      (this.totalSize / this.MAX_FILE_SIZE) * 100,
+      100
+    );
+  }
+
+  // ======================================================
+  // ELIMINAR ARCHIVO
+  // ======================================================
+
+  onRemoveTemplatingFile(
+    event: Event,
+    file: File,
+    removeFileCallback: (
+      event: Event,
+      index: number
+    ) => void,
+    index: number
+  ): void {
+
+    removeFileCallback(event, index);
+
+    this.files.splice(index, 1);
+
+    this.files = [...this.files];
+
+    this.calcularTotalArchivos();
+  }
+
+  // ======================================================
+  // LIMPIAR
+  // ======================================================
+
+  onClearTemplatingUpload(
+    clear: () => void
+  ): void {
+
+    clear();
+
+    this.files = [];
+
+    this.totalSize = 0;
+
+    this.totalSizePercent = 0;
+  }
+
+  // ======================================================
+  // UPLOAD FINALIZADO
+  // ======================================================
+
+  onTemplatedUpload(): void {
+
+    this.messageService.add({
+      severity: 'success',
+      summary: 'Correcto',
+      detail: 'Archivo cargado correctamente.',
+      life: 3000
+    });
+
+  }
+
+  subirCertificado(): void {
+
+    console.log('ENTRÓ A subirCertificado()');
+
+    if (!this.files || this.files.length === 0) {
+
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Advertencia',
+        detail: 'Debe seleccionar un certificado.'
+      });
+
+      return;
+    }
+
+    const archivo = this.files[0];
+
+    // PDF o imagen
+    const esPdf = archivo.type === 'application/pdf';
+    const esImagen = archivo.type.startsWith('image/');
+
+    if (!esPdf && !esImagen) {
+
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Formato no permitido',
+        detail: 'Solo se permiten archivos PDF o imágenes.'
+      });
+
+      return;
+    }
+
+    // Máximo 3.5 MB
+    const maxSize = 3.5 * 1024 * 1024;
+
+    if (archivo.size > maxSize) {
+
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Archivo demasiado grande',
+        detail: 'El archivo no puede superar los 3.5 MB.'
+      });
+
+      return;
+    }
+
+    const formData = new FormData();
+
+    formData.append(
+      'archivo',
+      archivo,
+      archivo.name
+    );
+
+    formData.append(
+      'idPlanta',
+      this.idPlanta.toString()
+    );
+
+    console.log('ARCHIVO:', archivo);
+    console.log('NOMBRE:', archivo.name);
+    console.log('TIPO:', archivo.type);
+    console.log('TAMAÑO:', archivo.size);
+    console.log('ID PLANTA:', this.idPlanta);
+
+    // Por ahora llegamos hasta aquí.
+    // El siguiente paso será enviar formData al backend.
+  }
+  // ======================================================
+  // FORMATEAR TAMAÑO
+  // ======================================================
+
+  formatSize(bytes: number): string {
+
+    if (bytes === 0) {
+      return '0 B';
+    }
+
+    const k = 1024;
+
+    const sizes = [
+      'B',
+      'KB',
+      'MB',
+      'GB'
+    ];
+
+    const i = Math.floor(
+      Math.log(bytes) /
+      Math.log(k)
+    );
+
+    const valor = parseFloat(
+      (bytes / Math.pow(k, i))
+        .toFixed(2)
+    );
+
+    return `${valor} ${sizes[i]}`;
+  }
 }

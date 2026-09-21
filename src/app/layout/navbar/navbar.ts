@@ -112,7 +112,6 @@ export class Navbar implements OnInit {
     });
   }
   mostrarNotificaciones(event: Event): void {
-
     this.confirmationService.confirm({
       target: event.currentTarget as EventTarget,
       message: '',

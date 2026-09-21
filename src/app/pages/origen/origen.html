@@ -1,5 +1,4 @@
-<p-drawer [(visible)]="sidebarVisible" (onHide)="alCerrar($event)"
-    position="right" styleClass="drawer-personalizado">
+<p-drawer [(visible)]="sidebarVisible" (onHide)="alCerrar($event)" position="right" styleClass="drawer-personalizado">
     <ng-template pTemplate="header">
         <div class="flex align-items-center gap-2">
 
@@ -53,7 +52,7 @@
                                 </ng-template>
                             </p-select>
                             <p-button severity="help" pTooltip="Agregar Planta / Importador" tooltipPosition="left"
-                                (click)="showDialog()">
+                                (click)="showDialog('planta')">
                                 <img src="planta_gas.ico" width="20" alt="">
                             </p-button>
                             <p-dialog [(visible)]="visible" [modal]="true"
@@ -122,8 +121,8 @@
 
                         <br>
                         <div class="card flex justify-center">
-                            <p-datepicker panelStyleClass="texto-calendario" formControlName="fecha_muestra" [inline]="true"
-                                [showWeek]="true" />
+                            <p-datepicker panelStyleClass="texto-calendario" formControlName="fecha_muestra"
+                                [inline]="true" [showWeek]="true" />
                         </div>
                         <br>
                         <p-floatlabel>
@@ -142,7 +141,7 @@
 
             <p-tabpanel [value]="1">
                 <p>
-                    Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium...
+                    Datos para la importación, solo se añadira pais, punto de ingreso
                 </p>
             </p-tabpanel>
         </p-tabpanels>
@@ -230,8 +229,23 @@
                     <td>
                         {{ produccion.nombre}}
                     </td>
-                    <td>
-                        <p-tag severity="info" value="{{ produccion.numCertificado }}"></p-tag>
+                    <td style="display: flex; justify-content: center; align-items: center; gap:1rem;">
+
+                        @if(produccion.numCertificado === null){
+                        <p-button severity="warn" (click)="showDialog('registroCert',produccion.idPlanta)"
+                            icon="pi pi-plus">
+
+                        </p-button>
+                        <p-button severity="info" (click)="showDialog('upload', produccion.idPlanta )" [rounded]="true"
+                            icon="pi pi-upload"></p-button>
+                        }
+                        @else
+                        {
+
+                        <p-tag severity="warn" value="{{ produccion.numCertificado }}" />
+                        <p-button severity="info" (click)="showDialog('upload', produccion.idPlanta )" [rounded]="true"
+                            icon="pi pi-upload"></p-button>
+                        }
 
                     </td>
                     <td>
@@ -261,7 +275,15 @@
                         }
                     </td>
                     <td>
-                        <p-tag severity="success" value="{{produccion.estado}}"></p-tag>
+                        @if(produccion.estado == 'DESPACHO')
+                        {
+                        <p-tag severity="secondary" value="{{produccion.estado}}"></p-tag>
+                        }
+                        @else
+                        {
+                        <p-tag severity="success" value="{{produccion.estado}}" pTooltip="Registrar Despacho"
+                            tooltipPosition="top" (click)="showDialog('despacho', produccion.idPlanta )"></p-tag>
+                        }
                     </td>
                 </tr>
             </ng-template>
@@ -269,8 +291,505 @@
                 <tr>
                     <td colspan="8">No existen registros</td>
                 </tr>
+
             </ng-template>
         </p-table>
+
+    </div>
+</p-card>
+
+<!-- ================================== -->
+<!-- MODAL PARA DESPACHO -->
+<!-- ================================== -->
+
+<p-dialog [(visible)]="visibleDespacho" [modal]="true" [style]="{ width: '50rem' }">
+
+    <ng-template #header>
+        <div class="titulo_img_dialog">
+            <p-avatar image="Cisterna.png" width="32" shape="circle" />
+
+            <span class="font-bold whitespace-nowrap">
+                Despachar GLP
+            </span>
+        </div>
+    </ng-template>
+
+    <!-- ========================= -->
+    <!-- TABS -->
+    <!-- ========================= -->
+
+    <div class="card" style="position: fixed;
+    left: 0px;
+    right: 0;
+
+    z-index: 2;
+    ">
+        <p-tabs [(value)]="tabDespacho">
+            <p-tablist>
+                <p-tab [value]="4">LOCAL</p-tab>
+                <p-tab [value]="5">IMPORTACIÓN</p-tab>
+            </p-tablist>
+        </p-tabs>
+    </div>
+    <br>
+    <br>
+    <!-- ========================= -->
+    <!-- LOCAL -->
+    <!-- ========================= -->
+
+    @if (tabDespacho === 4) {
+    <div class="card pasos" style="position: relative; margin-top: 52px;z-index: 1;">
+        <form [formGroup]="formDespacho" (ngSubmit)="despacharOrigen()">
+            <p-stepper [(value)]="pasoDespacho">
+                <!-- ====================== -->
+                <!-- PASO 1 -->
+                <!-- ====================== -->
+
+                <p-step-item [value]="1">
+                    <p-step>
+                        Cantidad de Cisternas
+                    </p-step>
+                    <p-step-panel>
+                        <ng-template #content let-activateCallback="activateCallback">
+                            <div class="flex flex-col h-48">
+                                <div class="
+                                               dark:border-surface-700
+                                               rounded
+                                               bg-surface-50
+                                               dark:bg-surface-950
+                                               flex-auto
+                                               flex
+                                               justify-center
+                                               items-center
+                                               font-medium h-full">
+                                    <div class="card flex justify-center">
+                                        <p-fieldset legend="Cisterna">
+                                            <br>
+                                            <p-floatlabel>
+                                                <input class="w-full" id="cantCisterna" pInputText type="number"
+                                                    formControlName="cantCisterna" min="1" max="30" (input)="actualizarCisternas(
+                                                            +formDespacho
+                                                                .get('cantCisterna')
+                                                                ?.value
+                                                        )" />
+                                                <label for="cantCisterna">
+                                                    Cantidad Cisterna *
+                                                </label>
+                                            </p-floatlabel>
+                                        </p-fieldset>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="py-6">
+                                <p-button type="button" label="Siguiente" icon="pi pi-arrow-right" severity="info"
+                                    (onClick)="activateCallback(2)" />
+                            </div>
+                        </ng-template>
+                    </p-step-panel>
+                </p-step-item>
+
+                <!-- ====================== -->
+                <!-- PASO 2 -->
+                <!-- ====================== -->
+
+                <p-step-item [value]="2">
+                    <p-step>
+                        Datos Cisternas
+                    </p-step>
+                    <p-step-panel>
+                        <ng-template #content let-activateCallback="activateCallback">
+                            <div formArrayName="cisternas">
+                                @for (
+                                cisterna of cisternas.controls;
+                                track $index;
+                                let i = $index
+                                ) {
+                                <div [formGroupName]="i" class="bloque-cisterna">
+                                    <p-fieldset [legend]="'Cisterna Nro. ' + (i + 1)">
+                                        <br>
+                                        <div class="datos-cisterna">
+
+                                            <!-- PRESINTO -->
+                                            <div>
+                                                <p-floatlabel>
+                                                    <input [id]="'presinto-' + i" pInputText type="text"
+                                                        formControlName="presinto" class="w-full" />
+                                                    <label [for]="'presinto-' + i">
+                                                        Presinto
+                                                    </label>
+                                                </p-floatlabel>
+                                            </div>
+
+                                            <!-- PLACA -->
+                                            <div>
+                                                <p-floatlabel>
+                                                    <p-inputmask mask="9999-aaa" [id]="'placa-' + i"
+                                                        formControlName="placa" styleClass="w-full" [autoClear]="false">
+                                                    </p-inputmask>
+                                                    <label [for]="'placa-' + i">
+                                                        Placa
+                                                    </label>
+                                                </p-floatlabel>
+                                            </div>
+
+                                            <!-- VOLUMEN -->
+                                            <div>
+                                                <p-floatlabel>
+                                                    <input [id]="'volumen-' + i" pInputText type="number"
+                                                        formControlName="volTotalTransporte" class="w-full" />
+                                                    <label [for]="'volumen-' + i">
+                                                        Volumen Total Transporte
+                                                    </label>
+                                                </p-floatlabel>
+                                            </div>
+
+                                            <!-- CONDUCTOR -->
+                                            <div class="campo-conductor">
+                                                <p-floatlabel>
+                                                    <input [id]="'conductor-' + i" pInputText type="text"
+                                                        formControlName="conductor" class="w-full" />
+                                                    <label [for]="'conductor-' + i">
+                                                        Conductor
+                                                    </label>
+                                                </p-floatlabel>
+                                            </div>
+                                        </div>
+                                    </p-fieldset>
+                                    <br>
+                                </div>
+                                }
+                            </div>
+
+                            <!-- BOTONES -->
+                            <div class="flex py-6 gap-2" style="display:flex; gap:1rem">
+                                <p-button type="button" icon="pi pi-arrow-left" label="Atrás" variant="text"
+                                    severity="secondary" (onClick)="activateCallback(1)" />
+                                <p-button label="Registrar" icon="pi pi-save" severity="info" type="submit" />
+                            </div>
+                        </ng-template>
+                    </p-step-panel>
+                </p-step-item>
+            </p-stepper>
+        </form>
+    </div>
+    }
+    <!-- ========================= -->
+    <!-- IMPORTACION -->
+    <!-- ========================= -->
+
+    @if (tabDespacho === 5) {
+
+    <div class="card">
+
+        Aquí irá el formulario de Importación.
+
     </div>
 
-</p-card>
+    }
+
+    <br><br>
+</p-dialog>
+
+
+<!-- MODAL PARA SUBIR CERTIFICADO DE CALIDAD -->
+
+<p-dialog [(visible)]="visibleUpload" [modal]="true" [style]="{ width: '50rem' }">
+    <ng-template #header>
+        <div class="inline-flex items-center justify-center gap-2">
+            <p-avatar image="certificado.png" style="border-radius: 50%;" />
+            <span class="font-bold whitespace-nowrap">
+                SUBIR CERTIFICADO DE CALIDAD
+            </span>
+        </div>
+    </ng-template>
+    <div class="card">
+        <p-toast />
+        <p-fileupload name="archivo" [multiple]="false" accept="image/*,application/pdf" [maxFileSize]="3670016"
+            [customUpload]="true" class="fileupload-certificado" (onSelect)="onSelectedFiles($event)">
+            <ng-template #header let-files let-chooseCallback="chooseCallback" let-clearCallback="clearCallback"
+                let-uploadCallback="uploadCallback">
+                <div class="upload-header">
+                    <!-- BOTONES -->
+                    <div class="upload-acciones">
+                        <p-button (onClick)="choose($event, chooseCallback)" icon="pi pi-images" [rounded]="true"
+                            [outlined]="true" pTooltip="Seleccionar archivo">
+                        </p-button>
+                        <p-button (onClick)="subirCertificado()" icon="pi pi-cloud-upload" [rounded]="true"
+                            [outlined]="true" severity="success" pTooltip="Subir certificado"
+                            [disabled]="!files || files.length === 0">
+                        </p-button>
+                        <p-button (onClick)="clearCallback()" icon="pi pi-times" [rounded]="true" [outlined]="true"
+                            severity="danger" pTooltip="Limpiar" [disabled]="!files || files.length === 0">
+                        </p-button>
+                    </div>
+                    <!-- PROGRESO -->
+                    <div class="upload-progreso">
+                        <div class="progreso-info">
+                            <span>Espacio utilizado</span>
+                            <span>
+                                {{ formatSize(totalSize) }} / 3.5 MB
+                            </span>
+                        </div>
+                        <p-progressbar [value]="totalSizePercent" [showValue]="false">
+                        </p-progressbar>
+                    </div>
+                </div>
+            </ng-template>
+            <ng-template #content let-files let-uploadedFiles="uploadedFiles"
+                let-removeFileCallback="removeFileCallback" let-removeUploadedFileCallback="removeUploadedFileCallback">
+
+                <div class="zona-archivos">
+                    <!-- ============================== -->
+                    <!-- ARCHIVOS PENDIENTES -->
+                    <!-- ============================== -->
+                    <div *ngIf="files?.length > 0" class="grupo-archivos">
+                        <div class="grupo-header">
+                            <div class="grupo-titulo">
+                                <i class="pi pi-clock"></i>
+                                <div>
+                                    <h4>Archivos pendientes</h4>
+                                    <small>
+                                        Estos archivos se subirán al iniciar la carga.
+                                    </small>
+                                </div>
+                            </div>
+                            <span class="contador">
+                                {{ files.length }}
+                                {{ files.length === 1 ? 'archivo' : 'archivos' }}
+                            </span>
+                        </div>
+                        <div class="archivos-grid">
+                            <div *ngFor="let file of files; let i = index" class="archivo-card">
+                                <!-- IMAGEN -->
+                                <div class="archivo-preview">
+                                    <img role="presentation" [alt]="file.name" [src]="file.objectURL" />
+                                </div>
+                                <!-- INFORMACIÓN -->
+                                <div class="archivo-datos">
+                                    <span class="archivo-nombre" [title]="file.name">
+                                        {{ file.name }}
+                                    </span>
+                                    <span class="archivo-tamano">
+                                        {{ formatSize(file.size) }}
+                                    </span>
+                                </div>
+                                <!-- ESTADO + ELIMINAR -->
+                                <div class="archivo-footer">
+                                    <span class="estado estado-pendiente">
+                                        <i class="pi pi-clock"></i>
+                                        Pendiente
+                                    </span>
+                                    <p-button icon="pi pi-times" (onClick)="onRemoveTemplatingFile(
+                                $event,
+                                file,
+                                removeFileCallback,
+                                i
+                            )" [outlined]="true" [rounded]="true" severity="danger">
+                                    </p-button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- ============================== -->
+                    <!-- ARCHIVOS COMPLETADOS -->
+                    <!-- ============================== -->
+                    <div *ngIf="uploadedFiles?.length > 0" class="grupo-archivos">
+                        <div class="grupo-header">
+                            <div class="grupo-titulo">
+                                <i class="pi pi-check-circle"></i>
+                                <div>
+                                    <h4>Archivos cargados</h4>
+                                    <small>
+                                        Archivos cargados correctamente.
+                                    </small>
+                                </div>
+                            </div>
+                            <span class="contador">
+                                {{ uploadedFiles.length }}
+                                {{ uploadedFiles.length === 1 ? 'archivo' : 'archivos' }}
+                            </span>
+                        </div>
+                        <div class="archivos-grid">
+                            <div *ngFor="let file of uploadedFiles; let i = index" class="archivo-card">
+                                <div class="archivo-preview">
+                                    <img role="presentation" [alt]="file.name" [src]="file.objectURL" />
+                                </div>
+                                <div class="archivo-datos">
+                                    <span class="archivo-nombre" [title]="file.name">
+                                        {{ file.name }}
+                                    </span>
+                                    <span class="archivo-tamano">
+                                        {{ formatSize(file.size) }}
+                                    </span>
+                                </div>
+                                <div class="archivo-footer">
+                                    <span class="estado estado-completado">
+                                        <i class="pi pi-check"></i>
+                                        Completado
+                                    </span>
+                                    <p-button icon="pi pi-times" (onClick)="removeUploadedFileCallback(i)"
+                                        [outlined]="true" [rounded]="true" severity="danger">
+                                    </p-button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </ng-template>
+            <ng-template #file> </ng-template>
+            <ng-template #empty>
+
+                <div class="upload-vacio">
+
+                    <div class="upload-vacio-icono">
+                        <i class="pi pi-cloud-upload"></i>
+                    </div>
+
+                    <div>
+                        <strong>
+                            Arrastra y suelta los archivos aquí para subirlos.
+                        </strong>
+
+                        <span>
+                            También puedes seleccionarlos usando el botón superior.
+                        </span>
+                    </div>
+
+                </div>
+
+            </ng-template>
+        </p-fileupload>
+    </div>
+</p-dialog>
+
+<!-- MODAL PARA REGISTRAR CERTIFICADO -->
+
+<p-dialog [(visible)]="visibleRegCert" [modal]="true" [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }"
+    [maximizable]="true" [style]="{ width: '70rem' }">
+    <ng-template #header>
+        <div class="inline-flex items-center justify-center gap-2">
+            <p-avatar image="certificado_de_calidad.png" shape="circle" />
+            <span class="font-bold whitespace-nowrap">
+                Registrar Certificado de Calidad
+            </span>
+        </div>
+    </ng-template>
+
+    <div class="card">
+        <p-stepper [value]="1">
+            <p-step-item [value]="1">
+                <p-step>Datos Generales</p-step>
+                <p-step-panel>
+                    <ng-template #content let-activateCallback="activateCallback">
+                        <div class=" h-48">
+                            <div
+                                class=" border-surface-200 dark:border-surface-700 rounded bg-surface-50 dark:bg-surface-950 flex-auto flex justify-center items-center font-medium">
+                                Content I
+                            </div>
+                        </div>
+                        <p-divider type="solid" />
+                        <div class="py-6">
+                            <p-button label="Siguiente" severity="info" (onClick)="activateCallback(2)" />
+                        </div>
+                    </ng-template>
+                </p-step-panel>
+            </p-step-item>
+
+            <p-step-item [value]="2">
+                <p-step>Datos de Calidad</p-step>
+                <p-step-panel>
+                    <ng-template #content let-activateCallback="activateCallback">
+                        <div class="flex flex-col h-48">
+                            <div
+                                class=" border-surface-200 dark:border-surface-700 rounded bg-surface-50 dark:bg-surface-950 flex-auto flex justify-center items-center font-medium">
+                                <p-table [value]="products" dataKey="id" [tableStyle]="{ 'min-width': '50rem' }">
+                                    <ng-template #header>
+                                        <tr>
+                                            <th style="width:5%">
+                                                #
+                                            </th>
+                                            <th style="width:25%">
+                                                Prueba/Ensayo
+                                            </th>
+                                            <th style="width:20%">
+                                                Método ASTM y/o UOP
+                                            </th>
+                                            <th style="width:5%">
+                                                Unidad
+                                            </th>
+                                            <th style="width:20%">
+                                                Valor Reportado
+                                            </th>
+                                            <th style="width:10%">
+                                                Espec. Minima
+                                            </th>
+                                            <th style="width:10%">
+                                                Espec. Maxima
+                                            </th>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template #body let-product let-editing="editing">
+                                        <tr>
+                                            <td [pEditableColumn]="product.code" pEditableColumnField="code">
+                                                <p-cellEditor>
+                                                    <ng-template #input>
+                                                        <input pInputText type="text" [(ngModel)]="product.code" />
+                                                    </ng-template>
+                                                    <ng-template #output>
+                                                        {{ product.code }}
+                                                    </ng-template>
+                                                </p-cellEditor>
+                                            </td>
+                                            <td [pEditableColumn]="product.name" pEditableColumnField="name">
+                                                <p-cellEditor>
+                                                    <ng-template #input>
+                                                        <input pInputText type="text" [(ngModel)]="product.name"
+                                                            required />
+                                                    </ng-template>
+                                                    <ng-template #output>
+                                                        {{ product.name }}
+                                                    </ng-template>
+                                                </p-cellEditor>
+                                            </td>
+                                            <td [pEditableColumn]="product.inventoryStatus"
+                                                pEditableColumnField="inventoryStatus">
+                                                <p-cellEditor>
+                                                    <ng-template #input>
+                                                        <input pInputText [(ngModel)]="product.inventoryStatus" />
+                                                    </ng-template>
+                                                    <ng-template #output>
+                                                        {{ product.inventoryStatus }}
+                                                    </ng-template>
+                                                </p-cellEditor>
+                                            </td>
+                                            <td [pEditableColumn]="product.price" pEditableColumnField="price">
+                                                <p-cellEditor>
+                                                    <ng-template #input>
+                                                        <input pInputText type="text" [(ngModel)]="product.price" />
+                                                    </ng-template>
+                                                    <ng-template #output>
+                                                        {{ product.price | currency: 'USD' }}
+                                                    </ng-template>
+                                                </p-cellEditor>
+                                            </td>
+                                        </tr>
+                                    </ng-template>
+                                </p-table>
+                            </div>
+                        </div>
+                        <p-divider type="solid" />
+                        <div class="flex py-6 gap-2" style="display: flex;gap:1rem;">
+                            <p-button label="Back" severity="secondary" (onClick)="activateCallback(1)" />
+                        </div>
+                    </ng-template>
+                </p-step-panel>
+            </p-step-item>
+
+        </p-stepper>
+    </div>
+
+    <ng-template #footer>
+
+        <p-button label="Almacenar" [outlined]="true" severity="secondary" (click)="visible = false" />
+    </ng-template>
+</p-dialog>

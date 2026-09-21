@@ -73,6 +73,10 @@ router-outlet+* {
 
   --text-tab: #6750a3;
   /* cambiado */
+
+  --table-head: #f1f1f1;
+  --table-body: #fff;
+  --table-select: rgba(211, 210, 210, 0.8);
 }
 
 html.dark-mode {
@@ -148,8 +152,9 @@ html.dark-mode {
   --text-secundary: #94A3B8;
 
   --icono-menu_responsive: #090f1b;
-
-
+  --table-head: #080f1a;
+  --table-body: #0f1626;
+  --table-select: rgb(168, 229, 252, 0.1);
   /* --text-primary: #f9fafb;
 
     --text-secondary: #d1d5db;
@@ -280,13 +285,13 @@ p-table {
 }
 
 .tabla-personalizada .p-datatable-thead>tr>th {
-  background: #080f1a !important;
+  background: var(--table-head) !important;
   color: var(--text-white) !important;
   border: 1px solid var(--border-color);
 }
 
 .tabla-personalizada .p-datatable-tbody>tr>td {
-  background: #0f1626 !important;
+  background: var(--table-body) !important;
   color: var(--menu-link) !important;
   border: 1px solid var(--border-color);
 }
@@ -295,7 +300,7 @@ p-table {
   /* border:1px solid var(--text-link)!important; */
   border: 0px !important;
   color: var(--text-link-hover) !important;
-  background-color: rgb(168, 229, 252, 0.1) !important;
+  background-color: var(--table-select) !important;
   transition: .5s all ease-in-out;
 }
 
@@ -303,10 +308,515 @@ p-table {
   border: 0px !important;
   color: var(--menu-link) !important;
   background-color: rgb(168, 229, 252, 0.1) !important;
-  transition: .5s all ease-in-out!important;
+  transition: .5s all ease-in-out !important;
+}
+
+.p-dialog {
+  background: var(--bg-content) !important;
+  border: 1px solid var(--border-color) !important;
+}
+
+.p-steppanel {
+  background: var(--bg-content) !important;
+  /* border: 1px solid var(--border-color) !important; */
+}
+
+.p-fieldset {
+  background: var(--bg-content) !important;
+  border: 1px solid var(--border-color) !important;
+}
+
+.p-fieldset-legend {
+  background-color: transparent !important;
+}
+
+.p-fileupload-advanced {
+  background-color: var(--table-body) !important;
+}
+
+.p-dialog-header>div {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+/* =========================================================
+   FILE UPLOAD
+========================================================= */
+
+.fileupload-certificado {
+    display: block;
+    width: 100%;
 }
 
 
+/* =========================================================
+   ZONA DE ARCHIVOS
+========================================================= */
+
+.zona-archivos {
+    width: 100%;
+    min-height: 260px;
+    padding: 1rem;
+    box-sizing: border-box;
+}
+
+
+/* =========================================================
+   GRUPO
+========================================================= */
+
+.grupo-archivos {
+    width: 100%;
+
+    padding: 1.25rem;
+
+    border: 1px solid var(--p-content-border-color);
+    border-radius: 14px;
+
+    background: var(--p-content-background);
+
+    box-sizing: border-box;
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.grupo-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 1rem;
+
+    margin-bottom: 1.5rem;
+}
+
+
+.grupo-titulo {
+    display: flex;
+    align-items: center;
+
+    gap: .8rem;
+}
+
+
+.grupo-titulo > i {
+    font-size: 1.4rem;
+
+    color: var(--p-primary-color);
+}
+
+
+.grupo-titulo h4 {
+    margin: 0 0 .2rem 0;
+
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+
+.grupo-titulo small {
+    color: var(--p-text-muted-color);
+}
+
+
+/* =========================================================
+   CONTADOR
+========================================================= */
+
+.contador {
+    padding: .4rem .8rem;
+
+    border-radius: 20px;
+
+    background: color-mix(
+        in srgb,
+        var(--p-primary-color) 15%,
+        transparent
+    );
+
+    color: var(--p-primary-color);
+
+    font-size: .75rem;
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   GRID
+========================================================= */
+
+.archivos-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(auto-fill, minmax(190px, 220px));
+
+    gap: 1rem;
+}
+
+
+/* =========================================================
+   TARJETA
+========================================================= */
+
+.archivo-card {
+    width: 100%;
+
+    overflow: hidden;
+
+    border: 1px solid var(--p-content-border-color);
+    border-radius: 12px;
+
+    background: var(--p-content-background);
+
+    transition:
+        transform .2s ease,
+        border-color .2s ease,
+        box-shadow .2s ease;
+
+    box-sizing: border-box;
+}
+
+
+.archivo-card:hover {
+    transform: translateY(-3px);
+
+    border-color: var(--p-primary-color);
+
+    box-shadow:
+        0 8px 20px rgba(0, 0, 0, .15);
+}
+
+
+/* =========================================================
+   PREVIEW
+========================================================= */
+
+.archivo-preview {
+    width: 100%;
+    height: 130px;
+
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+
+    padding: .8rem;
+
+    background: var(--p-surface-900);
+
+    box-sizing: border-box;
+}
+
+
+.archivo-preview img {
+    display: block;
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: contain;
+
+    border-radius: 6px;
+}
+
+
+/* =========================================================
+   DATOS
+========================================================= */
+
+.archivo-datos {
+    display: flex;
+    flex-direction: column;
+
+    gap: .35rem;
+
+    padding: .9rem 1rem .6rem;
+}
+
+
+.archivo-nombre {
+    display: block;
+
+    width: 100%;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    font-size: .9rem;
+    font-weight: 600;
+
+    color: var(--p-text-color);
+}
+
+
+.archivo-tamano {
+    font-size: .78rem;
+
+    color: var(--p-text-muted-color);
+}
+
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+.archivo-footer {
+    display: flex;
+
+    justify-content: space-between;
+    align-items: center;
+
+    gap: .5rem;
+
+    padding: .4rem 1rem 1rem;
+}
+
+
+/* =========================================================
+   ESTADOS
+========================================================= */
+
+.estado {
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: .35rem;
+
+    padding: .35rem .65rem;
+
+    border-radius: 20px;
+
+    font-size: .7rem;
+    font-weight: 600;
+}
+
+
+.estado-pendiente {
+    background: color-mix(
+        in srgb,
+        var(--p-primary-color) 15%,
+        transparent
+    );
+
+    color: var(--p-primary-color);
+}
+
+
+.estado-completado {
+    background: color-mix(
+        in srgb,
+        var(--p-green-500) 15%,
+        transparent
+    );
+
+    color: var(--p-green-500);
+}
+
+
+/* =========================================================
+   EMPTY
+========================================================= */
+
+.upload-vacio {
+    min-height: 150px;
+
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+
+    gap: 1rem;
+
+    margin-top: 1rem;
+    padding: 1.5rem;
+
+    border: 2px dashed var(--p-content-border-color);
+    border-radius: 14px;
+
+    color: var(--p-text-muted-color);
+
+    box-sizing: border-box;
+}
+
+
+.upload-vacio-icono {
+    width: 55px;
+    height: 55px;
+
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+
+    flex-shrink: 0;
+
+    border-radius: 50%;
+
+    background: color-mix(
+        in srgb,
+        var(--p-primary-color) 12%,
+        transparent
+    );
+}
+
+
+.upload-vacio-icono i {
+    font-size: 1.5rem;
+
+    color: var(--p-primary-color);
+}
+
+
+.upload-vacio > div:last-child {
+    display: flex;
+    flex-direction: column;
+
+    gap: .25rem;
+}
+
+
+.upload-vacio strong {
+    color: var(--p-text-color);
+
+    font-size: .9rem;
+}
+
+
+.upload-vacio span {
+    font-size: .78rem;
+
+    color: var(--p-text-muted-color);
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 600px) {
+
+    .grupo-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+
+    .archivos-grid {
+        grid-template-columns: 1fr;
+    }
+
+
+    .upload-vacio {
+        flex-direction: column;
+
+        text-align: center;
+    }
+
+}
+/* =========================================
+   HEADER FILE UPLOAD
+========================================= */
+
+.upload-header {
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+
+    gap: 1.5rem;
+
+    padding: .5rem;
+
+    box-sizing: border-box;
+}
+
+
+/* BOTONES */
+
+.upload-acciones {
+    display: flex;
+    align-items: center;
+
+    gap: .5rem;
+
+    flex-shrink: 0;
+}
+
+
+/* PROGRESO */
+
+.upload-progreso {
+    flex: 1;
+
+    min-width: 0;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: .45rem;
+}
+
+
+/* TEXTO SUPERIOR */
+
+.progreso-info {
+    display: flex;
+
+    justify-content: space-between;
+    align-items: center;
+
+    gap: 1rem;
+
+    color: var(--p-text-muted-color);
+
+    font-size: .75rem;
+}
+
+
+/* BARRA */
+
+.upload-progreso p-progressbar {
+    display: block;
+
+    width: 100%;
+}
+
+
+:host ::ng-deep .upload-progreso .p-progressbar {
+    width: 100%;
+
+    height: 8px;
+
+    border-radius: 20px;
+
+    overflow: hidden;
+}
+
+
+/* RESPONSIVE */
+
+@media (max-width: 600px) {
+
+    .upload-header {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .upload-acciones {
+        justify-content: flex-start;
+    }
+
+    .upload-progreso {
+        width: 100%;
+    }
+}
 
 @keyframes entradaPagina {
 

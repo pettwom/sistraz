@@ -25,7 +25,7 @@
     import { DynamicDialogModule } from 'primeng/dynamicdialog';
     import { EditorModule } from 'primeng/editor';
     import { FieldsetModule } from 'primeng/fieldset';
-    import { FileUploadModule } from 'primeng/fileupload';
+    import { FileUploadModule, FileUpload } from 'primeng/fileupload';
     import { FocusTrapModule } from 'primeng/focustrap';
     import { GalleriaModule } from 'primeng/galleria';
     import { InplaceModule } from 'primeng/inplace';
@@ -97,7 +97,7 @@
     import { HttpClientModule } from '@angular/common/http';
     import { NgModule } from '@angular/core';
     import { DatePickerModule } from 'primeng/datepicker';
-
+    import { FluidModule } from 'primeng/fluid';
 
     const PRIME_NG_IMPORTS = [
       AvatarModule,
@@ -133,6 +133,7 @@
       EditorModule,
       FieldsetModule,
       FileUploadModule,
+      FileUpload,
       FocusTrapModule,
       GalleriaModule,
       InplaceModule,
@@ -199,7 +200,8 @@
       InputIconModule,
       AutoFocusModule,
       FloatLabelModule,
-      DatePickerModule
+      DatePickerModule,
+      FluidModule
     ];
 
     const PRIME_NG_EXPORTS = PRIME_NG_IMPORTS;

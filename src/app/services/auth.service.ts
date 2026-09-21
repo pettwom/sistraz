@@ -33,12 +33,6 @@ export class AuthService {
 
   logout() {
 
-    localStorage.removeItem(
-      this.TOKEN_KEY
-    );
-    localStorage.removeItem(
-      this.USER_KEY
-    );
     localStorage.clear();
     this.usuario.set(null);
 
@@ -52,13 +46,54 @@ export class AuthService {
 
   estaAutenticado(): boolean {
 
-    return !!this.obtenerToken();
+
+    const token = this.obtenerToken();
+
+    if (!token) {
+      return false;
+    }
+
+    try {
+      const partes = token.split('.');
+      if (partes.length !== 3) {
+        this.logout();
+        return false;
+      }
+
+      const payload = JSON.parse(atob(partes[1]));
+
+      if (!payload.exp) {
+        this.logout();
+        return false;
+      }
+
+      const fechaExpiracion = payload.exp * 1000;
+
+      if (Date.now() >= fechaExpiracion) {
+
+        console.warn('La sesión ha expirado');
+
+        this.logout();
+
+        return false;
+      }
+
+      return true;
+
+    } catch (error) {
+
+      console.error('Token JWT inválido',error);
+
+      this.logout();
+
+      return false;
+    }
 
   }
 
   private obtenerUsuarioStorage(): Usuario | null {
     const dato = localStorage.getItem(this.USER_KEY);
-    if(!dato)return null;
+    if (!dato) return null;
     try {
       return JSON.parse(dato) as Usuario;
     } catch {
