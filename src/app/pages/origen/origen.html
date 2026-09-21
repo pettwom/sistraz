@@ -237,9 +237,8 @@
                     </td>
                     <td style="display: flex; justify-content: center; align-items: center; gap:1rem;">
                         @if(produccion.numCertificado !== null){
-                        <p-tag severity="warn" value="{{ produccion.numCertificado }}" />
-                        <!-- <p-button severity="info" (click)="showDialog('upload', produccion.idPlanta )" [rounded]="true"
-                                icon="pi pi-upload"></p-button> -->
+                        <p-tag severity="warn" pTooltip="Ver Datos del Certificado" tooltipPosition="top" (click)="showDialog('registroCert',produccion.idPlanta)" value="{{ produccion.numCertificado }}" />
+
                         }
                         @else{
                         <p-tag severity="danger" value="No existe certifiado" />
@@ -358,9 +357,9 @@
                                                flex
                                                justify-center
                                                items-center
-                                               font-medium h-full">
-                                    <div class="card flex justify-center">
-                                        <p-fieldset legend="Cisterna">
+                                               font-medium h-full w-full">
+                                    <div class="card flex justify-center w-full">
+                                        <p-fieldset legend="Cisterna" class="w-full">
                                             <br>
                                             <p-floatlabel>
                                                 <input class="w-full" id="cantCisterna" pInputText type="number"
@@ -667,7 +666,7 @@
         <div class="inline-flex items-center justify-center gap-2">
             <p-avatar image="certificado_de_calidad.png" shape="circle" />
             <span class="font-bold whitespace-nowrap">
-                Registrar Certificado de Calidad
+                Certificado de Calidad
             </span>
         </div>
     </ng-template>
@@ -776,7 +775,7 @@
                         </div>
                         <p-divider type="solid" />
                         <div class="flex py-6 gap-2" style="display: flex;gap:1rem;">
-                            <p-button label="Back" severity="secondary" (onClick)="activateCallback(1)" />
+                            <p-button label="Atras" severity="secondary" (onClick)="activateCallback(1)" />
                         </div>
                     </ng-template>
                 </p-step-panel>
@@ -784,11 +783,6 @@
 
         </p-stepper>
     </div>
-
-    <ng-template #footer>
-
-        <p-button label="Almacenar" [outlined]="true" severity="secondary" (click)="visible = false" />
-    </ng-template>
 </p-dialog>
 
 <!-- MOSTRAR TRAZABILIDAD -->
