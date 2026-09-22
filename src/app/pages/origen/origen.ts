@@ -66,7 +66,8 @@ export class Origen implements OnInit {
   date: Date[] | undefined;
   vol_total: number = 0;
   nro_certificado: string = '';
-  plantas: SelectOption[] = [];
+  // plantas: SelectOption[] = [];
+  plantas = signal<SelectOption[]>([]);
   selectedCountry: SelectOption | null = null;
   formProduccion: FormGroup;
   formPlanta: FormGroup;
@@ -182,6 +183,7 @@ export class Origen implements OnInit {
       minute: '2-digit'
     }).format(new Date(fecha));
   }
+
   departamento: Departamento[] = [
     { name: 'CHUQUISACA', code: 'ch' },
     { name: 'LA PAZ', code: 'lp' },
@@ -272,16 +274,30 @@ export class Origen implements OnInit {
   // ******************************************************
   // FUNCION DEL SISTEMA
   // ****************************************************** 
-  cargarSelectPlanta() {
+  // cargarSelectPlanta() {
+  //   this.catalogo.getPlantas().subscribe({
+  //     next: (resultado) => {
+  //       this.plantas = resultado
+  //     },
+  //     error: (error) => {
+  //       this.mensaje(error, 'error')
+  //     }
+  //   })
+  // }
+  cargarSelectPlanta(): void {
     this.catalogo.getPlantas().subscribe({
-      next: (resultado) => {
-        this.plantas = resultado
-      },
-      error: (error) => {
-        this.mensaje(error, 'error')
-      }
-    })
-  }
+        next: (resultado) => {
+            this.plantas.set(
+                Array.isArray(resultado) ? resultado : []
+            );
+            console.log('PLANTAS:', this.plantas());
+        },
+        error: (error) => {
+            this.plantas.set([]);
+            this.mensaje(error, 'error');
+        }
+    });
+}
 
   // ******************************************************
   // FUNCION QUE PERMITE CARGAR LA TABLA DE PRODUCCION
@@ -506,7 +522,7 @@ export class Origen implements OnInit {
       willOpen: () => {
         Swal.getContainer()?.style.setProperty('z-index', '99999');
       }
-    })
+    });
   }
 
   exportarExcel() {

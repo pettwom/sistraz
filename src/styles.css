@@ -288,12 +288,14 @@ p-table {
   background: var(--table-head) !important;
   color: var(--text-white) !important;
   border: 1px solid var(--border-color);
+  font-size: clamp(0.3rem, calc(0.3rem + 0.3vw), 1rem);
 }
 
 .tabla-personalizada .p-datatable-tbody>tr>td {
   background: var(--table-body) !important;
   color: var(--menu-link) !important;
   border: 1px solid var(--border-color);
+  font-size: clamp(0.3rem, calc(0.3rem + 0.3vw), 1rem);
 }
 
 .p-datatable-tbody>tr.p-datatable-row-selected>td {
@@ -339,13 +341,14 @@ p-table {
   align-items: center;
   gap: 1rem;
 }
+
 /* =========================================================
    FILE UPLOAD
 ========================================================= */
 
 .fileupload-certificado {
-    display: block;
-    width: 100%;
+  display: block;
+  width: 100%;
 }
 
 
@@ -354,10 +357,10 @@ p-table {
 ========================================================= */
 
 .zona-archivos {
-    width: 100%;
-    min-height: 260px;
-    padding: 1rem;
-    box-sizing: border-box;
+  width: 100%;
+  min-height: 50px;
+  padding: 1rem;
+  box-sizing: border-box;
 }
 
 
@@ -366,16 +369,16 @@ p-table {
 ========================================================= */
 
 .grupo-archivos {
-    width: 100%;
+  width: 100%;
 
-    padding: 1.25rem;
+  padding: 1.25rem;
 
-    border: 1px solid var(--p-content-border-color);
-    border-radius: 14px;
+  border: 1px solid var(--p-content-border-color);
+  border-radius: 14px;
 
-    background: var(--p-content-background);
+  background: var(--p-content-background);
 
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 
@@ -384,41 +387,41 @@ p-table {
 ========================================================= */
 
 .grupo-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 
-    gap: 1rem;
+  gap: 1rem;
 
-    margin-bottom: 1.5rem;
+  margin-bottom: 1.5rem;
 }
 
 
 .grupo-titulo {
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
 
-    gap: .8rem;
+  gap: .8rem;
 }
 
 
-.grupo-titulo > i {
-    font-size: 1.4rem;
+.grupo-titulo>i {
+  font-size: 1.4rem;
 
-    color: var(--p-primary-color);
+  color: var(--p-primary-color);
 }
 
 
 .grupo-titulo h4 {
-    margin: 0 0 .2rem 0;
+  margin: 0 0 .2rem 0;
 
-    font-size: 1rem;
-    font-weight: 600;
+  font-size: 1rem;
+  font-weight: 600;
 }
 
 
 .grupo-titulo small {
-    color: var(--p-text-muted-color);
+  color: var(--p-text-muted-color);
 }
 
 
@@ -427,20 +430,18 @@ p-table {
 ========================================================= */
 
 .contador {
-    padding: .4rem .8rem;
+  padding: .4rem .8rem;
 
-    border-radius: 20px;
+  border-radius: 20px;
 
-    background: color-mix(
-        in srgb,
-        var(--p-primary-color) 15%,
-        transparent
-    );
+  background: color-mix(in srgb,
+      var(--p-primary-color) 15%,
+      transparent);
 
-    color: var(--p-primary-color);
+  color: var(--p-primary-color);
 
-    font-size: .75rem;
-    font-weight: 600;
+  font-size: .75rem;
+  font-weight: 600;
 }
 
 
@@ -449,12 +450,12 @@ p-table {
 ========================================================= */
 
 .archivos-grid {
-    display: grid;
+  display: grid;
 
-    grid-template-columns:
-        repeat(auto-fill, minmax(190px, 220px));
+  grid-template-columns:
+    repeat(auto-fill, minmax(190px, 220px));
 
-    gap: 1rem;
+  gap: 1rem;
 }
 
 
@@ -463,31 +464,31 @@ p-table {
 ========================================================= */
 
 .archivo-card {
-    width: 100%;
+  width: 100%;
 
-    overflow: hidden;
+  overflow: hidden;
 
-    border: 1px solid var(--p-content-border-color);
-    border-radius: 12px;
+  border: 1px solid var(--p-content-border-color);
+  border-radius: 12px;
 
-    background: var(--p-content-background);
+  background: var(--p-content-background);
 
-    transition:
-        transform .2s ease,
-        border-color .2s ease,
-        box-shadow .2s ease;
+  transition:
+    transform .2s ease,
+    border-color .2s ease,
+    box-shadow .2s ease;
 
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 
 .archivo-card:hover {
-    transform: translateY(-3px);
+  transform: translateY(-3px);
 
-    border-color: var(--p-primary-color);
+  border-color: var(--p-primary-color);
 
-    box-shadow:
-        0 8px 20px rgba(0, 0, 0, .15);
+  box-shadow:
+    0 8px 20px rgba(0, 0, 0, .15);
 }
 
 
@@ -496,31 +497,31 @@ p-table {
 ========================================================= */
 
 .archivo-preview {
-    width: 100%;
-    height: 130px;
+  width: 100%;
+  height: 130px;
 
-    display: flex;
+  display: flex;
 
-    justify-content: center;
-    align-items: center;
+  justify-content: center;
+  align-items: center;
 
-    padding: .8rem;
+  padding: .8rem;
 
-    background: var(--p-surface-900);
+  background: var(--p-surface-900);
 
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 
 .archivo-preview img {
-    display: block;
+  display: block;
 
-    width: 100%;
-    height: 100%;
+  width: 100%;
+  height: 100%;
 
-    object-fit: contain;
+  object-fit: contain;
 
-    border-radius: 6px;
+  border-radius: 6px;
 }
 
 
@@ -529,36 +530,36 @@ p-table {
 ========================================================= */
 
 .archivo-datos {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 
-    gap: .35rem;
+  gap: .35rem;
 
-    padding: .9rem 1rem .6rem;
+  padding: .9rem 1rem .6rem;
 }
 
 
 .archivo-nombre {
-    display: block;
+  display: block;
 
-    width: 100%;
+  width: 100%;
 
-    overflow: hidden;
+  overflow: hidden;
 
-    text-overflow: ellipsis;
-    white-space: nowrap;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 
-    font-size: .9rem;
-    font-weight: 600;
+  font-size: .9rem;
+  font-weight: 600;
 
-    color: var(--p-text-color);
+  color: var(--p-text-color);
 }
 
 
 .archivo-tamano {
-    font-size: .78rem;
+  font-size: .78rem;
 
-    color: var(--p-text-muted-color);
+  color: var(--p-text-muted-color);
 }
 
 
@@ -567,14 +568,14 @@ p-table {
 ========================================================= */
 
 .archivo-footer {
-    display: flex;
+  display: flex;
 
-    justify-content: space-between;
-    align-items: center;
+  justify-content: space-between;
+  align-items: center;
 
-    gap: .5rem;
+  gap: .5rem;
 
-    padding: .4rem 1rem 1rem;
+  padding: .4rem 1rem 1rem;
 }
 
 
@@ -583,40 +584,36 @@ p-table {
 ========================================================= */
 
 .estado {
-    display: inline-flex;
+  display: inline-flex;
 
-    align-items: center;
+  align-items: center;
 
-    gap: .35rem;
+  gap: .35rem;
 
-    padding: .35rem .65rem;
+  padding: .35rem .65rem;
 
-    border-radius: 20px;
+  border-radius: 20px;
 
-    font-size: .7rem;
-    font-weight: 600;
+  font-size: .7rem;
+  font-weight: 600;
 }
 
 
 .estado-pendiente {
-    background: color-mix(
-        in srgb,
-        var(--p-primary-color) 15%,
-        transparent
-    );
+  background: color-mix(in srgb,
+      var(--p-primary-color) 15%,
+      transparent);
 
-    color: var(--p-primary-color);
+  color: var(--p-primary-color);
 }
 
 
 .estado-completado {
-    background: color-mix(
-        in srgb,
-        var(--p-green-500) 15%,
-        transparent
-    );
+  background: color-mix(in srgb,
+      var(--p-green-500) 15%,
+      transparent);
 
-    color: var(--p-green-500);
+  color: var(--p-green-500);
 }
 
 
@@ -625,74 +622,72 @@ p-table {
 ========================================================= */
 
 .upload-vacio {
-    min-height: 150px;
+  min-height: 150px;
 
-    display: flex;
+  display: flex;
 
-    justify-content: center;
-    align-items: center;
+  justify-content: center;
+  align-items: center;
 
-    gap: 1rem;
+  gap: 1rem;
 
-    margin-top: 1rem;
-    padding: 1.5rem;
+  margin-top: 1rem;
+  padding: 1.5rem;
 
-    border: 2px dashed var(--p-content-border-color);
-    border-radius: 14px;
+  border: 2px dashed var(--p-content-border-color);
+  border-radius: 14px;
 
-    color: var(--p-text-muted-color);
+  color: var(--p-text-muted-color);
 
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 
 .upload-vacio-icono {
-    width: 55px;
-    height: 55px;
+  width: 55px;
+  height: 55px;
 
-    display: flex;
+  display: flex;
 
-    justify-content: center;
-    align-items: center;
+  justify-content: center;
+  align-items: center;
 
-    flex-shrink: 0;
+  flex-shrink: 0;
 
-    border-radius: 50%;
+  border-radius: 50%;
 
-    background: color-mix(
-        in srgb,
-        var(--p-primary-color) 12%,
-        transparent
-    );
+  background: color-mix(in srgb,
+      var(--p-primary-color) 12%,
+      transparent);
 }
 
 
 .upload-vacio-icono i {
-    font-size: 1.5rem;
+  font-size: 1.5rem;
 
-    color: var(--p-primary-color);
+  color: var(--p-primary-color);
 }
 
 
-.upload-vacio > div:last-child {
-    display: flex;
-    flex-direction: column;
+.upload-vacio>div:last-child {
+  display: flex;
+  flex-direction: column;
 
-    gap: .25rem;
+  gap: .25rem;
 }
 
 
 .upload-vacio strong {
-    color: var(--p-text-color);
+  color: var(--p-text-color);
 
-    font-size: .9rem;
+  font-size: .9rem;
 }
 
 
 .upload-vacio span {
-    font-size: .78rem;
+  font-size: .78rem;
 
-    color: var(--p-text-muted-color);
+  color: var(--p-text-muted-color);
 }
 
 
@@ -702,101 +697,102 @@ p-table {
 
 @media (max-width: 600px) {
 
-    .grupo-header {
-        align-items: flex-start;
-        flex-direction: column;
-    }
+  .grupo-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
 
 
-    .archivos-grid {
-        grid-template-columns: 1fr;
-    }
+  .archivos-grid {
+    grid-template-columns: 1fr;
+  }
 
 
-    .upload-vacio {
-        flex-direction: column;
+  .upload-vacio {
+    flex-direction: column;
 
-        text-align: center;
-    }
+    text-align: center;
+  }
 
 }
+
 /* =========================================
    HEADER FILE UPLOAD
 ========================================= */
 
 .upload-header {
-    width: 100%;
+  width: 100%;
 
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
 
-    gap: 1.5rem;
+  gap: 1.5rem;
 
-    padding: .5rem;
+  padding: .5rem;
 
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 
 /* BOTONES */
 
 .upload-acciones {
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
 
-    gap: .5rem;
+  gap: .5rem;
 
-    flex-shrink: 0;
+  flex-shrink: 0;
 }
 
 
 /* PROGRESO */
 
 .upload-progreso {
-    flex: 1;
+  flex: 1;
 
-    min-width: 0;
+  min-width: 0;
 
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 
-    gap: .45rem;
+  gap: .45rem;
 }
 
 
 /* TEXTO SUPERIOR */
 
 .progreso-info {
-    display: flex;
+  display: flex;
 
-    justify-content: space-between;
-    align-items: center;
+  justify-content: space-between;
+  align-items: center;
 
-    gap: 1rem;
+  gap: 1rem;
 
-    color: var(--p-text-muted-color);
+  color: var(--p-text-muted-color);
 
-    font-size: .75rem;
+  font-size: .75rem;
 }
 
 
 /* BARRA */
 
 .upload-progreso p-progressbar {
-    display: block;
+  display: block;
 
-    width: 100%;
+  width: 100%;
 }
 
 
 :host ::ng-deep .upload-progreso .p-progressbar {
-    width: 100%;
+  width: 100%;
 
-    height: 8px;
+  height: 8px;
 
-    border-radius: 20px;
+  border-radius: 20px;
 
-    overflow: hidden;
+  overflow: hidden;
 }
 
 
@@ -804,18 +800,18 @@ p-table {
 
 @media (max-width: 600px) {
 
-    .upload-header {
-        flex-direction: column;
-        align-items: stretch;
-    }
+  .upload-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
 
-    .upload-acciones {
-        justify-content: flex-start;
-    }
+  .upload-acciones {
+    justify-content: flex-start;
+  }
 
-    .upload-progreso {
-        width: 100%;
-    }
+  .upload-progreso {
+    width: 100%;
+  }
 }
 
 @keyframes entradaPagina {
@@ -844,3 +840,7 @@ p-table {
   }
 
 }
+
+@media (max-width: 992px) {}
+
+@media (max-width: 768px) {}

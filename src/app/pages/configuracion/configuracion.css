@@ -1,0 +1,79 @@
+:host {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+}
+.parent {
+display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 20px;
+
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+.div1,
+.div2 {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+
+    padding: 10px;
+    margin: 0;
+
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+.titulo {
+    padding: 10px;
+    color: var(--p-text-muted-color);
+    background-color: transparent;
+}
+
+.titulo div:first-child,
+.titulo div:first-child i {
+    font-size: clamp(2rem, calc(1rem + 1vw), 2.5rem);
+}
+
+.titulo div:last-child {
+    padding: 5px;
+    font-size: clamp(.5rem, calc(1rem + 1vw), 0.9rem);
+}
+
+/* =================================================== */
+/* PARA TABLET */
+/* =================================================== */
+@media (max-width: 992px) {
+
+    .div1,
+    .div2 {
+        width: 45%;
+        padding: 10px;
+    }
+}
+/* =================================================== */
+/* PARA CELULAR */
+/* =================================================== */
+@media (max-width: 768px) {
+
+.parent {
+        grid-template-columns: 1fr;
+        gap: 15px;
+
+        width: 100%;
+        padding: 10px;
+    }
+
+    .div1,
+    .div2 {
+        width: 100%;
+        min-width: 0;
+        max-width: 100%;
+
+        padding: 5px;
+        margin: 0;
+    }
+}

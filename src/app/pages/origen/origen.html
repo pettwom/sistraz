@@ -31,7 +31,7 @@
                 <p-card header="">
                     <form [formGroup]="formProduccion" (ngSubmit)="almacenar()">
                         <div class="card flex justify-center agregar-planta">
-                            <p-select [options]="plantas" formControlName="planta_id" optionLabel="nombre"
+                            <p-select [options]="plantas()" formControlName="planta_id" optionLabel="nombre"
                                 [filter]="true" filterBy="codigo" [showClear]="true" placeholder="Seleccione una planta"
                                 class="w-full">
                                 <ng-template #selectedItem let-selectedOption>
@@ -164,16 +164,17 @@
 <br>
 <p-card>
     <div class="card">
-        <p-table #dt1 [value]="produccion()" [globalFilterFields]="['lote', 
+        <p-table #dt1 [value]="produccion()" [globalFilterFields]="[
+            'lote', 
             'nombre',
-            'numCertificacion', 
+            'numCertificado', 
             'fechaMuestreo', 
             'volTotal',
             'pais',
             'puntoIngreso',
             'estado']" selectionMode="single" [(selection)]="selectedCustomers" dataKey="lote"
             [tableStyle]="{ 'min-width': '50rem'}" class="tabla-personalizada" [rows]="5" [paginator]="true"
-            stateStorage="session" stateKey="statedemo-session">
+            >
             <ng-template #caption>
                 <p-iconfield iconPosition="left">
                     <p-inputicon>
@@ -185,37 +186,37 @@
             </ng-template>
             <ng-template #header>
                 <tr>
-                    <th pSortableColumn="produccion.lote" style="width:18%">
+                    <th pSortableColumn="lote" style="width:18%">
                         Nro. LOTE
-                        <p-sortIcon field="produccion.lote" />
+                        <p-sortIcon field="lote" />
                     </th>
-                    <th pSortableColumn="produccion.nombre" style="width:15%">
+                    <th pSortableColumn="nombre" style="width:15%">
                         Planta/Operador
-                        <p-sortIcon field="produccion.nombre" />
+                        <p-sortIcon field="nombre" />
                     </th>
-                    <th pSortableColumn="produccion.numCertificacion" style="width:10%">
+                    <th pSortableColumn="numCertificado" style="width:10%">
                         Nro. Certificado
-                        <p-sortIcon field="produccion.numCertificacion" />
+                        <p-sortIcon field="numCertificado" />
                     </th>
-                    <th pSortableColumn="producion.fechaMuestreo" style="width:10%">
+                    <th pSortableColumn="fechaMuestreo" style="width:10%">
                         Fecha Muestreo
-                        <p-sortIcon field="producion.fechaMuestreo" />
+                        <p-sortIcon field="fechaMuestreo" />
                     </th>
-                    <th pSortableColumn="produccion.volTotal" style="width:10%">
+                    <th pSortableColumn="volTotal" style="width:10%">
                         Volumen Total (Tn)
-                        <p-sortIcon field="produccion.volTotal" />
+                        <p-sortIcon field="volTotal" />
                     </th>
-                    <th pSortableColumn="produccion.pais" style="width:10%">
+                    <th pSortableColumn="pais" style="width:10%">
                         Pais
-                        <p-sortIcon field="produccion.pais" />
+                        <p-sortIcon field="pais" />
                     </th>
-                    <th pSortableColumn="produccion.puntoIngreso" style="width:10%">
+                    <th pSortableColumn="puntoIngreso" style="width:10%">
                         Punto Ingreso
-                        <p-sortIcon field="produccion.puntoIngreso" />
+                        <p-sortIcon field="puntoIngreso" />
                     </th>
-                    <th pSortableColumn="produccion.estado" style="width:10%">
+                    <th pSortableColumn="estado" style="width:10%">
                         Estado
-                        <p-sortIcon field="produccion.estado" />
+                        <p-sortIcon field="estado" />
                     </th>
                 </tr>
             </ng-template>

@@ -1,1 +1,282 @@
-<p>configuracion works!</p>
+<div class="parent">
+    <div class="div1">
+        <div class="titulo">
+            <div>
+                <i class="pi pi-file-excel"></i>
+                Cargar Datos
+            </div>
+            <div style="color:var(--text-secondary)">
+                Cargar datos de Cisternas (Placa, Nombre Conductor, presintos) y
+                Código de Ductos Mediante archivo Excel.
+            </div>
+        </div>
+        <p-card>
+            <div class="card" ftcoAnimate>
+
+
+                <p-toast />
+                <p-fileupload name="archivo" [multiple]="false"
+                    accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" [maxFileSize]="3670016"
+                    [customUpload]="true" class="fileupload-certificado" (onSelect)="onSelectedFiles($event)">
+                    <ng-template #header let-files let-chooseCallback="chooseCallback" let-clearCallback="clearCallback"
+                        let-uploadCallback="uploadCallback">
+                        <div class="upload-header">
+                            <!-- BOTONES -->
+                            <div class="upload-acciones">
+                                <p-button (onClick)="choose($event, chooseCallback)" icon="pi pi-images"
+                                    [rounded]="true" [outlined]="true" pTooltip="Seleccionar archivo">
+                                </p-button>
+                                <p-button (onClick)="subirExcel()" icon="pi pi-cloud-upload" [rounded]="true"
+                                    [outlined]="true" severity="success" pTooltip="Subir certificado"
+                                    [disabled]="!files || files.length === 0">
+                                </p-button>
+                                <p-button (onClick)="clearCallback()" icon="pi pi-times" [rounded]="true"
+                                    [outlined]="true" severity="danger" pTooltip="Limpiar"
+                                    [disabled]="!files || files.length === 0">
+                                </p-button>
+                            </div>
+                            <!-- PROGRESO -->
+                            <div class="upload-progreso">
+                                <div class="progreso-info">
+                                    <span>Espacio utilizado</span>
+                                    <span>
+                                        {{ formatSize(totalSize) }} / 3.5 MB
+                                    </span>
+                                </div>
+                                <p-progressbar [value]="totalSizePercent" [showValue]="false">
+                                </p-progressbar>
+                            </div>
+                        </div>
+                    </ng-template>
+                    <ng-template #content let-files let-uploadedFiles="uploadedFiles"
+                        let-removeFileCallback="removeFileCallback"
+                        let-removeUploadedFileCallback="removeUploadedFileCallback">
+
+                        <div class="zona-archivos">
+                            <!-- ============================== -->
+                            <!-- ARCHIVOS PENDIENTES -->
+                            <!-- ============================== -->
+                            <div *ngIf="files?.length > 0" class="grupo-archivos">
+                                <div class="grupo-header">
+                                    <div class="grupo-titulo">
+                                        <i class="pi pi-clock"></i>
+                                        <div>
+                                            <h4>Archivos pendientes</h4>
+                                            <small>
+                                                Estos archivos se subirán al iniciar la carga.
+                                            </small>
+                                        </div>
+                                    </div>
+                                    <span class="contador">
+                                        {{ files.length }}
+                                        {{ files.length === 1 ? 'archivo' : 'archivos' }}
+                                    </span>
+                                </div>
+                                <div class="archivos-grid">
+                                    <div *ngFor="let file of files; let i = index" class="archivo-card">
+                                        <!-- IMAGEN -->
+                                        <div class="archivo-preview">
+                                            <img role="presentation" [alt]="file.name" [src]="file.objectURL" />
+                                        </div>
+                                        <!-- INFORMACIÓN -->
+                                        <div class="archivo-datos">
+                                            <span class="archivo-nombre" [title]="file.name">
+                                                {{ file.name }}
+                                            </span>
+                                            <span class="archivo-tamano">
+                                                {{ formatSize(file.size) }}
+                                            </span>
+                                        </div>
+                                        <!-- ESTADO + ELIMINAR -->
+                                        <div class="archivo-footer">
+                                            <span class="estado estado-pendiente">
+                                                <i class="pi pi-clock"></i>
+                                                Pendiente
+                                            </span>
+                                            <p-button icon="pi pi-times" (onClick)="onRemoveTemplatingFile(
+                                $event,
+                                file,
+                                removeFileCallback,
+                                i
+                            )" [outlined]="true" [rounded]="true" severity="danger">
+                                            </p-button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- ============================== -->
+                            <!-- ARCHIVOS COMPLETADOS -->
+                            <!-- ============================== -->
+                            <div *ngIf="uploadedFiles?.length > 0" class="grupo-archivos">
+                                <div class="grupo-header">
+                                    <div class="grupo-titulo">
+                                        <i class="pi pi-check-circle"></i>
+                                        <div>
+                                            <h4>Archivos cargados</h4>
+                                            <small>
+                                                Archivos cargados correctamente.
+                                            </small>
+                                        </div>
+                                    </div>
+                                    <span class="contador">
+                                        {{ uploadedFiles.length }}
+                                        {{ uploadedFiles.length === 1 ? 'archivo' : 'archivos' }}
+                                    </span>
+                                </div>
+                                <div class="archivos-grid">
+                                    <div *ngFor="let file of uploadedFiles; let i = index" class="archivo-card">
+                                        <div class="archivo-preview">
+                                            <img role="presentation" [alt]="file.name" [src]="file.objectURL" />
+                                        </div>
+                                        <div class="archivo-datos">
+                                            <span class="archivo-nombre" [title]="file.name">
+                                                {{ file.name }}
+                                            </span>
+                                            <span class="archivo-tamano">
+                                                {{ formatSize(file.size) }}
+                                            </span>
+                                        </div>
+                                        <div class="archivo-footer">
+                                            <span class="estado estado-completado">
+                                                <i class="pi pi-check"></i>
+                                                Completado
+                                            </span>
+                                            <p-button icon="pi pi-times" (onClick)="removeUploadedFileCallback(i)"
+                                                [outlined]="true" [rounded]="true" severity="danger">
+                                            </p-button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </ng-template>
+                    <ng-template #file> </ng-template>
+                    <ng-template #empty>
+
+                        <div class="upload-vacio">
+
+                            <div class="upload-vacio-icono">
+                                <i class="pi pi-cloud-upload"></i>
+                            </div>
+
+                            <div>
+                                <strong>
+                                    Arrastra y suelta los archivos aquí para subirlos.
+                                </strong>
+
+                                <span>
+                                    También puedes seleccionarlos usando el botón superior.
+                                </span>
+                            </div>
+
+                        </div>
+
+                    </ng-template>
+                </p-fileupload>
+            </div>
+
+        </p-card>
+        <br>
+        <!-- ============================================ -->
+        <!-- TABLA -->
+        <!-- ============================================ -->
+        <p-card>
+            <div class="card" ftcoAnimate>
+                <p-table #dt1 [value]="excelList" [globalFilterFields]="[
+                    'fecha', 
+                    'nroCre', 
+                    'nroCreFenix', 
+                    'cliente',
+                    'plantaDescarga',
+                    'conductor',
+                    'placa',
+                    'empresTrans']" selectionMode="single" [(selection)]="selectedExcel" 
+                    [tableStyle]="{ 'min-width': '50rem' }" [rows]="10" [paginator]="true" class="tabla-personalizada">
+                    <ng-template #caption>
+                        <p-iconfield iconPosition="left">
+                            <p-inputicon>
+                                <i class="pi pi-search"></i>
+                            </p-inputicon>
+                            <input pInputText type="text" (input)="dt1.filterGlobal($event.target.value, 'contains')"
+                                placeholder="Busqueda Global" />
+                        </p-iconfield>
+                    </ng-template>
+                    <ng-template #header>
+                        <tr>
+                            <th pSortableColumn="fecha" style="width:25%">FECHA <p-sortIcon field="fecha" /></th>
+                            <th pSortableColumn="nroCre" style="width:25%">NRO CRE <p-sortIcon field="nroCre" /></th>
+                            <th pSortableColumn="nroCreFenix" style="width:25%">NRO CRE FENIX <p-sortIcon
+                                    field="nroCreFenix" /></th>
+                            <th pSortableColumn="cliente" style="width:25%">CLIENTE <p-sortIcon field="cliente" /></th>
+                            <th pSortableColumn="plantaDescarga" style="width:25%">PLANTA DE DESCARGA <p-sortIcon
+                                    field="plantaDescarga" /></th>
+                            <th pSortableColumn="conductor" style="width:25%">CONDUCTOR <p-sortIcon field="conductor" />
+                            </th>
+                            <th pSortableColumn="placa" style="width:25%">PLACA <p-sortIcon field="placa" /></th>
+                            <th pSortableColumn="empresaTrans" style="width:25%">EMPRESA DE TRANSPORTE <p-sortIcon
+                                    field="empresaTrans" /></th>
+                        </tr>
+                    </ng-template>
+                    <ng-template #body let-excelList>
+                        <tr [pSelectableRow]="excelList">
+                            <td>
+                                <div class="flex items-center gap-2">
+                                    <span class="ml-1 align-middle">{{ excelList.fecha | date: "dd-MM-yyyy" }}</span>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="flex items-center gap-2">
+                                    <p-tag severity="warn">{{ excelList.nroCre }}</p-tag>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="flex items-center gap-2">
+                                    <span class="ml-1 align-middle">{{ excelList.nroCreFenix }}</span>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="flex items-center gap-2">
+                                    <span class="ml-1 align-middle">{{ excelList.cliente }}</span>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="flex items-center gap-2">
+                                    <span class="ml-1 align-middle">{{ excelList.plantaDescarga }}</span>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="flex items-center gap-2">
+                                    <p-tag severity="info">{{ excelList.conductor }}</p-tag>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="flex items-center gap-2">
+                                    <p-tag severity="success">{{ excelList.placa }}</p-tag>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="flex items-center gap-2">
+                                    <span class="ml-1 align-middle">{{ excelList.empresaTrans }}</span>
+                                </div>
+                            </td>
+                        </tr>
+                    </ng-template>
+                    <ng-template emptymessage>
+                        <tr>
+                            <td colspan="4">No existen Datos.</td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
+        </p-card>
+
+    </div>
+
+    <!-- =================================================================== -->
+    <!-- COLUMNA 2 -->
+    <!-- =================================================================== -->
+
+    <div class="div2">
+
+    </div>
+</div>
