@@ -251,7 +251,7 @@ export class Origen implements OnInit {
   }
 
   datosOctano(){
-    this.serivce.get('Calidad/debug-usuario').subscribe({
+    this.serivce.get('Calidad/parametros').subscribe({
       next: (respuesta)=>{
         console.log('1. octano calidad => ',respuesta)
       },
