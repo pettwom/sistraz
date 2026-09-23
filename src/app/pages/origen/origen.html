@@ -327,7 +327,7 @@
             </p-tablist>
             <p-tabpanels>
                 <p-tabpanel value="0">
-                    <form [formGroup]="form_Cisternas">
+                    <form [formGroup]="formDespacho" (ngSubmit)="despacharOrigen()">
                         <div class="card flex justify-center">
                             <p-multiselect [options]="cisterna_list" formControlName="CisternaList"
                                 (onChange)="verListado()" placeholder="Seleccionar Cisterna" optionLabel="conductor"
@@ -341,7 +341,7 @@
                         <p-divider type="dashed" />
                         <div class="flex justify-end gap-2">
 
-                            <p-button severity="help" label="Despachar"></p-button>
+                            <p-button severity="help" label="Despachar" (click)="despacharOrigen()"></p-button>
                         </div>
                     </form>
 
@@ -368,7 +368,7 @@
 <!-- ================================== -->
 <!-- MODAL PARA DESPACHO version 2 -->
 <!-- ================================== -->
-<p-dialog [modal]="true" [style]="{ width: '50rem' }">
+<!-- <p-dialog [modal]="true" [style]="{ width: '50rem' }">
 
     <ng-template #header>
         <div class="titulo_img_dialog">
@@ -380,9 +380,6 @@
         </div>
     </ng-template>
 
-    <!-- ========================= -->
-    <!-- TABS -->
-    <!-- ========================= -->
 
     <div class="card" style="position: fixed;
     left: 0px;
@@ -399,17 +396,11 @@
     </div>
     <br>
     <br>
-    <!-- ========================= -->
-    <!-- LOCAL -->
-    <!-- ========================= -->
 
     @if (tabDespacho === 4) {
     <div class="card pasos" style="position: relative; margin-top: 52px;z-index: 1;">
-        <form [formGroup]="formDespacho" (ngSubmit)="despacharOrigen()">
+        <form >
             <p-stepper [(value)]="pasoDespacho">
-                <!-- ====================== -->
-                <!-- PASO 1 -->
-                <!-- ====================== -->
 
                 <p-step-item [value]="1">
                     <p-step>
@@ -454,10 +445,6 @@
                     </p-step-panel>
                 </p-step-item>
 
-                <!-- ====================== -->
-                <!-- PASO 2 -->
-                <!-- ====================== -->
-
                 <p-step-item [value]="2">
                     <p-step>
                         Datos Cisternas
@@ -475,7 +462,6 @@
                                         <br>
                                         <div class="datos-cisterna">
 
-                                            <!-- PRESINTO -->
                                             <div>
                                                 <p-floatlabel>
                                                     <input [id]="'presinto-' + i" pInputText type="text"
@@ -486,7 +472,6 @@
                                                 </p-floatlabel>
                                             </div>
 
-                                            <!-- PLACA -->
                                             <div>
                                                 <p-floatlabel>
                                                     <p-inputmask mask="9999-aaa" [id]="'placa-' + i"
@@ -498,7 +483,6 @@
                                                 </p-floatlabel>
                                             </div>
 
-                                            <!-- VOLUMEN -->
                                             <div>
                                                 <p-floatlabel>
                                                     <input [id]="'volumen-' + i" pInputText type="number"
@@ -509,7 +493,7 @@
                                                 </p-floatlabel>
                                             </div>
 
-                                            <!-- CONDUCTOR -->
+
                                             <div class="campo-conductor">
                                                 <p-floatlabel>
                                                     <input [id]="'conductor-' + i" pInputText type="text"
@@ -526,7 +510,7 @@
                                 }
                             </div>
 
-                            <!-- BOTONES -->
+
                             <div class="flex py-6 gap-2" style="display:flex; gap:1rem">
                                 <p-button type="button" icon="pi pi-arrow-left" label="Atrás" variant="text"
                                     severity="secondary" (onClick)="activateCallback(1)" />
@@ -539,9 +523,6 @@
         </form>
     </div>
     }
-    <!-- ========================= -->
-    <!-- IMPORTACION -->
-    <!-- ========================= -->
 
     @if (tabDespacho === 5) {
 
@@ -554,7 +535,7 @@
     }
 
     <br><br>
-</p-dialog>
+</p-dialog> -->
 
 <!-- ================================== -->
 <!-- MODAL PARA SUBIR CERTIFICADO DE CALIDAD -->

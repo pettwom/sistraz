@@ -79,7 +79,6 @@ export class Origen implements OnInit {
   formProduccion: FormGroup;
   formPlanta: FormGroup;
   formDespacho: FormGroup;
-  form_Cisternas: FormGroup;
   tabs: number = 0;
   produccion = signal<any[]>([]);
   selectedCustomers: any[] = [];
@@ -104,6 +103,71 @@ export class Origen implements OnInit {
   cisterna_list: { conductor: string; id: number; }[] = [];
   listadoConductores: any;
   listCond: any;
+  form: any;
+  visibleRegCert: boolean = false;
+  resultadoTraz: any;
+  departamento: Departamento[] = [
+    { name: 'CHUQUISACA', code: 'ch' },
+    { name: 'LA PAZ', code: 'lp' },
+    { name: 'COCHABAMBA', code: 'cb' },
+    { name: 'SANTA CRUZ', code: 'sc' },
+    { name: 'ORURO', code: 'or' },
+    { name: 'POTOSI', code: 'pt' },
+    { name: 'TARIJA', code: 'tj' },
+    { name: 'BENI', code: 'bn' },
+    { name: 'PANDO', code: 'pn' },
+  ];
+
+  constructor(
+    private fb: FormBuilder,
+    private router: Router,
+    private serivce: ServiceServices,
+    private catalogo: CatalogoService,
+    private config: PrimeNG,
+    private messageService: MessageService
+  ) {
+    this.formPlanta = this.fb.group({
+      cod_planta: ['', Validators.required],
+      desc_planta: ['', Validators.required],
+      obs_planta: [''],
+      ciudad: [''],
+    })
+    this.formProduccion = this.fb.group({
+      planta_id: ['', Validators.required],
+      nro_certificado: ['', Validators.required],
+      vol_total: ['', Validators.required],
+      fecha_muestra: ['', Validators.required],
+      observacion: ['']
+    })
+/*     this.formDespacho = this.fb.group({
+      cantCisterna: [1, [
+        Validators.required,
+        Validators.min(1),
+        Validators.maxLength(2)
+      ]],
+
+      cisternas: this.fb.array([]),
+    }) */
+    this.formDespacho = this.fb.group({
+      CisternaList: ['', Validators.required]
+    })
+
+    this.datosOctano();
+    this.cisternasList();
+    // this.actualizarCisternas(1);
+  }
+
+  // ******************************************************
+  // FUNCION INICIAL
+  // ******************************************************
+  ngOnInit() {
+    this.cargarSelectPlanta();
+    this.cargarProduccion();
+    this.formDespacho.get('cantCisterna')?.valueChanges
+      .subscribe(valor => {
+        this.actualizarCisternas(Number(valor));
+      });
+  }
 
   get codigoTrazabilidad(): string {
     return this.eventos.length > 0
@@ -198,69 +262,17 @@ export class Origen implements OnInit {
     }).format(new Date(fecha));
   }
 
-  departamento: Departamento[] = [
-    { name: 'CHUQUISACA', code: 'ch' },
-    { name: 'LA PAZ', code: 'lp' },
-    { name: 'COCHABAMBA', code: 'cb' },
-    { name: 'SANTA CRUZ', code: 'sc' },
-    { name: 'ORURO', code: 'or' },
-    { name: 'POTOSI', code: 'pt' },
-    { name: 'TARIJA', code: 'tj' },
-    { name: 'BENI', code: 'bn' },
-    { name: 'PANDO', code: 'pn' },
-  ];
-  form: any;
-  visibleRegCert: boolean = false;
-  resultadoTraz: any;
-  constructor(
-    private fb: FormBuilder,
-    private router: Router,
-    private serivce: ServiceServices,
-    private catalogo: CatalogoService,
-    private config: PrimeNG,
-    private messageService: MessageService
-  ) {
-    this.formPlanta = this.fb.group({
-      cod_planta: ['', Validators.required],
-      desc_planta: ['', Validators.required],
-      obs_planta: [''],
-      ciudad: [''],
-    })
-    this.formProduccion = this.fb.group({
-      planta_id: ['', Validators.required],
-      nro_certificado: ['', Validators.required],
-      vol_total: ['', Validators.required],
-      fecha_muestra: ['', Validators.required],
-      observacion: ['']
-    })
-    this.formDespacho = this.fb.group({
-      cantCisterna: [1, [
-        Validators.required,
-        Validators.min(1),
-        Validators.maxLength(2)
-      ]],
-
-      cisternas: this.fb.array([]),
-    })
-    this.form_Cisternas = this.fb.group({
-      CisternaList: ['', Validators.required]
-    })
-    this.datosOctano();
-    this.cisternasList();
-    // this.actualizarCisternas(1);
-  }
-
-  datosOctano(){
+  datosOctano() {
     this.serivce.get('Calidad/parametros').subscribe({
-      next: (respuesta)=>{
-        console.log('1. octano calidad => ',respuesta)
+      next: (respuesta) => {
+        console.log('1. octano calidad => ', respuesta)
       },
-      error:(error)=>{}
+      error: (error) => { }
     })
   }
 
   verListado() {
-    this.listadoConductores = this.form_Cisternas.value.CisternaList ?? [];
+    this.listadoConductores = this.formDespacho.value.CisternaList ?? [];
     // console.log(this.listadoConductores);
 
     this.listCond = this.listadoConductores.map((x: { conductor: string; }) => ({ conductor: x.conductor }))
@@ -307,17 +319,6 @@ export class Origen implements OnInit {
     while (this.cisternas.length > cant) {
       this.cisternas.removeAt(this.cisternas.length - 1);
     }
-  }
-  // ******************************************************
-  // FUNCION INICIAL
-  // ******************************************************
-  ngOnInit() {
-    this.cargarSelectPlanta();
-    this.cargarProduccion();
-    this.formDespacho.get('cantCisterna')?.valueChanges
-      .subscribe(valor => {
-        this.actualizarCisternas(Number(valor));
-      });
   }
 
   // ******************************************************
@@ -480,9 +481,9 @@ export class Origen implements OnInit {
 
   despacharOrigen() {
     Swal.fire({
-      title: 'Precaución',
+      title: '🚧 Precaución 🚧',
       icon: 'warning',
-      html: '🚧 Desea despachar GLP ? 🚧',
+      html: ' Desea despachar las Cisternas 🚚?  ',
       showCancelButton: true,
       showConfirmButton: true,
       confirmButtonText: 'Si, estoy seguro',
@@ -492,10 +493,8 @@ export class Origen implements OnInit {
       }
     }).then((result) => {
       if (result.isConfirmed) {
-/*         console.log(this.formDespacho);
-        console.log(this.formDespacho.value.cisternas);
-        console.log(this.formDespacho.value.cisternas[1].placa); */
         alert(this.idPlanta)
+        console.log(this.formDespacho.value)
         // this.serivce.post('prod/addDespachar', idPlanta)
         // .subscribe({
         //   next: (result)=>{
@@ -578,7 +577,7 @@ export class Origen implements OnInit {
     const datos = this.produccion();
 
     if (!datos || datos.length === 0) {
-      this.mensaje('No existen datos para exportar','warning');
+      this.mensaje('No existen datos para exportar', 'warning');
       return;
     }
 
@@ -839,11 +838,11 @@ export class Origen implements OnInit {
       this.idPlanta.toString()
     );
 
- /*    console.log('ARCHIVO:', archivo);
-    console.log('NOMBRE:', archivo.name);
-    console.log('TIPO:', archivo.type);
-    console.log('TAMAÑO:', archivo.size);
-    console.log('ID PLANTA:', this.idPlanta); */
+    /*    console.log('ARCHIVO:', archivo);
+       console.log('NOMBRE:', archivo.name);
+       console.log('TIPO:', archivo.type);
+       console.log('TAMAÑO:', archivo.size);
+       console.log('ID PLANTA:', this.idPlanta); */
 
     // Por ahora llegamos hasta aquí.
     // El siguiente paso será enviar formData al backend.
