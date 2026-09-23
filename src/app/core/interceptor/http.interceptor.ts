@@ -167,11 +167,11 @@ export const httpInterceptor: HttpInterceptorFn =
     // MOSTRAR PETICIÓN EN CONSOLA
     // =====================================================
 
-    console.log(
-      'HTTP REQUEST:',
-      request.method,
-      request.url
-    );
+    // console.log(
+    //   'HTTP REQUEST:',
+    //   request.method,
+    //   request.url
+    // );
 
 
     // =====================================================
@@ -189,11 +189,11 @@ export const httpInterceptor: HttpInterceptorFn =
         (error: HttpErrorResponse) => {
 
 
-          console.error(
-            'HTTP ERROR:',
-            error.status,
-            error
-          );
+/*             console.error(
+              'HTTP ERROR:',
+              error.status,
+              error
+            ); */
 
 
           // =================================================
@@ -213,9 +213,9 @@ export const httpInterceptor: HttpInterceptorFn =
 
           if (error.status === 401) {
 
-            console.error(
-              'Sesión no autorizada o expirada'
-            );
+            // console.error(
+            //   'Sesión no autorizada o expirada'
+            // );
 
 
             // ===============================================
@@ -270,10 +270,10 @@ export const httpInterceptor: HttpInterceptorFn =
 
           if (omitirMensajes) {
 
-            console.log(
-              'Mensaje global omitido:',
-              request.url
-            );
+            // console.log(
+            //   'Mensaje global omitido:',
+            //   request.url
+            // );
 
 
             return throwError(
@@ -296,9 +296,9 @@ export const httpInterceptor: HttpInterceptorFn =
 
             case 400:
 
-              console.error(
-                'Solicitud incorrecta'
-              );
+              // console.error(
+              //   'Solicitud incorrecta'
+              // );
 
               break;
 
@@ -309,9 +309,9 @@ export const httpInterceptor: HttpInterceptorFn =
 
             case 403:
 
-              console.error(
-                'No tiene permisos para realizar esta acción'
-              );
+              // console.error(
+              //   'No tiene permisos para realizar esta acción'
+              // );
 
               break;
 
@@ -322,9 +322,9 @@ export const httpInterceptor: HttpInterceptorFn =
 
             case 404:
 
-              console.error(
-                'Recurso no encontrado'
-              );
+              // console.error(
+              //   'Recurso no encontrado'
+              // );
 
               break;
 
@@ -335,9 +335,9 @@ export const httpInterceptor: HttpInterceptorFn =
 
             case 408:
 
-              console.error(
-                'Tiempo de espera agotado'
-              );
+              // console.error(
+              //   'Tiempo de espera agotado'
+              // );
 
               break;
 
@@ -348,9 +348,9 @@ export const httpInterceptor: HttpInterceptorFn =
 
             case 500:
 
-              console.error(
-                'Error interno del servidor'
-              );
+              // console.error(
+              //   'Error interno del servidor'
+              // );
 
               break;
 
@@ -361,9 +361,9 @@ export const httpInterceptor: HttpInterceptorFn =
 
             case 502:
 
-              console.error(
-                'Error de comunicación con el servidor'
-              );
+              // console.error(
+              //   'Error de comunicación con el servidor'
+              // );
 
               break;
 
@@ -374,9 +374,9 @@ export const httpInterceptor: HttpInterceptorFn =
 
             case 503:
 
-              console.error(
-                'Servicio no disponible'
-              );
+              // console.error(
+              //   'Servicio no disponible'
+              // );
 
               break;
 
@@ -387,10 +387,10 @@ export const httpInterceptor: HttpInterceptorFn =
 
             default:
 
-              console.error(
-                'Error HTTP no controlado:',
-                error.status
-              );
+              // console.error(
+              //   'Error HTTP no controlado:',
+              //   error.status
+              // );
 
               break;
 
@@ -426,10 +426,10 @@ export const httpInterceptor: HttpInterceptorFn =
         loadingService.hide();
 
 
-        console.log(
-          'HTTP FINALIZADO:',
-          request.url
-        );
+        // console.log(
+        //   'HTTP FINALIZADO:',
+        //   request.url
+        // );
 
       })
 

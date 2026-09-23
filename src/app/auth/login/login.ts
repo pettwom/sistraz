@@ -256,10 +256,10 @@ export class Login {
 
       error: (error) => {
 
-        console.error(
+/*         console.error(
           'ERROR LOGIN:',
           error
-        );
+        ); */
 
         const mensaje =
           error.error?.mensaje ??

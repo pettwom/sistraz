@@ -37,8 +37,8 @@ export class Perfil {
     });
   }
   cambiarPassword() {
-    console.log(this.pass, this.newpass)
-    console.log(this.pass === this.newpass)
+/*     console.log(this.pass, this.newpass)
+    console.log(this.pass === this.newpass) */
     if (this.pass === this.newpass) {
       Swal.fire({
         title: 'Exito',

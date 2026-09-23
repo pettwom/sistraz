@@ -13,10 +13,10 @@ export class FtcoAnimateDirective implements AfterViewInit, OnDestroy {
   private observer?: IntersectionObserver;
 
   ngAfterViewInit(): void {
-    console.log(
+/*     console.log(
       'FtcoAnimate ejecutándose:',
       this.el.nativeElement
-    );
+    ); */
     const elemento = this.el.nativeElement;
 
     // Estado inicial
@@ -38,7 +38,7 @@ export class FtcoAnimateDirective implements AfterViewInit, OnDestroy {
             // this.renderer.addClass(elemento, this.animation);
 
             // this.observer?.unobserve(elemento);
-              console.log('Elemento visible');
+              /* console.log('Elemento visible'); */
 
               this.renderer.addClass(
                 elemento,

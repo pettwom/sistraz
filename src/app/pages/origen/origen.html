@@ -173,8 +173,7 @@
             'pais',
             'puntoIngreso',
             'estado']" selectionMode="single" [(selection)]="selectedCustomers" dataKey="lote"
-            [tableStyle]="{ 'min-width': '50rem'}" class="tabla-personalizada" [rows]="5" [paginator]="true"
-            >
+            [tableStyle]="{ 'min-width': '50rem'}" class="tabla-personalizada" [rows]="5" [paginator]="true">
             <ng-template #caption>
                 <p-iconfield iconPosition="left">
                     <p-inputicon>
@@ -224,10 +223,8 @@
                 <tr [pSelectableRow]="produccion">
                     <td>
                         <span style="color: var(--text-link)">
-                            <a (click)="showDialog('trazabilidad',produccion.lote)" 
-                            pTooltip="Muestra la trazabilidad" 
-                            tooltipPosition="top"
-                            >
+                            <a (click)="showDialog('trazabilidad',produccion.lote)" pTooltip="Muestra la trazabilidad"
+                                tooltipPosition="top">
                                 {{ produccion.lote }}
                             </a>
 
@@ -238,7 +235,9 @@
                     </td>
                     <td style="display: flex; justify-content: center; align-items: center; gap:1rem;">
                         @if(produccion.numCertificado !== null){
-                        <p-tag severity="warn" pTooltip="Ver Datos del Certificado" tooltipPosition="top" (click)="showDialog('registroCert',produccion.idPlanta)" value="{{ produccion.numCertificado }}" />
+                        <p-tag severity="warn" pTooltip="Ver Datos del Certificado" tooltipPosition="top"
+                            (click)="showDialog('registroCert',produccion.idPlanta)"
+                            value="{{ produccion.numCertificado }}" />
 
                         }
                         @else{
@@ -298,8 +297,78 @@
 <!-- ================================== -->
 <!-- MODAL PARA DESPACHO -->
 <!-- ================================== -->
+<p-dialog [(visible)]="visibleDespacho" [modal]="true" [style]="{ width: '50rem', height: '35rem' }">
+    <ng-template #header>
+        <div class="inline-flex items-center justify-center gap-2">
+            <p-avatar image="Cisterna.png" shape="circle" />
+            <span class="font-bold whitespace-nowrap">
+                Despacho de GLP
+            </span>
+        </div>
+    </ng-template>
+    <div class="card">
+        <p-tabs value="0" scrollable>
+            <p-tablist>
+                <ng-template #previcon>
+                    <i class="pi pi-minus"></i>
+                </ng-template>
+                <p-tab value="0">
+                    <p-avatar image="local.png" shape="circle" />
+                    <span class="font-bold whitespace-nowrap">local</span>
+                </p-tab>
+                <p-tab value="1">
+                    <p-avatar image="importacion.png" shape="circle" />
+                    <span class="font-bold whitespace-nowrap">Importación</span>
+                </p-tab>
 
-<p-dialog [(visible)]="visibleDespacho" [modal]="true" [style]="{ width: '50rem' }">
+                <ng-template #nexticon>
+                    <i class="pi pi-plus"></i>
+                </ng-template>
+            </p-tablist>
+            <p-tabpanels>
+                <p-tabpanel value="0">
+                    <form [formGroup]="form_Cisternas">
+                        <div class="card flex justify-center">
+                            <p-multiselect [options]="cisterna_list" formControlName="CisternaList"
+                                (onChange)="verListado()" placeholder="Seleccionar Cisterna" optionLabel="conductor"
+                                display="chip" styleClass="w-full md:w-80" />
+                        </div>
+                        <p-divider type="dashed" />
+                        <h3>Datos Seleccionados</h3>
+                        <div class="card flex justify-center">
+                            <p-listbox [options]="listCond" optionLabel="conductor" class="w-full md:w-56" />
+                        </div>
+                        <p-divider type="dashed" />
+                        <div class="flex justify-end gap-2">
+
+                            <p-button severity="help" label="Despachar"></p-button>
+                        </div>
+                    </form>
+
+                </p-tabpanel>
+                <p-tabpanel value="1">
+                    <p class="m-0">
+                        Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque
+                        laudantium, totam rem
+                        aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt
+                        explicabo.
+                        Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia
+                        consequuntur magni
+                        dolores eos qui ratione voluptatem sequi nesciunt. Consectetur, adipisci velit, sed quia non
+                        numquam eius
+                        modi.
+                    </p>
+                </p-tabpanel>
+
+            </p-tabpanels>
+        </p-tabs>
+    </div>
+</p-dialog>
+
+<!-- ================================== -->
+<!-- MODAL PARA DESPACHO version 2 -->
+<!-- ================================== -->
+<p-dialog [modal]="true" [style]="{ width: '50rem' }">
 
     <ng-template #header>
         <div class="titulo_img_dialog">
@@ -487,9 +556,9 @@
     <br><br>
 </p-dialog>
 
-
+<!-- ================================== -->
 <!-- MODAL PARA SUBIR CERTIFICADO DE CALIDAD -->
-
+<!-- ================================== -->
 <p-dialog [(visible)]="visibleUpload" [modal]="true" [style]="{ width: '50rem' }">
     <ng-template #header>
         <div class="inline-flex items-center justify-center gap-2">
@@ -659,8 +728,9 @@
     </div>
 </p-dialog>
 
+<!-- ================================== -->
 <!-- MODAL PARA REGISTRAR CERTIFICADO -->
-
+<!-- ================================== -->
 <p-dialog [(visible)]="visibleRegCert" [modal]="true" [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }"
     [maximizable]="true" [style]="{ width: '70rem' }">
     <ng-template #header>
@@ -786,41 +856,42 @@
     </div>
 </p-dialog>
 
+<!-- ================================== -->
 <!-- MOSTRAR TRAZABILIDAD -->
-
+<!-- ================================== -->
 <p-dialog [(visible)]="mostrarTrazabilidad" [modal]="true" [maximizable]="true">
     <div class="trazabilidad-container">
         <!-- ============================= -->
         <!-- CABECERA -->
         <!-- ============================= -->
         @if (eventos.length > 0) {
-            <!-- <ng-template #header> -->
-            <!-- <div class="inline-flex items-center justify-center gap-2"> -->
-                <div class="trazabilidad-header">
-                    <div>
-                        <span class="subtitulo">
-                            CÓDIGO DE TRAZABILIDAD
-                        </span>
-                        <h2>
-                            {{ codigoTrazabilidad }}
-                        </h2>
-                    </div>
-                    <div class="header-info">
-                        <div class="dato-header">
-                            <span>Eventos</span>
-                            <strong>{{ eventos.length }}</strong>
-                        </div>
-                        <div class="dato-header">
-                            <span>Volumen inicial</span>
-                            <strong>
-                                {{ volumenInicial | number:'1.0-2' }}
-                            </strong>
-                        </div>
-                        <p-tag value="CONFIRMADO" severity="success">
-                        </p-tag>
-                    </div>
+        <!-- <ng-template #header> -->
+        <!-- <div class="inline-flex items-center justify-center gap-2"> -->
+        <div class="trazabilidad-header">
+            <div>
+                <span class="subtitulo">
+                    CÓDIGO DE TRAZABILIDAD
+                </span>
+                <h2>
+                    {{ codigoTrazabilidad }}
+                </h2>
+            </div>
+            <div class="header-info">
+                <div class="dato-header">
+                    <span>Eventos</span>
+                    <strong>{{ eventos.length }}</strong>
                 </div>
-            <!-- </div> -->
+                <div class="dato-header">
+                    <span>Volumen inicial</span>
+                    <strong>
+                        {{ volumenInicial | number:'1.0-2' }}
+                    </strong>
+                </div>
+                <p-tag value="CONFIRMADO" severity="success">
+                </p-tag>
+            </div>
+        </div>
+        <!-- </div> -->
         <!-- </ng-template> -->
         <!-- ============================= -->
         <!-- EVENTOS -->

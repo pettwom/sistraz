@@ -291,10 +291,10 @@ export class Configuracion implements OnInit {
        .subscribe({
          next: (resultado)=>{
            this.excelList = resultado as Excel[];
-           console.log(resultado)
+           /* console.log(resultado) */
          },
          error: (error)=>{
-           console.log(error)
+           console.log('1. Configuration =>',error)
          }
        })
   }

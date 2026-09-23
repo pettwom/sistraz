@@ -28,8 +28,6 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
 
       if (error.status === 401) {
 
-        console.warn('Sesión expirada');
-
         // Mata completamente la sesión
         authService.logout();
 

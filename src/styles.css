@@ -690,6 +690,10 @@ p-table {
   color: var(--p-text-muted-color);
 }
 
+.p-ripple {
+  display: flex;
+  align-items: center;
+}
 
 /* =========================================================
    RESPONSIVE

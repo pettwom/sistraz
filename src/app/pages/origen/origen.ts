@@ -50,6 +50,13 @@ export interface TrazabilidadEvento {
   Destinos: InstanciaTrazabilidad[];
   Certificados: CertificadoTrazabilidad[];
 }
+
+interface Cisterna {
+  volBbls: number,
+  placa: string,
+  id: number
+}
+
 @Component({
   selector: 'app-origen',
   imports: [ImportsModule],
@@ -72,6 +79,7 @@ export class Origen implements OnInit {
   formProduccion: FormGroup;
   formPlanta: FormGroup;
   formDespacho: FormGroup;
+  form_Cisternas: FormGroup;
   tabs: number = 0;
   produccion = signal<any[]>([]);
   selectedCustomers: any[] = [];
@@ -89,9 +97,15 @@ export class Origen implements OnInit {
   totalSize: number = 0;
   totalSizePercent: number = 0;
   mostrarTrazabilidad: boolean = false;
+  cisterna!: Cisterna[];
 
+  selectedCisterna!: Cisterna[];
   eventos: TrazabilidadEvento[] = [];
-   get codigoTrazabilidad(): string {
+  cisterna_list: { conductor: string; id: number; }[] = [];
+  listadoConductores: any;
+  listCond: any;
+
+  get codigoTrazabilidad(): string {
     return this.eventos.length > 0
       ? this.eventos[0].CodigoTrazabilidad
       : '';
@@ -99,7 +113,7 @@ export class Origen implements OnInit {
 
   get volumenInicial(): number {
     return this.eventos.length > 0 &&
-           this.eventos[0].Origenes.length > 0
+      this.eventos[0].Origenes.length > 0
       ? this.eventos[0].Origenes[0].volumen
       : 0;
   }
@@ -228,7 +242,42 @@ export class Origen implements OnInit {
 
       cisternas: this.fb.array([]),
     })
-    this.actualizarCisternas(1);
+    this.form_Cisternas = this.fb.group({
+      CisternaList: ['', Validators.required]
+    })
+    this.datosOctano();
+    this.cisternasList();
+    // this.actualizarCisternas(1);
+  }
+
+  datosOctano(){
+    this.serivce.get('Calidad/debug-usuario').subscribe({
+      next: (respuesta)=>{
+        console.log('1. octano calidad => ',respuesta)
+      },
+      error:(error)=>{}
+    })
+  }
+
+  verListado() {
+    this.listadoConductores = this.form_Cisternas.value.CisternaList ?? [];
+    // console.log(this.listadoConductores);
+
+    this.listCond = this.listadoConductores.map((x: { conductor: string; }) => ({ conductor: x.conductor }))
+  }
+  cisternasList() {
+    this.serivce.get("Excel/listSel")
+      .subscribe({
+        next: (resultado) => {
+          this.cisterna = resultado as Cisterna[];
+          // console.log('3.', this.cisterna);
+
+          this.cisterna_list = this.cisterna.map(x => ({ conductor: ' PLACA: ' + x.placa + ' - VOLUMEN: ' + x.volBbls, id: x.id }))
+        },
+        error: (error) => {
+          this.mensaje(error, 'error');
+        }
+      });
   }
 
   crearCisterna(): FormGroup {
@@ -286,18 +335,18 @@ export class Origen implements OnInit {
   // }
   cargarSelectPlanta(): void {
     this.catalogo.getPlantas().subscribe({
-        next: (resultado) => {
-            this.plantas.set(
-                Array.isArray(resultado) ? resultado : []
-            );
-            console.log('PLANTAS:', this.plantas());
-        },
-        error: (error) => {
-            this.plantas.set([]);
-            this.mensaje(error, 'error');
-        }
+      next: (resultado) => {
+        this.plantas.set(
+          Array.isArray(resultado) ? resultado : []
+        );
+        // console.log('PLANTAS:', this.plantas());
+      },
+      error: (error) => {
+        this.plantas.set([]);
+        this.mensaje(error, 'error');
+      }
     });
-}
+  }
 
   // ******************************************************
   // FUNCION QUE PERMITE CARGAR LA TABLA DE PRODUCCION
@@ -308,7 +357,7 @@ export class Origen implements OnInit {
       .subscribe({
         next: (resultado: any) => {
           this.produccion.set(Array.isArray(resultado) ? resultado : [])
-          console.log(this.produccion())
+          // console.log(this.produccion())
         },
         error: (error) => {
           this.mensaje(error, 'error');
@@ -321,7 +370,7 @@ export class Origen implements OnInit {
   // FUNCION QUE PERMITE CREAR UN LOTE E INICIAR LA TRAZABILIDAD
   // ****************************************************** 
   almacenar() {
-    console.log(this.formProduccion);
+    // console.log(this.formProduccion);
     if (this.formProduccion.valid) {
       Swal.fire({
         title: 'Precaución',
@@ -348,7 +397,7 @@ export class Origen implements OnInit {
           this.serivce.post("prod/addProd", dto).subscribe(
             {
               next: (resultado) => {
-                console.log(resultado);
+                // console.log(resultado);
                 this.cargarProduccion();
                 this.sidebarVisible = false;
                 this.mensaje('Se almacenaron correctamente los datos', 'success')
@@ -367,7 +416,7 @@ export class Origen implements OnInit {
 
   AgregarPlanta() {
     if (this.formPlanta.valid) {
-      console.log('1.form planta', this.formPlanta.value)
+      // console.log('1.form planta', this.formPlanta.value)
       Swal.fire({
         title: 'Precaución',
         icon: 'warning',
@@ -423,7 +472,7 @@ export class Origen implements OnInit {
   }
 
   alCerrar($event: any) {
-    console.log(this.sidebarVisible)
+    // console.log(this.sidebarVisible)
     if (this.sidebarVisible == true) {
       this.visible = false
     }
@@ -443,9 +492,9 @@ export class Origen implements OnInit {
       }
     }).then((result) => {
       if (result.isConfirmed) {
-        console.log(this.formDespacho);
+/*         console.log(this.formDespacho);
         console.log(this.formDespacho.value.cisternas);
-        console.log(this.formDespacho.value.cisternas[1].placa);
+        console.log(this.formDespacho.value.cisternas[1].placa); */
         alert(this.idPlanta)
         // this.serivce.post('prod/addDespachar', idPlanta)
         // .subscribe({
@@ -485,7 +534,7 @@ export class Origen implements OnInit {
     this.serivce.get("TrazabilidadView?" + "codigoTrazabilidad=" + traz)
       .subscribe({
         next: (res => {
-          console.log(res);
+          // console.log(res);
 
           this.eventos = res as TrazabilidadEvento[];
 
@@ -529,7 +578,7 @@ export class Origen implements OnInit {
     const datos = this.produccion();
 
     if (!datos || datos.length === 0) {
-      console.warn('No existen datos para exportar');
+      this.mensaje('No existen datos para exportar','warning');
       return;
     }
 
@@ -733,7 +782,7 @@ export class Origen implements OnInit {
 
   subirCertificado(): void {
 
-    console.log('ENTRÓ A subirCertificado()');
+    // console.log('ENTRÓ A subirCertificado()');
 
     if (!this.files || this.files.length === 0) {
 
@@ -790,11 +839,11 @@ export class Origen implements OnInit {
       this.idPlanta.toString()
     );
 
-    console.log('ARCHIVO:', archivo);
+ /*    console.log('ARCHIVO:', archivo);
     console.log('NOMBRE:', archivo.name);
     console.log('TIPO:', archivo.type);
     console.log('TAMAÑO:', archivo.size);
-    console.log('ID PLANTA:', this.idPlanta);
+    console.log('ID PLANTA:', this.idPlanta); */
 
     // Por ahora llegamos hasta aquí.
     // El siguiente paso será enviar formData al backend.
