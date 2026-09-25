@@ -10,19 +10,23 @@ import * as XLSX from 'xlsx';
 import { CatalogoService, SelectOption } from '../../services/catalogo.service';
 import { PrimeNG } from 'primeng/config';
 import { MessageService } from 'primeng/api';
+
 interface ExportColumn {
   title: string;
   dataKey: string;
 }
+
 interface Column {
   field: string;
   header: string;
   customExportHeader?: string;
 }
+
 interface Departamento {
   name: string;
   code: string;
 }
+
 export interface InstanciaTrazabilidad {
   tipo: string;
   codigo: string;
@@ -57,6 +61,13 @@ interface Cisterna {
   id: number
 }
 
+interface PaisOption {
+  idPais: number;
+  descripcion: string | null;
+  abreviacion2: string | null;
+  abreviacion3: string | null;
+}
+
 @Component({
   selector: 'app-origen',
   imports: [ImportsModule],
@@ -86,6 +97,7 @@ export class Origen implements OnInit {
   cols!: Column[];
   exportColumns!: ExportColumn[];
   visible: boolean = false;
+  visibleImportacion: boolean = false;//importacion
   visibleDespacho: boolean = false;
   visibleUpload: boolean = false;
   idPlanta: number = 0;
@@ -97,7 +109,6 @@ export class Origen implements OnInit {
   totalSizePercent: number = 0;
   mostrarTrazabilidad: boolean = false;
   cisterna!: Cisterna[];
-
   selectedCisterna!: Cisterna[];
   eventos: TrazabilidadEvento[] = [];
   cisterna_list: { conductor: string; id: number; }[] = [];
@@ -117,6 +128,14 @@ export class Origen implements OnInit {
     { name: 'BENI', code: 'bn' },
     { name: 'PANDO', code: 'pn' },
   ];
+  resCisterna: any;
+  // ************** IMPORTACION **************
+  formProduccionImportacion: FormGroup;//importacion
+  formOperador: FormGroup;//importacion
+  operador_id: number = 0;//importacion
+  operador = signal<SelectOption[]>([]);//importacion
+  pais = signal<SelectOption[]>([]);//importacion
+  DataOperador: {}={};
 
   constructor(
     private fb: FormBuilder,
@@ -139,15 +158,29 @@ export class Origen implements OnInit {
       fecha_muestra: ['', Validators.required],
       observacion: ['']
     })
-/*     this.formDespacho = this.fb.group({
-      cantCisterna: [1, [
-        Validators.required,
-        Validators.min(1),
-        Validators.maxLength(2)
-      ]],
-
-      cisternas: this.fb.array([]),
-    }) */
+    this.formProduccionImportacion = this.fb.group({
+      operador_id: ['', Validators.required],
+      nro_certificado_impo: ['', Validators.required],
+      vol_total_impo: ['', Validators.required],
+      fecha_muestra_impo: ['', Validators.required],
+      observacion_impo: ['']
+    })
+    this.formOperador = this.fb.group({
+      cod_operador: ['', Validators.required],
+      desc_operador: ['', Validators.required],
+      paisImpor: ['', Validators.required],
+      punto_ingreso: ['', Validators.required],
+      obs_operador: ['']
+    })
+    /*     this.formDespacho = this.fb.group({
+          cantCisterna: [1, [
+            Validators.required,
+            Validators.min(1),
+            Validators.maxLength(2)
+          ]],
+    
+          cisternas: this.fb.array([]),
+        }) */
     this.formDespacho = this.fb.group({
       CisternaList: ['', Validators.required]
     })
@@ -157,11 +190,15 @@ export class Origen implements OnInit {
     // this.actualizarCisternas(1);
   }
 
+
+
   // ******************************************************
   // FUNCION INICIAL
   // ******************************************************
   ngOnInit() {
     this.cargarSelectPlanta();
+    this.cargarSeleccionPais();
+    this.cargarOperador();
     this.cargarProduccion();
     this.formDespacho.get('cantCisterna')?.valueChanges
       .subscribe(valor => {
@@ -277,12 +314,13 @@ export class Origen implements OnInit {
 
     this.listCond = this.listadoConductores.map((x: { conductor: string; }) => ({ conductor: x.conductor }))
   }
+
   cisternasList() {
     this.serivce.get("Excel/listSel")
       .subscribe({
         next: (resultado) => {
           this.cisterna = resultado as Cisterna[];
-          // console.log('3.', this.cisterna);
+          console.log('3.', this.cisterna);
 
           this.cisterna_list = this.cisterna.map(x => ({ conductor: ' PLACA: ' + x.placa + ' - VOLUMEN: ' + x.volBbls, id: x.id }))
         },
@@ -321,9 +359,42 @@ export class Origen implements OnInit {
     }
   }
 
+  despacharOrigen() {
+    Swal.fire({
+      title: '🚧 Precaución 🚧',
+      icon: 'warning',
+      html: ' Desea despachar las Cisternas 🚚?  ',
+      showCancelButton: true,
+      showConfirmButton: true,
+      confirmButtonText: 'Si, estoy seguro',
+      cancelButtonText: 'No',
+      willOpen: () => {
+        Swal.getContainer()?.style.setProperty('z-index', '99999');
+      }
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.resCisterna = this.formDespacho.value.CisternaList.map((x: { id: any; }) => ({ id: x.id }))
+        console.log('1. Despachar cisternas', this.resCisterna);
+        console.log({ 'idPlanta': this.idPlanta, 'cisterna': this.resCisterna })
+        this.serivce.post('prod/addDespachar', { 'idPlanta': this.idPlanta, 'cisterna': this.resCisterna })
+          .subscribe({
+            next: (result) => {
+              this.visibleDespacho = false;
+              this.formDespacho.get('CisternaList')?.setValue([]);
+              this.listCond = '';
+              this.mensaje('Se registro correctamente los datos', 'success');
+              console.log('1. despachar Origen', result)
+            },
+            error: (error) => { }
+          })
+      }
+    })
+  }
+
   // ******************************************************
   // FUNCION DEL SISTEMA
   // ****************************************************** 
+
   // cargarSelectPlanta() {
   //   this.catalogo.getPlantas().subscribe({
   //     next: (resultado) => {
@@ -340,7 +411,6 @@ export class Origen implements OnInit {
         this.plantas.set(
           Array.isArray(resultado) ? resultado : []
         );
-        // console.log('PLANTAS:', this.plantas());
       },
       error: (error) => {
         this.plantas.set([]);
@@ -348,6 +418,58 @@ export class Origen implements OnInit {
       }
     });
   }
+  /* ============================================== */
+  /* IMPORTACION */
+  /* ============================================== */
+  cargarOperador(): void {
+    this.serivce.get('Prod/getOperador')
+      .subscribe({
+        next: (resultado) => {
+          console.log('3. cargarOperador=> ',resultado);
+          
+          this.operador.set(Array.isArray(resultado) ? resultado : [])
+        },
+        error: (error) => {
+          this.mensaje(error, 'error');
+        }
+      })
+  }
+
+  cargarSeleccionPais(): void {
+    this.serivce.get('Catalogo/pais')
+      .subscribe({
+        next: (resultado) => {
+          this.pais.set(Array.isArray(resultado) ? resultado : [])
+          console.log('1. Operador => ', this.operador)
+        },
+        error: (error) => {
+          this.mensaje(error, 'error');
+        }
+      })
+  }
+
+  AgregarOperador() { 
+    console.log('1. form operadro=> ',this.formOperador.value);
+    this.DataOperador = {
+      'cod_operador':this.formOperador.value.cod_operador,
+      'desc_operador':this.formOperador.value.desc_operador,
+      'obs_operador':this.formOperador.value.obs_operador,
+      'paisImpor':this.formOperador.value.paisImpor.descripcion,
+      'punto_ingreso':this.formOperador.value.punto_ingreso
+    }    
+    this.serivce.post('Prod/AddOperador', this.DataOperador)
+    .subscribe({
+      next: (resultado)=>{
+        this.visibleImportacion = false; 
+        this.cargarSeleccionPais();
+      },
+      error: (error)=>{
+        this.mensaje(error, 'error');
+      }
+    })
+  }//importacion
+
+  almacenarImportacion() { }//importacion
 
   // ******************************************************
   // FUNCION QUE PERMITE CARGAR LA TABLA DE PRODUCCION
@@ -477,33 +599,6 @@ export class Origen implements OnInit {
     if (this.sidebarVisible == true) {
       this.visible = false
     }
-  }
-
-  despacharOrigen() {
-    Swal.fire({
-      title: '🚧 Precaución 🚧',
-      icon: 'warning',
-      html: ' Desea despachar las Cisternas 🚚?  ',
-      showCancelButton: true,
-      showConfirmButton: true,
-      confirmButtonText: 'Si, estoy seguro',
-      cancelButtonText: 'No',
-      willOpen: () => {
-        Swal.getContainer()?.style.setProperty('z-index', '99999');
-      }
-    }).then((result) => {
-      if (result.isConfirmed) {
-        alert(this.idPlanta)
-        console.log(this.formDespacho.value)
-        // this.serivce.post('prod/addDespachar', idPlanta)
-        // .subscribe({
-        //   next: (result)=>{
-        //     console.log('1. despachar Origen',result)
-        //   },
-        //   error: (error)=>{}
-        // })
-      }
-    })
   }
 
   cantCisterna() {
@@ -639,6 +734,9 @@ export class Origen implements OnInit {
     switch (lugar) {
       case 'planta':
         this.visible = true;
+        break;
+      case 'importacion':
+        this.visibleImportacion = true;
         break;
       case 'despacho':
         this.visibleDespacho = true;

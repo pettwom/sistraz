@@ -22,8 +22,8 @@
     </div>
     <p-tabs [(value)]="activeIndex">
         <p-tablist>
-            <p-tab [value]="0">Local</p-tab>
-            <p-tab [value]="1">Importación</p-tab>
+            <p-tab [value]="0">LOCAL</p-tab>
+            <p-tab [value]="1">IMPORTACIÓN</p-tab>
         </p-tablist>
         <p-tabpanels>
             <p-tabpanel [value]="0">
@@ -140,9 +140,139 @@
             </p-tabpanel>
 
             <p-tabpanel [value]="1">
-                <p>
-                    Datos para la importación, solo se añadira pais, punto de ingreso
-                </p>
+                <form [formGroup]="formProduccionImportacion" (ngSubmit)="almacenarImportacion()">
+                        <div class="card flex justify-center agregar-planta">
+                            <p-select 
+                                [options]="operador()" 
+                                formControlName="operador_id" 
+                                optionLabel="codigo"
+                                [filter]="true" 
+                                filterBy="codigo" 
+                                [showClear]="true" 
+                                placeholder="Seleccione un Operador"
+                                class="w-full">
+                                <ng-template #selectedItem let-selectedOption>
+                                    @if (selectedOption) {
+                                    <div class="flex items-center gap-2">
+                                        <div>
+                                            {{ selectedOption.codigo }}
+                                        </div>
+                                    </div>
+                                    }
+                                </ng-template>
+                                <ng-template #item let-codigo>
+                                    <div class="flex items-center gap-2">
+                                        <div>
+                                            {{ operador.codigo }}
+                                        </div>
+                                    </div>
+                                </ng-template>
+                            </p-select>
+                            <p-button severity="help" pTooltip="Agregar Operador de Importador" tooltipPosition="left"
+                                (click)="showDialog('importacion')">
+                                <img src="planta_gas.ico" width="20" alt="">
+                            </p-button>
+                            <p-dialog [(visible)]="visibleImportacion" [modal]="true"
+                                [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }" [style]="{ width: '50vw' }"
+                                [draggable]="false" [resizable]="false">
+                                <ng-template #header>
+                                    <div class="inline-flex items-center justify-center gap-2 titulo_img_dialog">
+                                        <p-avatar image="planta_gas1.png" shape="circle" />
+                                        <span class="font-bold whitespace-nowrap">Nuevo Operador</span>
+                                    </div>
+                                </ng-template>
+                                <form [formGroup]="formOperador" (submit)="AgregarOperador()">
+                                    <hr style="border: 0px;margin-bottom: 10px;">
+
+                                    <p-floatlabel>
+                                        <input class="w-full" id="cod_operador" pInputText type="text"
+                                            formControlName="cod_operador"
+                                            (input)="convertirMayusculas($event, 'cod_operador')" />
+                                        <label for="cod_operador">Código Operador *</label>
+                                    </p-floatlabel>
+
+                                    <br>
+                                    <br>
+                                    <p-floatlabel>
+                                        <input class="w-full" id="desc_operador" pInputText type="text"
+                                            formControlName="desc_operador"
+                                            (input)="convertirMayusculas($event, 'desc_operador')" />
+                                        <label for="desc_operador">Descripción Operador *</label>
+                                    </p-floatlabel>
+                                    <br>
+                                    <br>
+                                    <div class="card flex justify-center">
+                                            <p-select 
+                                                [options]="pais()" 
+                                                formControlName="paisImpor" 
+                                                optionLabel="descripcion"
+                                                [showClear]="true" 
+                                                [filter]="true"
+                                                [showClear]="true"
+                                                filterBy="descripcion"
+                                                placeholder="Seleccionar Pais" 
+                                                class="w-full md:w-56" />
+
+
+<!--                                         <p-select [options]="pais" optionLabel="name" optionValue="name"
+                                            [checkmark]="true" placeholder="Seleccionar Pais" [showClear]="true"
+                                            formControlName="paisImpor" class="w-full md:w-56" /> -->
+                                    </div>
+                                    <br>
+                                    <br>
+                                    <p-floatlabel>
+                                        <input class="w-full" id="punto_ingreso" pInputText type="text"
+                                            formControlName="punto_ingreso"
+                                            (input)="convertirMayusculas($event, 'punto_ingreso')" />
+                                        <label for="punto_ingreso">Punto de Ingreso *</label>
+                                    </p-floatlabel>
+                                    <br>
+                                    <br>
+                                    <p-floatlabel>
+                                        <textarea pTextarea id="obs_operador" formControlName="obs_operador" rows="5"
+                                            cols="30" style="resize: none" class="h-full w-full"
+                                            (input)="convertirMayusculas($event,'obs_operador')"></textarea>
+                                        <label for="obs_operador">Observación</label>
+                                    </p-floatlabel>
+                                    <br>
+                                    <p-tag severity="danger" value="Los Campos requeridos estan con *" />
+                                    <hr style="border: 1px solid var(--text-link);margin-bottom: 10px;">
+                                    <p-button icon="pi pi-save" label="Crear Operador" type="submit" severity="info" />
+                                </form>
+                            </p-dialog>
+                        </div>
+                        <br>
+                        <br>
+                        <p-floatlabel>
+                            <p-inputmask mask="aaa-999999" placeholder="AAA-999999" class="h-full w-full"
+                                id="cert_produccion_impo" formControlName="nro_certificado_impo" type="text"
+                                (onBlur)="convertirMayusculas($event,'nro_certificado_impo')" />
+                            <label for="cert_produccion_impo">N° Certificado</label>
+                        </p-floatlabel>
+                        <br>
+                        <br>
+                        <p-floatlabel>
+                            <input class="w-full" id="volumen_produccion_impo" pInputText type="number"
+                                formControlName="vol_total_impo" />
+                            <label for="volumen_produccion_impo">Volumen Total (Tn)</label>
+                        </p-floatlabel>
+
+                        <br>
+                        <div class="card flex justify-center">
+                            <p-datepicker panelStyleClass="texto-calendario" formControlName="fecha_muestra_impo"
+                                [inline]="true" [showWeek]="true" />
+                        </div>
+                        <br>
+                        <p-floatlabel>
+                            <textarea pTextarea id="observacion_impo" formControlName="observacion_impo" rows="5" cols="30"
+                                style="resize: none" class="h-full w-full"></textarea>
+                            <label for="observacion_impo">Observación</label>
+                        </p-floatlabel>
+
+                        <hr style="border: 1px solid var(--border-color);margin-bottom: 10px;">
+
+                        <p-button icon="pi pi-save" label="Guardar registro" type="submit" severity="info" />
+                    </form>
             </p-tabpanel>
         </p-tabpanels>
     </p-tabs>
@@ -277,7 +407,7 @@
                         }
                         @else
                         {
-                        <p-tag severity="success" value="{{produccion.estado}}" pTooltip="Registrar Despacho"
+                        <p-tag severity="success" value="SIN ACCIÓN" pTooltip="Registrar Despacho"
                             tooltipPosition="top" (click)="showDialog('despacho', produccion.idPlanta )"></p-tag>
                         }
                     </td>
@@ -313,12 +443,12 @@
                     <i class="pi pi-minus"></i>
                 </ng-template>
                 <p-tab value="0">
-                    <p-avatar image="local.png" shape="circle" />
-                    <span class="font-bold whitespace-nowrap">local</span>
+                    <p-avatar image="images/cisterna.png" shape="circle" />
+                    <span class="font-bold whitespace-nowrap">Cisterna</span>
                 </p-tab>
                 <p-tab value="1">
-                    <p-avatar image="importacion.png" shape="circle" />
-                    <span class="font-bold whitespace-nowrap">Importación</span>
+                    <p-avatar image="images/ducto.jpg" shape="circle" />
+                    <span class="font-bold whitespace-nowrap">Ducto</span>
                 </p-tab>
 
                 <ng-template #nexticon>
@@ -329,9 +459,14 @@
                 <p-tabpanel value="0">
                     <form [formGroup]="formDespacho" (ngSubmit)="despacharOrigen()">
                         <div class="card flex justify-center">
-                            <p-multiselect [options]="cisterna_list" formControlName="CisternaList"
-                                (onChange)="verListado()" placeholder="Seleccionar Cisterna" optionLabel="conductor"
-                                display="chip" styleClass="w-full md:w-80" />
+                            <p-multiselect 
+                                [options]="cisterna_list" 
+                                formControlName="CisternaList"
+                                (onChange)="verListado()" 
+                                placeholder="Seleccionar Cisterna" 
+                                optionLabel="conductor"
+                                display="chip" 
+                                styleClass="w-full md:w-80" />
                         </div>
                         <p-divider type="dashed" />
                         <h3>Datos Seleccionados</h3>
