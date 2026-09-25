@@ -28,27 +28,31 @@
 :host ::ng-deep .texto-calendario .p-datepicker,
 :host ::ng-deep .texto-calendario .p-inputtext,
 :host ::ng-deep .texto-calendario * {
-    font-size: 0.75rem !important; /* Prueba un valor drástico como 0.75rem para notar el cambio */
+    font-size: 0.75rem !important;
+    /* Prueba un valor drástico como 0.75rem para notar el cambio */
     /* width: 100%;
     height: 100%; */
 }
 
-:host ::ng-deep .p-datepicker-today > .p-datepicker-day {
+:host ::ng-deep .p-datepicker-today>.p-datepicker-day {
     background-color: var(--bg-background);
 }
 
 :host ::ng-deep .texto-calendario .p-datepicker {
     transform: scale(0.1);
-    transform-origin: top left; /* Evita desalineaciones al encogerse */
+    transform-origin: top left;
+    /* Evita desalineaciones al encogerse */
 }
 
-:host ::ng-deep .p-step-active .p-step-number{
-    border: 1px solid var(--text-link)!important;
-    color:var(--text-link)!important;
+:host ::ng-deep .p-step-active .p-step-number {
+    border: 1px solid var(--text-link) !important;
+    color: var(--text-link) !important;
 }
-:host ::ng-deep .p-step-active .p-step-title{
-    color:var(--text-link)!important;
+
+:host ::ng-deep .p-step-active .p-step-title {
+    color: var(--text-link) !important;
 }
+
 .datos-cisterna {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -158,12 +162,9 @@
 
     z-index: 2;
 
-    box-shadow: 0 0 0 5px
-        color-mix(
-            in srgb,
+    box-shadow: 0 0 0 5px color-mix(in srgb,
             var(--p-primary-color) 15%,
-            transparent
-        );
+            transparent);
 }
 
 .linea {
@@ -302,11 +303,9 @@
     border-radius: 10px;
 
     background:
-        color-mix(
-            in srgb,
+        color-mix(in srgb,
             var(--p-primary-color) 12%,
-            transparent
-        );
+            transparent);
 
     color: var(--p-primary-color);
 
@@ -462,7 +461,17 @@
     }
 }
 
-
+:host ::ng-deep .mascara_cre .p-inputtext {
+    width: 100%!important;
+}
+.fieldset-agregar{
+    display: flex;
+    flex-direction: column;
+}
+:host ::ng-deep .p-fieldset-content{
+    display: flex!important;
+    gap:10px!important;
+}
 /* ============================= */
 /* RESPONSIVE */
 /* ============================= */

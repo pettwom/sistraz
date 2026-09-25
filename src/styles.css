@@ -288,14 +288,14 @@ p-table {
   background: var(--table-head) !important;
   color: var(--text-white) !important;
   border: 1px solid var(--border-color);
-  font-size: clamp(0.3rem, calc(0.3rem + 0.3vw), 1rem);
+  font-size: clamp(0.3rem, calc(0.6rem + 0.3vw), 1rem);
 }
 
 .tabla-personalizada .p-datatable-tbody>tr>td {
   background: var(--table-body) !important;
   color: var(--menu-link) !important;
   border: 1px solid var(--border-color);
-  font-size: clamp(0.3rem, calc(0.3rem + 0.3vw), 1rem);
+  font-size: clamp(0.3rem, calc(0.6rem + 0.3vw), 1rem);
 }
 
 .p-datatable-tbody>tr.p-datatable-row-selected>td {

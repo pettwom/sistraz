@@ -135,7 +135,7 @@ export class Origen implements OnInit {
   operador_id: number = 0;//importacion
   operador = signal<SelectOption[]>([]);//importacion
   pais = signal<SelectOption[]>([]);//importacion
-  DataOperador: {}={};
+  DataOperador: {} = {};
 
   constructor(
     private fb: FormBuilder,
@@ -425,8 +425,8 @@ export class Origen implements OnInit {
     this.serivce.get('Prod/getOperador')
       .subscribe({
         next: (resultado) => {
-          console.log('3. cargarOperador=> ',resultado);
-          
+          console.log('3. cargarOperador=> ', resultado);
+
           this.operador.set(Array.isArray(resultado) ? resultado : [])
         },
         error: (error) => {
@@ -448,28 +448,65 @@ export class Origen implements OnInit {
       })
   }
 
-  AgregarOperador() { 
-    console.log('1. form operadro=> ',this.formOperador.value);
+  AgregarOperador() {
+    console.log('1. form operadro=> ', this.formOperador.value);
     this.DataOperador = {
-      'cod_operador':this.formOperador.value.cod_operador,
-      'desc_operador':this.formOperador.value.desc_operador,
-      'obs_operador':this.formOperador.value.obs_operador,
-      'paisImpor':this.formOperador.value.paisImpor.descripcion,
-      'punto_ingreso':this.formOperador.value.punto_ingreso
-    }    
+      'cod_operador': this.formOperador.value.cod_operador,
+      'desc_operador': this.formOperador.value.desc_operador,
+      'obs_operador': this.formOperador.value.obs_operador,
+      'paisImpor': this.formOperador.value.paisImpor.descripcion,
+      'punto_ingreso': this.formOperador.value.punto_ingreso
+    }
     this.serivce.post('Prod/AddOperador', this.DataOperador)
-    .subscribe({
-      next: (resultado)=>{
-        this.visibleImportacion = false; 
-        this.cargarSeleccionPais();
-      },
-      error: (error)=>{
-        this.mensaje(error, 'error');
-      }
-    })
+      .subscribe({
+        next: (resultado) => {
+          this.mensaje('Se registro correctamente el Operador', 'success');
+          this.visibleImportacion = false;
+          this.cargarSeleccionPais();
+        },
+        error: (error) => {
+          this.mensaje(error, 'error');
+        }
+      })
   }//importacion
 
-  almacenarImportacion() { }//importacion
+  almacenarImportacion() {
+    const form = this.formProduccionImportacion.value;
+    const dto = {
+      plantaId: form.operador_id.idOperador,
+      nroCertificado: form.nro_certificado_impo,
+      volTotal: form.vol_total_impo,
+      fechaMuestra: form.fecha_muestra_impo,
+      observacion: form.observacion_impo
+    }
+    console.log(dto);
+    Swal.fire({
+      title: '🚧 Esta seguro? 🚧',
+      icon: 'warning',
+      html: 'Esta seguro de iniciar la producción?',
+      showCancelButton: true,
+      showConfirmButton: true,
+      confirmButtonText: 'Si, estoy seguro',
+      cancelButtonText: 'No',
+      willOpen: () => {
+        Swal.getContainer()?.style.setProperty('z-index', '99999');
+      }
+    }).then((respuesta) => {
+      if (respuesta.isConfirmed) {
+        this.serivce.post('Prod/addProd', dto)
+          .subscribe({
+            next: (resultado) => {
+              this.mensaje('Se registro Correctamente','success');
+              console.log(resultado)
+            },
+            error: (error) => {
+              this.mensaje(error.message, 'error');
+            }
+          })
+      }
+    })
+
+  }//importacion
 
   // ******************************************************
   // FUNCION QUE PERMITE CARGAR LA TABLA DE PRODUCCION
