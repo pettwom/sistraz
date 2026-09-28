@@ -472,6 +472,16 @@
     display: flex!important;
     gap:10px!important;
 }
+:host ::ng-deep .p-motion{
+max-width: 82% !important;
+position: relative;
+left:65px;
+}
+
+:host ::ng-deep .p-datepicker .p-motion{
+max-width: 82% !important;
+position: static;
+}
 /* ============================= */
 /* RESPONSIVE */
 /* ============================= */

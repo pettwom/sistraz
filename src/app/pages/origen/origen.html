@@ -30,80 +30,37 @@
 
                 <p-card header="">
                     <form [formGroup]="formProduccion" (ngSubmit)="almacenar()">
-                        <div class="card flex justify-center ">
-                            <p-fieldset legend="Agregar Planta" class="w-full fieldset-agregar">
-                                <p-select [options]="plantas()" formControlName="planta_id" optionLabel="nombre"
-                                    [filter]="true" filterBy="codigo" [showClear]="true"
-                                    placeholder="Seleccione una planta" class="w-full">
-                                    <ng-template #selectedItem let-selectedOption>
-                                        @if (selectedOption) {
-                                        <div class="flex items-center gap-2">
-                                            <div>
-                                                {{ selectedOption.codigo }}
-                                            </div>
+                        <br>
+                        <div class="card flex justify-center">
+
+                            <p-select [options]="plantas()" formControlName="planta_id" optionLabel="denominacion"
+                                [filter]="true" filterBy="codigo" [showClear]="true" placeholder="Seleccione una planta"
+                                class="w-full select-overflow">
+                                <ng-template #selectedItem let-selectedOption>
+                                    @if (selectedOption) {
+                                    <div class="flex items-center gap-2">
+                                        <div>
+                                            {{ selectedOption.denominacion }}
                                         </div>
-                                        }
-                                    </ng-template>
-                                    <ng-template #item let-plantas>
-                                        <div class="flex items-center gap-2">
-                                            <div>
-                                                {{ plantas.codigo }}
-                                            </div>
+                                    </div>
+                                    }
+                                </ng-template>
+                                <ng-template #item let-plantas>
+                                    <div class="flex items-center gap-2">
+                                        <div>
+                                            {{ plantas.denominacion }}
                                         </div>
-                                    </ng-template>
-                                </p-select>
-                                <p-button severity="help" pTooltip="Agregar Planta / Importador" tooltipPosition="left"
-                                    (click)="showDialog('planta')">
-                                    <img src="planta_gas.ico" width="20" alt="">
-                                </p-button>
-                            </p-fieldset>
-                            <p-dialog [(visible)]="visible" [modal]="true"
-                                [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }" [style]="{ width: '50vw' }"
-                                [draggable]="false" [resizable]="false">
-                                <ng-template #header>
-                                    <div class="inline-flex items-center justify-center gap-2 titulo_img_dialog">
-                                        <p-avatar image="planta_gas1.png" shape="circle" />
-                                        <span class="font-bold whitespace-nowrap">Nueva Planta</span>
                                     </div>
                                 </ng-template>
-                                <form [formGroup]="formPlanta" (submit)="AgregarPlanta()">
-                                    <hr style="border: 0px;margin-bottom: 10px;">
-                                    <p-floatlabel>
+                            </p-select>
+                        </div>
+                        <br>
+                        <br>
 
-                                        <input class="w-full" id="cod_planta" pInputText type="text"
-                                            formControlName="cod_planta"
-                                            (input)="convertirMayusculas($event, 'cod_planta')" />
-                                        <label for="cod_planta">Código Planta *</label>
-                                    </p-floatlabel>
-                                    <br>
-                                    <br>
-                                    <p-floatlabel>
-                                        <input class="w-full" id="desc_planta" pInputText type="text"
-                                            formControlName="desc_planta"
-                                            (input)="convertirMayusculas($event, 'desc_planta')" />
-                                        <label for="desc_planta">Descripción Planta *</label>
-                                    </p-floatlabel>
-                                    <br>
-                                    <br>
-                                    <div class="card flex justify-center">
-                                        <p-select [options]="departamento" optionLabel="name" optionValue="name"
-                                            [checkmark]="true" placeholder="Seleccionar Departamento" [showClear]="true"
-                                            formControlName="ciudad" class="w-full md:w-56" />
-                                    </div>
-                                    <br>
-                                    <br>
-                                    <p-floatlabel>
-                                        <textarea pTextarea id="obs_planta" formControlName="obs_planta" rows="5"
-                                            cols="30" style="resize: none" class="h-full w-full"
-                                            (input)="convertirMayusculas($event,'obs_planta')"></textarea>
-                                        <label for="obs_planta">Observación</label>
-                                    </p-floatlabel>
-                                    <br>
-                                    <p-tag severity="danger" value="Los Campos requeridos estan con *" />
-                                    <hr style="border: 1px solid var(--text-link);margin-bottom: 10px;">
-                                    <p-button icon="pi pi-save" label="Crear Planta" type="submit" severity="info" />
-                                </form>
-                            </p-dialog>
+                        <div class="card flex justify-center">
+                            <p-select [options]="departamento" optionLabel="name" optionValue="name" [checkmark]="true"
+                                placeholder="Seleccionar Departamento" [showClear]="true" formControlName="ciudad"
+                                class="w-full md:w-56" />
                         </div>
                         <br>
                         <br>
@@ -145,96 +102,45 @@
                 <p-card>
                     <form [formGroup]="formProduccionImportacion" (ngSubmit)="almacenarImportacion()">
                         <div class="card flex justify-center">
-                            <p-fieldset legend="Agregar Operador" class="w-full fieldset-agregar">
-
-                                <p-select [options]="operador()" formControlName="operador_id" optionLabel="codigo"
-                                    [filter]="true" filterBy="codigo" [showClear]="true"
-                                    placeholder="Seleccione un Operador" class="w-full">
-                                    <ng-template #selectedItem let-selectedOption>
-                                        @if (selectedOption) {
-                                        <div class="flex items-center gap-2">
-                                            <div>
-                                                {{ selectedOption.codigo }}
-                                            </div>
+                            <p-select 
+                                [options]="operador()" 
+                                formControlName="operador_id" 
+                                optionLabel="denominacion"
+                                [filter]="true" filterBy="denominacion" [showClear]="true"
+                                placeholder="Seleccione un Operador" class="w-full">
+                                <ng-template #selectedItem let-selectedOption>
+                                    @if (selectedOption) {
+                                    <div class="flex items-center gap-2">
+                                        <div>
+                                            {{ selectedOption.denominacion }}
                                         </div>
-                                        }
-                                    </ng-template>
-                                    <ng-template #item let-opcion>
-                                        <div class="flex items-center gap-2">
-                                            <div>
-                                                {{ opcion.codigo }}
-                                            </div>
+                                    </div>
+                                    }
+                                </ng-template>
+                                <ng-template #item let-opcion>
+                                    <div class="flex items-center gap-2">
+                                        <div>
+                                            {{ opcion.denominacion }}
                                         </div>
-                                    </ng-template>
-                                </p-select>
-                                <p-button severity="info" pTooltip="Agregar Operador de Importador"
-                                    tooltipPosition="left" (click)="showDialog('importacion')">
-                                    <img src="planta_gas.ico" width="20" alt="">
-                                </p-button>
-                            </p-fieldset>
-                            <p-dialog [(visible)]="visibleImportacion" [modal]="true"
-                                [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }" [style]="{ width: '50vw' }"
-                                [draggable]="false" [resizable]="false">
-                                <ng-template #header>
-                                    <div class="inline-flex items-center justify-center gap-2 titulo_img_dialog">
-                                        <p-avatar image="planta_gas1.png" shape="circle" />
-                                        <span class="font-bold whitespace-nowrap">Nuevo Operador</span>
                                     </div>
                                 </ng-template>
-                                <form [formGroup]="formOperador" (submit)="AgregarOperador()">
-                                    <hr style="border: 0px;margin-bottom: 10px;">
-
-                                    <p-floatlabel>
-                                        <input class="w-full" id="cod_operador" pInputText type="text"
-                                            formControlName="cod_operador"
-                                            (input)="convertirMayusculas($event, 'cod_operador')" />
-                                        <label for="cod_operador">Código Operador *</label>
-                                    </p-floatlabel>
-
-                                    <br>
-                                    <br>
-                                    <p-floatlabel>
-                                        <input class="w-full" id="desc_operador" pInputText type="text"
-                                            formControlName="desc_operador"
-                                            (input)="convertirMayusculas($event, 'desc_operador')" />
-                                        <label for="desc_operador">Descripción Operador *</label>
-                                    </p-floatlabel>
-                                    <br>
-                                    <br>
-                                    <div class="card flex justify-center">
-                                        <p-select [options]="pais()" formControlName="paisImpor"
-                                            optionLabel="descripcion" [showClear]="true" [filter]="true"
-                                            [showClear]="true" filterBy="descripcion" placeholder="Seleccionar Pais"
-                                            class="w-full md:w-56" />
-
-
-                                        <!--                                         <p-select [options]="pais" optionLabel="name" optionValue="name"
-                                            [checkmark]="true" placeholder="Seleccionar Pais" [showClear]="true"
-                                            formControlName="paisImpor" class="w-full md:w-56" /> -->
-                                    </div>
-                                    <br>
-                                    <br>
-                                    <p-floatlabel>
-                                        <input class="w-full" id="punto_ingreso" pInputText type="text"
-                                            formControlName="punto_ingreso"
-                                            (input)="convertirMayusculas($event, 'punto_ingreso')" />
-                                        <label for="punto_ingreso">Punto de Ingreso *</label>
-                                    </p-floatlabel>
-                                    <br>
-                                    <br>
-                                    <p-floatlabel>
-                                        <textarea pTextarea id="obs_operador" formControlName="obs_operador" rows="5"
-                                            cols="30" style="resize: none" class="h-full w-full"
-                                            (input)="convertirMayusculas($event,'obs_operador')"></textarea>
-                                        <label for="obs_operador">Observación</label>
-                                    </p-floatlabel>
-                                    <br>
-                                    <p-tag severity="danger" value="Los Campos requeridos estan con *" />
-                                    <hr style="border: 1px solid var(--text-link);margin-bottom: 10px;">
-                                    <p-button icon="pi pi-save" label="Crear Operador" type="submit" severity="info" />
-                                </form>
-                            </p-dialog>
+                            </p-select>
                         </div>
+                        <br>
+                        <div class="card flex justify-center">
+                            <p-select [options]="pais()" formControlName="paisImpor" optionLabel="descripcion"
+                                [showClear]="true" [filter]="true" [showClear]="true" filterBy="descripcion"
+                                placeholder="Seleccionar Pais" class="w-full md:w-56" />
+                        </div>
+                        <br>
+                        <br>
+                        <p-floatlabel>
+                            <input class="w-full" id="punto_ingreso" pInputText type="text"
+                                formControlName="punto_ingreso"
+                                (input)="convertirMayusculas($event, 'punto_ingreso')" />
+                            <label for="punto_ingreso">Punto de Ingreso *</label>
+                        </p-floatlabel>
+
                         <br>
                         <br>
                         <p-floatlabel>
@@ -259,7 +165,8 @@
                         <br>
                         <p-floatlabel>
                             <textarea pTextarea id="observacion_impo" formControlName="observacion_impo" rows="5"
-                                cols="30" style="resize: none" class="h-full w-full"></textarea>
+                                cols="30" style="resize: none" class="h-full w-full">
+                                </textarea>
                             <label for="observacion_impo">Observación</label>
                         </p-floatlabel>
 
@@ -297,13 +204,8 @@
             'volTotal',
             'pais',
             'puntoIngreso',
-            'estado']" 
-            selectionMode="single" 
-            [(selection)]="selectedCustomers" 
-            dataKey="lote"
-            [tableStyle]="{ 'min-width': '50rem'}" 
-            class="tabla-personalizada" 
-            [rows]="10" [paginator]="true">
+            'estado']" selectionMode="single" [(selection)]="selectedCustomers" dataKey="lote"
+            [tableStyle]="{ 'min-width': '50rem'}" class="tabla-personalizada" [rows]="10" [paginator]="true">
             <ng-template #caption>
                 <p-iconfield iconPosition="left">
                     <p-inputicon>

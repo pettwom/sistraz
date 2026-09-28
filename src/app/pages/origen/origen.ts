@@ -1,4 +1,4 @@
-import { Component, OnInit, signal, ViewChild } from '@angular/core';
+import { Component, inject, OnInit, signal, ViewChild } from '@angular/core';
 import { ImportsModule } from '../../imports';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -10,6 +10,7 @@ import * as XLSX from 'xlsx';
 import { CatalogoService, SelectOption } from '../../services/catalogo.service';
 import { PrimeNG } from 'primeng/config';
 import { MessageService } from 'primeng/api';
+import { MensajesService } from '../../services/mensajes.service';
 
 interface ExportColumn {
   title: string;
@@ -68,6 +69,11 @@ interface PaisOption {
   abreviacion3: string | null;
 }
 
+interface selectOption{
+  idDenominacion: number,
+  denominacion: string
+}
+
 @Component({
   selector: 'app-origen',
   imports: [ImportsModule],
@@ -79,14 +85,15 @@ export class Origen implements OnInit {
   // ******************************************************
   // DECLARACOIN DE VARIABLES
   // ******************************************************
+  private readonly mensajeSwal = inject(MensajesService);
   sidebarVisible: boolean = false;
   activeIndex: number = 0;
   date: Date[] | undefined;
   vol_total: number = 0;
   nro_certificado: string = '';
   // plantas: SelectOption[] = [];
-  plantas = signal<SelectOption[]>([]);
-  selectedCountry: SelectOption | null = null;
+  plantas = signal<selectOption[]>([]);
+  selectedCountry: selectOption | null = null;
   formProduccion: FormGroup;
   formPlanta: FormGroup;
   formDespacho: FormGroup;
@@ -136,7 +143,7 @@ export class Origen implements OnInit {
   operador = signal<SelectOption[]>([]);//importacion
   pais = signal<SelectOption[]>([]);//importacion
   DataOperador: {} = {};
-
+  
   constructor(
     private fb: FormBuilder,
     private router: Router,
@@ -155,16 +162,20 @@ export class Origen implements OnInit {
       planta_id: ['', Validators.required],
       nro_certificado: ['', Validators.required],
       vol_total: ['', Validators.required],
+      ciudad:['',Validators.required],
       fecha_muestra: ['', Validators.required],
       observacion: ['']
     })
     this.formProduccionImportacion = this.fb.group({
       operador_id: ['', Validators.required],
+      paisImpor:['',Validators.required],
+      punto_ingreso:['',Validators.required],
       nro_certificado_impo: ['', Validators.required],
       vol_total_impo: ['', Validators.required],
       fecha_muestra_impo: ['', Validators.required],
       observacion_impo: ['']
     })
+
     this.formOperador = this.fb.group({
       cod_operador: ['', Validators.required],
       desc_operador: ['', Validators.required],
@@ -406,26 +417,24 @@ export class Origen implements OnInit {
   //   })
   // }
   cargarSelectPlanta(): void {
-    this.catalogo.getPlantas().subscribe({
-      next: (resultado) => {
-        this.plantas.set(
-          Array.isArray(resultado) ? resultado : []
-        );
+    this.serivce.get("Prod/getPlanta").subscribe({
+      next: (resultado)=>{
+        this.plantas.set(Array.isArray(resultado)?resultado:[])
       },
-      error: (error) => {
-        this.plantas.set([]);
-        this.mensaje(error, 'error');
+      error: (error)=>{
+        this.mensajeSwal.mensaje('Error','error',error);
       }
-    });
+    })
+
+
   }
   /* ============================================== */
   /* IMPORTACION */
   /* ============================================== */
   cargarOperador(): void {
-    this.serivce.get('Prod/getOperador')
+    this.serivce.get('Prod/getImpo')
       .subscribe({
         next: (resultado) => {
-          console.log('3. cargarOperador=> ', resultado);
 
           this.operador.set(Array.isArray(resultado) ? resultado : [])
         },
@@ -473,7 +482,9 @@ export class Origen implements OnInit {
   almacenarImportacion() {
     const form = this.formProduccionImportacion.value;
     const dto = {
-      plantaId: form.operador_id.idOperador,
+      plantaId: form.operador_id.idEntidad,
+      paisImpor: form.paisImpor.idPais,
+      puntoIngreso: form.punto_ingreso,
       nroCertificado: form.nro_certificado_impo,
       volTotal: form.vol_total_impo,
       fechaMuestra: form.fecha_muestra_impo,
@@ -492,8 +503,10 @@ export class Origen implements OnInit {
         Swal.getContainer()?.style.setProperty('z-index', '99999');
       }
     }).then((respuesta) => {
+
       if (respuesta.isConfirmed) {
-        this.serivce.post('Prod/addProd', dto)
+        console.log(dto)
+        /* this.serivce.post('Prod/addProd', dto)
           .subscribe({
             next: (resultado) => {
               this.mensaje('Se registro Correctamente','success');
@@ -502,7 +515,7 @@ export class Origen implements OnInit {
             error: (error) => {
               this.mensaje(error.message, 'error');
             }
-          })
+          }) */
       }
     })
 
@@ -547,13 +560,12 @@ export class Origen implements OnInit {
         if (resultado.isConfirmed) {
           const form = this.formProduccion.value;
           const dto = {
-            plantaId: form.planta_id.idPlanta,
+            plantaId: form.planta_id.idEntidad,
             nroCertificado: form.nro_certificado,
             volTotal: form.vol_total,
             fechaMuestra: form.fecha_muestra,
             observacion: form.observacion
           }
-
           this.serivce.post("prod/addProd", dto).subscribe(
             {
               next: (resultado) => {
