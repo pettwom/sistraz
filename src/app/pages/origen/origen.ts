@@ -11,6 +11,7 @@ import { CatalogoService, SelectOption } from '../../services/catalogo.service';
 import { PrimeNG } from 'primeng/config';
 import { MessageService } from 'primeng/api';
 import { MensajesService } from '../../services/mensajes.service';
+import { endWith } from 'rxjs';
 
 interface ExportColumn {
   title: string;
@@ -69,9 +70,13 @@ interface PaisOption {
   abreviacion3: string | null;
 }
 
-interface selectOption{
+interface selectOption {
   idDenominacion: number,
   denominacion: string
+}
+interface CertificadosOctano {
+  VALOR_LOTE: string,
+  ID_ENTIDAD: number
 }
 
 @Component({
@@ -143,7 +148,14 @@ export class Origen implements OnInit {
   operador = signal<SelectOption[]>([]);//importacion
   pais = signal<SelectOption[]>([]);//importacion
   DataOperador: {} = {};
-  
+  list: any;
+  volPlanta: any;
+  totalVol: number = 0;
+  certificados: CertificadosOctano[] = []
+  entidad: any;
+  ent: any;
+
+
   constructor(
     private fb: FormBuilder,
     private router: Router,
@@ -162,14 +174,14 @@ export class Origen implements OnInit {
       planta_id: ['', Validators.required],
       nro_certificado: ['', Validators.required],
       vol_total: ['', Validators.required],
-      ciudad:['',Validators.required],
+      ciudad: ['', Validators.required],
       fecha_muestra: ['', Validators.required],
       observacion: ['']
     })
     this.formProduccionImportacion = this.fb.group({
       operador_id: ['', Validators.required],
-      paisImpor:['',Validators.required],
-      punto_ingreso:['',Validators.required],
+      paisImpor: ['', Validators.required],
+      punto_ingreso: ['', Validators.required],
       nro_certificado_impo: ['', Validators.required],
       vol_total_impo: ['', Validators.required],
       fecha_muestra_impo: ['', Validators.required],
@@ -215,6 +227,50 @@ export class Origen implements OnInit {
       .subscribe(valor => {
         this.actualizarCisternas(Number(valor));
       });
+  }
+
+  changeEntidad(event:any):void{
+    console.log(event.value.idEntidad);
+    this.entidad = event.value.idEntidad;
+    
+    this.cargarCertiicados(this.entidad);
+  }
+/*   changeEntidad():void{
+    this.entidad = this.formProduccionImportacion.get('operador_id')?.value?.idEntidad
+    this.cargarCertiicados();
+  } */
+
+  cargarCertiicados(entidad: number) {
+    console.log('this.entidad = > ',entidad);
+    
+    const hoy = new Date();
+    const hasta = [
+      hoy.getFullYear(),
+      String(hoy.getMonth() + 1).padStart(2, '0'),
+      String(hoy.getDate()).padStart(2, '0')
+    ].join('-');
+    // this.ent = this.changeEntidad();/*  */
+    // console.log('==== entidad === ',this.ent);
+    
+    this.serivce.get(`Calidad/certificados?desde=2006-01-01&hasta=${hasta}&entidad=${entidad}`)
+      .subscribe({
+        next: (resultado) => {
+          console.log(resultado);
+          
+          if (!Array.isArray(resultado)) {
+            console.error('Se esperaba un arreglo:', resultado);
+            return;
+          }
+
+          this.certificados = resultado.map((x: CertificadosOctano) => ({
+            VALOR_LOTE: x.VALOR_LOTE,
+            ID_ENTIDAD: x.ID_ENTIDAD
+          }))
+          // console.log('1. CERTIFICADOS => ',this.certificados);/*  */
+          
+        },
+        error: (error) => { }
+      })
   }
 
   get codigoTrazabilidad(): string {
@@ -319,11 +375,23 @@ export class Origen implements OnInit {
     })
   }
 
-  verListado() {
-    this.listadoConductores = this.formDespacho.value.CisternaList ?? [];
-    // console.log(this.listadoConductores);
+  verListado(seleccionadas: { conductor: string }[] = []): void {
+    this.listadoConductores = seleccionadas;
+    this.listCond = seleccionadas.map(x => ({ conductor: x.conductor }));
 
-    this.listCond = this.listadoConductores.map((x: { conductor: string; }) => ({ conductor: x.conductor }))
+    this.list = seleccionadas.reduce((total, x) => {
+      const textoVolumen = x.conductor.split('VOLUMEN:')[1]?.trim();
+      const volumen = Number(textoVolumen);
+      this.totalVol = total + (Number.isFinite(volumen) ? volumen : 0);
+      if (this.volPlanta <= this.totalVol) {
+        this.formDespacho.get('CisternaList')?.disable();
+      } else {
+        this.formDespacho.get('CisternaList')?.enable();
+      }
+      return this.totalVol;
+    }, 0);
+
+    // console.log('Volumen total:', this.list);/*  */
   }
 
   cisternasList() {
@@ -331,9 +399,12 @@ export class Origen implements OnInit {
       .subscribe({
         next: (resultado) => {
           this.cisterna = resultado as Cisterna[];
-          console.log('3.', this.cisterna);
+          // console.log('3.', this.cisterna);
 
           this.cisterna_list = this.cisterna.map(x => ({ conductor: ' PLACA: ' + x.placa + ' - VOLUMEN: ' + x.volBbls, id: x.id }))
+          // console.log(this.cisterna_list);
+          // console.log(this.cisterna);
+
         },
         error: (error) => {
           this.mensaje(error, 'error');
@@ -385,16 +456,18 @@ export class Origen implements OnInit {
     }).then((result) => {
       if (result.isConfirmed) {
         this.resCisterna = this.formDespacho.value.CisternaList.map((x: { id: any; }) => ({ id: x.id }))
-        console.log('1. Despachar cisternas', this.resCisterna);
-        console.log({ 'idPlanta': this.idPlanta, 'cisterna': this.resCisterna })
+        // console.log('1. Despachar cisternas', this.resCisterna);
+        // console.log({ 'idPlanta': this.idPlanta, 'cisterna': this.resCisterna })
         this.serivce.post('prod/addDespachar', { 'idPlanta': this.idPlanta, 'cisterna': this.resCisterna })
           .subscribe({
             next: (result) => {
+              // console.log('==>', result);
+
               this.visibleDespacho = false;
               this.formDespacho.get('CisternaList')?.setValue([]);
               this.listCond = '';
               this.mensaje('Se registro correctamente los datos', 'success');
-              console.log('1. despachar Origen', result)
+              // console.log('1. despachar Origen', result)
             },
             error: (error) => { }
           })
@@ -418,11 +491,11 @@ export class Origen implements OnInit {
   // }
   cargarSelectPlanta(): void {
     this.serivce.get("Prod/getPlanta").subscribe({
-      next: (resultado)=>{
-        this.plantas.set(Array.isArray(resultado)?resultado:[])
+      next: (resultado) => {
+        this.plantas.set(Array.isArray(resultado) ? resultado : [])
       },
-      error: (error)=>{
-        this.mensajeSwal.mensaje('Error','error',error);
+      error: (error) => {
+        this.mensajeSwal.mensaje('Error', 'error', error);
       }
     })
 
@@ -437,6 +510,8 @@ export class Origen implements OnInit {
         next: (resultado) => {
 
           this.operador.set(Array.isArray(resultado) ? resultado : [])
+          // console.log('this.operador= ',this.operador);
+          
         },
         error: (error) => {
           this.mensaje(error, 'error');
@@ -449,7 +524,7 @@ export class Origen implements OnInit {
       .subscribe({
         next: (resultado) => {
           this.pais.set(Array.isArray(resultado) ? resultado : [])
-          console.log('1. Operador => ', this.operador)
+          // console.log('1. Operador => ', this.operador)
         },
         error: (error) => {
           this.mensaje(error, 'error');
@@ -458,7 +533,6 @@ export class Origen implements OnInit {
   }
 
   AgregarOperador() {
-    console.log('1. form operadro=> ', this.formOperador.value);
     this.DataOperador = {
       'cod_operador': this.formOperador.value.cod_operador,
       'desc_operador': this.formOperador.value.desc_operador,
@@ -466,6 +540,7 @@ export class Origen implements OnInit {
       'paisImpor': this.formOperador.value.paisImpor.descripcion,
       'punto_ingreso': this.formOperador.value.punto_ingreso
     }
+    
     this.serivce.post('Prod/AddOperador', this.DataOperador)
       .subscribe({
         next: (resultado) => {
@@ -483,14 +558,17 @@ export class Origen implements OnInit {
     const form = this.formProduccionImportacion.value;
     const dto = {
       plantaId: form.operador_id.idEntidad,
-      paisImpor: form.paisImpor.idPais,
+      descripcion: form.operador_id.denominacion,
+      paisImpor: form.paisImpor.descripcion,
       puntoIngreso: form.punto_ingreso,
       nroCertificado: form.nro_certificado_impo,
+      departamento: form.ciudad,
       volTotal: form.vol_total_impo,
       fechaMuestra: form.fecha_muestra_impo,
-      observacion: form.observacion_impo
+      observacion: form.observacion_impo,
+      tipo: 2 //importacion
     }
-    console.log(dto);
+    // console.log(dto);
     Swal.fire({
       title: '🚧 Esta seguro? 🚧',
       icon: 'warning',
@@ -505,17 +583,19 @@ export class Origen implements OnInit {
     }).then((respuesta) => {
 
       if (respuesta.isConfirmed) {
-        console.log(dto)
-        /* this.serivce.post('Prod/addProd', dto)
+        // console.log(dto)
+        this.serivce.post('Prod/addProd', dto)
           .subscribe({
             next: (resultado) => {
-              this.mensaje('Se registro Correctamente','success');
-              console.log(resultado)
+              this.mensaje('Se registro Correctamente', 'success');
+              this.sidebarVisible = false;
+              this.cargarProduccion();
+              // console.log(resultado)
             },
             error: (error) => {
               this.mensaje(error.message, 'error');
             }
-          }) */
+          })
       }
     })
 
@@ -561,18 +641,23 @@ export class Origen implements OnInit {
           const form = this.formProduccion.value;
           const dto = {
             plantaId: form.planta_id.idEntidad,
+            descripcion: form.planta_id.denominacion,
             nroCertificado: form.nro_certificado,
             volTotal: form.vol_total,
             fechaMuestra: form.fecha_muestra,
-            observacion: form.observacion
+            departamento: form?.ciudad,
+            observacion: form.observacion,
+            tipo: 1 //local
           }
+          // console.log(dto);
+
           this.serivce.post("prod/addProd", dto).subscribe(
             {
               next: (resultado) => {
                 // console.log(resultado);
                 this.cargarProduccion();
                 this.sidebarVisible = false;
-                this.mensaje('Se almacenaron correctamente los datos', 'success')
+                this.mensaje('Se almacenaron correctamente los datos', 'success');
               },
               error: (error) => {
                 this.mensaje(error.error?.mensaje ?? error.message ?? 'Ocurrió un error', 'error');
@@ -779,7 +864,7 @@ export class Origen implements OnInit {
     );
   }
 
-  showDialog(lugar: string, data: number = 0) {
+  showDialog(lugar: string, data: number = 0, volumen: number = 0) {
     switch (lugar) {
       case 'planta':
         this.visible = true;
@@ -790,6 +875,7 @@ export class Origen implements OnInit {
       case 'despacho':
         this.visibleDespacho = true;
         this.idPlanta = data;
+        this.volPlanta = volumen;
         break;
       case 'upload':
         this.visibleUpload = true;
@@ -804,6 +890,7 @@ export class Origen implements OnInit {
         this.resultTrazabilidad(String(data));
     }
   }
+
   // ======================================================
   // CONFIGURACIÓN DE ARCHIVOS
   // ======================================================
@@ -1025,4 +1112,5 @@ export class Origen implements OnInit {
 
     return `${valor} ${sizes[i]}`;
   }
+
 }

@@ -35,7 +35,8 @@
 
                             <p-select [options]="plantas()" formControlName="planta_id" optionLabel="denominacion"
                                 [filter]="true" filterBy="codigo" [showClear]="true" placeholder="Seleccione una planta"
-                                class="w-full select-overflow">
+                                class="w-full select-overflow" emptyFilterMessage="No se encontraron resultados"
+                                (onChange)="changeEntidad($event)">
                                 <ng-template #selectedItem let-selectedOption>
                                     @if (selectedOption) {
                                     <div class="flex items-center gap-2">
@@ -64,12 +65,27 @@
                         </div>
                         <br>
                         <br>
-                        <p-floatlabel>
+                        <!-- <p-floatlabel>
                             <p-inputmask mask="aaa-999999" placeholder="AAA-999999" class="h-full w-full mascara_cre"
                                 id="cert_produccion" formControlName="nro_certificado" type="text"
                                 (onBlur)="convertirMayusculas($event,'nro_certificado')" />
                             <label for="cert_produccion">N° Certificado</label>
-                        </p-floatlabel>
+                        </p-floatlabel> -->
+                        <p-select [options]="certificados" formControlName="nro_certificado" optionLabel="VALOR_LOTE"
+                            [filter]="true" emptyFilterMessage="No se encontraron resultados" filterBy="VALOR_LOTE"
+                            [showClear]="true" placeholder="Seleccionar el número de Certificado"
+                            class="w-full md:w-56">
+                            <ng-template #selectedItem let-selectedOption>
+                                <div class="flex items-center gap-2">
+                                    <div>{{ selectedOption.VALOR_LOTE }}</div>
+                                </div>
+                            </ng-template>
+                            <ng-template let-country #certificado>
+                                <div class="flex items-center gap-2">
+                                    <div>{{ certificado.VALOR_LOTE }}</div>
+                                </div>
+                            </ng-template>
+                        </p-select>
                         <br>
                         <br>
                         <p-floatlabel>
@@ -102,12 +118,10 @@
                 <p-card>
                     <form [formGroup]="formProduccionImportacion" (ngSubmit)="almacenarImportacion()">
                         <div class="card flex justify-center">
-                            <p-select 
-                                [options]="operador()" 
-                                formControlName="operador_id" 
-                                optionLabel="denominacion"
+                            <p-select [options]="operador()" formControlName="operador_id" optionLabel="denominacion"
                                 [filter]="true" filterBy="denominacion" [showClear]="true"
-                                placeholder="Seleccione un Operador" class="w-full">
+                                emptyFilterMessage="No se encontraron resultados" placeholder="Seleccione un Operador"
+                                class="w-full" (onChange)="changeEntidad($event)">
                                 <ng-template #selectedItem let-selectedOption>
                                     @if (selectedOption) {
                                     <div class="flex items-center gap-2">
@@ -143,12 +157,27 @@
 
                         <br>
                         <br>
-                        <p-floatlabel>
+                        <!--                         <p-floatlabel>
                             <p-inputmask mask="aaa-999999" placeholder="AAA-999999" class="w-full mascara_cre"
                                 id="cert_produccion_impo" formControlName="nro_certificado_impo" type="text"
                                 (onBlur)="convertirMayusculas($event,'nro_certificado_impo')" />
                             <label for="cert_produccion_impo">N° Certificado</label>
-                        </p-floatlabel>
+                        </p-floatlabel> -->
+                        <p-select [options]="certificados" formControlName="nro_certificado_impo"
+                            optionLabel="VALOR_LOTE" [filter]="true" filterBy="VALOR_LOTE"
+                            emptyFilterMessage="No se encontraron resultados" [showClear]="true"
+                            placeholder="Seleccionar el número de Certificado" class="w-full md:w-56">
+                            <ng-template #selectedItem let-selectedOption>
+                                <div class="flex items-center gap-2">
+                                    <div>{{ selectedOption.VALOR_LOTE }}</div>
+                                </div>
+                            </ng-template>
+                            <ng-template let-country #certificado>
+                                <div class="flex items-center gap-2">
+                                    <div>{{ certificado.VALOR_LOTE }}</div>
+                                </div>
+                            </ng-template>
+                        </p-select>
                         <br>
                         <br>
                         <p-floatlabel>
@@ -194,6 +223,10 @@
     </div>
 </p-card>
 <br>
+
+<!-- ========================================================================== -->
+<!-- TABLA PRINCIPAL -->
+<!-- ========================================================================== -->
 <p-card>
     <div class="card">
         <p-table #dt1 [value]="produccion()" [globalFilterFields]="[
@@ -265,7 +298,7 @@
                     <td>
                         {{ produccion.nombre}}
                     </td>
-                    <td style="display: flex; justify-content: center; align-items: center; gap:1rem;">
+                    <td style="text-align: center;">
                         @if(produccion.numCertificado !== null){
                         <p-tag severity="warn" pTooltip="Ver Datos del Certificado" tooltipPosition="top"
                             (click)="showDialog('registroCert',produccion.idPlanta)"
@@ -303,15 +336,29 @@
                         }
                     </td>
                     <td>
-                        @if(produccion.estado == 'DESPACHO')
-                        {
-                        <p-tag severity="secondary" value="{{produccion.estado}}"></p-tag>
+                        @switch (produccion.estado) {
+                            @case ("DESPACHO")
+                            {
+                            <p-tag severity="secondary" value="{{produccion.estado}}"></p-tag>
+                            }
+                            @case("RECEPCION")
+                            {
+                            <p-tag severity="Warn" value="{{produccion.estado}}"></p-tag>
+                            }
+                            @case("TRASVASE")
+                            {
+                            <p-tag severity="Info" value="{{produccion.estado}}"></p-tag>
+                            }
+                            @case("DISTRIBUCION")
+                            {
+                            <p-tag severity="success" value="{{produccion.estado}}"></p-tag>
+                            }
+                            @default {
+                            <p-tag severity="danger" value="SIN ACCIÓN" pTooltip="Registrar Despacho" tooltipPosition="top"
+                                (click)="showDialog('despacho', produccion.idPlanta,produccion.volTotal )"></p-tag>
+                            }
                         }
-                        @else
-                        {
-                        <p-tag severity="success" value="SIN ACCIÓN" pTooltip="Registrar Despacho" tooltipPosition="top"
-                            (click)="showDialog('despacho', produccion.idPlanta )"></p-tag>
-                        }
+
                     </td>
                 </tr>
             </ng-template>
@@ -362,14 +409,23 @@
                     <form [formGroup]="formDespacho" (ngSubmit)="despacharOrigen()">
                         <div class="card flex justify-center">
                             <p-multiselect [options]="cisterna_list" formControlName="CisternaList"
-                                (onChange)="verListado()" placeholder="Seleccionar Cisterna" optionLabel="conductor"
-                                display="chip" styleClass="w-full md:w-80" />
+                                (onChange)="verListado($event.value)" placeholder="Seleccionar Cisterna"
+                                optionLabel="conductor" display="chip" styleClass="w-full md:w-80" [disabled]="false" />
                         </div>
                         <p-divider type="dashed" />
                         <h3>Datos Seleccionados</h3>
                         <div class="card flex justify-center">
                             <p-listbox [options]="listCond" optionLabel="conductor" class="w-full md:w-56" />
                         </div>
+                        <p-divider type="dashed" />
+                        <p-message severity="info" icon="pi pi-send" text="" styleClass="h-full">
+                            <h2>
+                                <p><b>Total Planta: </b> <p-tag severity="info">{{volPlanta}}</p-tag></p>
+                            </h2>
+                            <h2>
+                                <p><b>Total Cisternas: </b> <p-tag severity="primary">{{totalVol}}</p-tag></p>
+                            </h2>
+                        </p-message>
                         <p-divider type="dashed" />
                         <div class="flex justify-end gap-2">
 

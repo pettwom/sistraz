@@ -77,22 +77,32 @@
 }
 
 .nombres> :first-child {
-    font-size: 1rem;
+    font-size: .7rem;
     font-weight: bold;
     color: var(--text-white);
     margin: 0px;
     padding: 0px;
     text-align: left;
+    display: inline-block;
+    max-width: 150px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis
 }
 
 .nombres> :last-child {
     padding: 0px;
     padding-top: 2px;
     margin: 0px;
-    font-size: 0.7rem;
+    font-size: 0.5rem;
     color: var(--text-secundary);
     text-align: left;
     font-weight: bold;
+    display: inline-block;
+    max-width: 150px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis
 }
 
 .icono {
@@ -187,14 +197,14 @@
     background: var(--menu-hover);
     border: 1px solid var(--border-color);
     border-radius: 10px;
-    color: var( --text-link-hover);
+    color: var(--text-link-hover);
 }
 
 .menu li:active a {
     background: var(--menu-hover);
     border: 1px solid var(--border-color);
     border-radius: 10px;
-    color: var( --text-link-hover);
+    color: var(--text-link-hover);
 }
 
 .menu li:hover a i {
@@ -213,12 +223,14 @@
 .link_cerrar_session {
     text-decoration: none;
 }
-.cerrarSession{
+
+.cerrarSession {
     transition: .2s ease-in-out;
-    
+
 }
+
 .cerrarSession:hover {
-    box-shadow: 1px -3px 3px rgba(0,0,0,.1);
+    box-shadow: 1px -3px 3px rgba(0, 0, 0, .1);
     border: 1px solid var(--border-color);
     background-color: var(--bg-background);
     border-radius: 15px 15px 0 0;
@@ -284,12 +296,13 @@
     .danger {
         background-color: brown;
         color: #fff;
-        margin:5px;
+        margin: 5px;
     }
+
     .danger:hover {
         background-color: rgb(199, 134, 134);
         color: #a09e9e;
-        margin:5px;
+        margin: 5px;
     }
 
     .btn-cerrar-menu:hover {
@@ -299,7 +312,7 @@
     .logo,
     .menu,
     .cerrarSession {
-        
+
         width: 100%;
     }
 

@@ -18,6 +18,9 @@ export class Sidebar implements OnInit {
 
   titulo: string = '';
   menuOption: any[] = [];
+  user: any;
+  usuario: any;
+  cargo: any;
   constructor(
     private router: Router,
     private login: AuthService,
@@ -32,8 +35,13 @@ export class Sidebar implements OnInit {
       this.menuOption = []
     };
 
-
-
+    const us = localStorage.getItem('usuario');
+    this.user = us ? JSON.parse(us) : null;
+    console.log(this.user.cargo);
+    this.usuario = this.user.nombreCompleto;
+    this.cargo = this.user.cargo;
+    
+    
   }
 
   seleccionarMenu(titulo: string, subtitulo: string): void {
