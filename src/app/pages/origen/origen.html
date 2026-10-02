@@ -339,7 +339,8 @@
                         @switch (produccion.estado) {
                             @case ("DESPACHO")
                             {
-                            <p-tag severity="secondary" value="{{produccion.estado}}"></p-tag>
+                            <p-tag severity="secondary" value="{{produccion.estado}}" pTooltip="Registrar Despacho" tooltipPosition="top"
+                            (click)="showDialog('despacho', produccion.idPlanta,produccion.volTotal )"></p-tag>
                             }
                             @case("RECEPCION")
                             {

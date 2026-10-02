@@ -235,10 +235,6 @@ export class Origen implements OnInit {
     
     this.cargarCertiicados(this.entidad);
   }
-/*   changeEntidad():void{
-    this.entidad = this.formProduccionImportacion.get('operador_id')?.value?.idEntidad
-    this.cargarCertiicados();
-  } */
 
   cargarCertiicados(entidad: number) {
     console.log('this.entidad = > ',entidad);
@@ -469,7 +465,9 @@ export class Origen implements OnInit {
               this.mensaje('Se registro correctamente los datos', 'success');
               // console.log('1. despachar Origen', result)
             },
-            error: (error) => { }
+            error: (error) => { 
+              this.mensaje(JSON.stringify(error.error.mensaje), 'error');
+            }
           })
       }
     })
@@ -561,14 +559,14 @@ export class Origen implements OnInit {
       descripcion: form.operador_id.denominacion,
       paisImpor: form.paisImpor.descripcion,
       puntoIngreso: form.punto_ingreso,
-      nroCertificado: form.nro_certificado_impo,
+      nroCertificado: form.nro_certificado_impo.VALOR_LOTE,
       departamento: form.ciudad,
       volTotal: form.vol_total_impo,
       fechaMuestra: form.fecha_muestra_impo,
       observacion: form.observacion_impo,
       tipo: 2 //importacion
     }
-    // console.log(dto);
+    console.log('1. DTO=> ',dto);
     Swal.fire({
       title: '🚧 Esta seguro? 🚧',
       icon: 'warning',
@@ -642,7 +640,7 @@ export class Origen implements OnInit {
           const dto = {
             plantaId: form.planta_id.idEntidad,
             descripcion: form.planta_id.denominacion,
-            nroCertificado: form.nro_certificado,
+            nroCertificado: form.nro_certificado.VALOR_LOTE,
             volTotal: form.vol_total,
             fechaMuestra: form.fecha_muestra,
             departamento: form?.ciudad,
@@ -795,7 +793,7 @@ export class Origen implements OnInit {
       text: mensaje,
       showCancelButton: false,
       showConfirmButton: false,
-      timer: 2000,
+      timer: 2500,
       willOpen: () => {
         Swal.getContainer()?.style.setProperty('z-index', '99999');
       }
